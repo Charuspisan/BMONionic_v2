@@ -3,7 +3,19 @@
 // angular.module is a global place for creating, registering and retrieving Angular modules
 // 'starter' is the name of this angular module example (also set in a <body> attribute in index.html)
 // the 2nd parameter is an array of 'requires'
-angular.module('BMON', ['ionic'])
+
+// Initialize Firebase
+var config = {
+  apiKey: "AIzaSyAT2zGRp1nxRNbozq8RXoAprelLBSJXeLw",
+  authDomain: "project-3351723142096034396.firebaseapp.com",
+  databaseURL: "https://project-3351723142096034396.firebaseio.com",
+  storageBucket: "project-3351723142096034396.appspot.com",
+  messagingSenderId: "765512598560"
+};
+
+firebase.initializeApp(config);
+
+angular.module('BMON', ['ionic','firebase'])
 
 .run(function($ionicPlatform) {
   $ionicPlatform.ready(function() {
@@ -37,3 +49,24 @@ angular.module('BMON', ['ionic'])
   $urlRouterProvider.otherwise('/login')  
 
 })
+
+.controller("loginCtrl", ["$scope", "$firebaseAuth",
+  function($scope, $firebaseAuth) {
+    var auth = $firebaseAuth();
+    //var userEmail = "tawancharuspisan@gmail.com";
+    //var userPass = "tawan1011";
+
+    $scope.signIn = function() {
+      $scope.firebaseUser = null;
+      $scope.error = null;
+      var userEmail = $scope.userEmail;
+      var userPass = $scope.userPass;
+      console.log(userEmail+" : "+userPass);
+      auth.$signInWithEmailAndPassword(userEmail, userPass).then(function(user) {
+        $scope.firebaseUser = user;
+      }).catch(function(error) {
+        $scope.error = error;
+      });
+    };
+  }
+]);
