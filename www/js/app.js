@@ -39,11 +39,15 @@ angular.module('BMON', ['ionic','firebase'])
   $stateProvider
     .state('login', {
       url:'/login',
-      templateUrl:'templates/login.html'
+      templateUrl:'partial/login.html'
     })
     .state('landing', {
       url:'/landing',
-      templateUrl:'templates/landing.html'
+      templateUrl:'partial/landing.html'
+    })
+    .state('users', {
+      url:'/users',
+      templateUrl:'partial/manageUsers.html'
     })
 
   $urlRouterProvider.otherwise('/login')  
@@ -78,6 +82,33 @@ angular.module('BMON', ['ionic','firebase'])
       });
     };
 
+    $scope.signOut = function() {
+      if (firebase.auth().currentUser) {
+        firebase.auth().signOut();
+        console.log("Now loged out");
+        $scope.userEmail = "";
+        $scope.userPass = "";
+        //$location.path('/login');
+      }else{
+        console.log("Not login login page");
+        //$location.path('/login');
+      }
+    };
+
+    $scope.signUp = function(user) {
+      $scope.firebaseUser = null;
+      $scope.error = null;
+      var userEmail = $scope.userEmail;
+      var userPass = $scope.userPass;
+
+      auth.$createUserWithEmailAndPassword(userEmail, userPass).then(function(user){
+        firebase.auth().currentUser.sendEmailVerification();
+      }).catch(function(error) {
+        $scope.error = error;
+      });
+
+    };
+
     var initApp = function(){
       // Listening for auth state changes.
       // [START authstatelistener]
@@ -94,11 +125,13 @@ angular.module('BMON', ['ionic','firebase'])
           // [START_EXCLUDE]
           
           if (emailVerified) {
-            $location.path('/landing')
+            $location.path('/landing');
           }else{
-            alert("รอการอนุมัติ");
+            //alert("รอการอนุมัติ");
+            $('#userEmail').val(email);
+            $('#userPass').val("รอการอนุมัติ กรุณาเช็คอีเมล์");
           }
-          $('#loginbt').text('Sign out');
+          //$('#loginbt').text('Sign out');
           console.log("Signin Ready : " + email +" Verification : "+emailVerified);
           //console.log(JSON.stringify(user, null, '  '));
           // [END_EXCLUDE]
@@ -106,7 +139,7 @@ angular.module('BMON', ['ionic','firebase'])
           // User is signed out.
           // [START_EXCLUDE]
           //document.getElementById('loginbt').textContent = 'Sign in';
-          $('#loginbt').text('Sign in')
+          //$('#loginbt').text('Sign in');
           console.log("Still Signout");
           // [END_EXCLUDE]
         }
@@ -119,19 +152,29 @@ angular.module('BMON', ['ionic','firebase'])
   }
 ])
 
-.controller('landingCtrl', ["$scope", "$firebaseAuth", function($scope, $firebaseAuth) {
+.controller('landingCtrl', ["$scope", "$firebaseAuth", "$location", function($scope, $firebaseAuth, $location) {
   var auth = $firebaseAuth();
   auth.$onAuthStateChanged((user) => {
     
     $scope.signOut = function(user) {
-      if (user) {
+      if (firebase.auth().currentUser) {
         firebase.auth().signOut();
         console.log("Now loged out");
+        $location.path('/login');
       }else{
-        console.log("Not login");
+        console.log("Not login landing page");
+        $location.path('/login');
       }
     };
 
 
   }); 
-}]);
+}])
+
+.controller('manageUsersCTRL', ["$scope", "$location", function($scope, $location) {
+    $scope.deleteUser = function(data) {
+
+    }; 
+}])
+
+;
