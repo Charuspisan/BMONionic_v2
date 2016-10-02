@@ -129,3 +129,14 @@ firebase.initializeApp(config);
 //   }, 500);
 
 // }); 
+
+
+      // auth.$onAuthStateChanged((user) => {
+      //   if (user) {
+      //     // If there is a user, take him to home page.
+      //     //console.log("User is logged in!");
+      //     firebase.auth().signOut();
+      //     //console.log(user);
+      //     //this.rootPage = HomePage;
+      //   }
+      // });

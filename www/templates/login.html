@@ -1,20 +1,24 @@
-<div class="list-inset" ng-controller="loginCtrl">
-<h1>Login{{5*5}}</h1>
-  <label class="item item-input">
-    <input id="userEmail" ng-model="userEmail" type="text" placeholder="Email">
-  </label>
-  <label class="item item-input">
-    <input id="userPass" ng-model="userPass" type="text" placeholder="Password">
-  </label><br/>
-  <button id="loginbt" ng-click="signIn()" class="button button-dark">
-    Sign in
-  </button>
-  <button id="signupbt" class="button button-dark">
-    Sign up
-  </button>
+<ion-view>
+<ion-content><div class="list list-inset" ng-controller="loginCtrl">
+	<h1>Login{{5*5}}</h1>
+	  <label class="item item-input">
+	    <input id="userEmail" ng-model="userEmail" type="text" placeholder="Email">
+	  </label>
+	  <label class="item item-input">
+	    <input id="userPass" ng-model="userPass" type="text" placeholder="Password">
+	  </label><br/>
+	  <button id="loginbt" ng-click="signIn()" class="button button-dark">
+	    Sign in
+	  </button>
+	  <button id="signupbt" class="button button-dark">
+	    Sign up
+	  </button>
 
-  <p ng-if="firebaseUser">Signed in user: <strong>{{ firebaseUser.email }} <br />Verified : {{ firebaseUser.emailVerified }}</strong></p>
-  <p ng-if="error">Error: <strong>{{ error.message }}</strong></p>
+	  <p ng-if="firebaseUser">Signed in user: <strong>{{ firebaseUser.email }} <br />Verified : {{ firebaseUser.emailVerified }}</strong></p>
+	  <p ng-if="error">Error: <strong>{{ error.message }}</strong></p>
 
-</div>
+	</div>
+	</ion-content>
+</ion-view>
+
 

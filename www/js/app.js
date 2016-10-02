@@ -50,23 +50,88 @@ angular.module('BMON', ['ionic','firebase'])
 
 })
 
-.controller("loginCtrl", ["$scope", "$firebaseAuth",
-  function($scope, $firebaseAuth) {
+.controller("loginCtrl", ["$scope", "$firebaseAuth", "$location",
+  function($scope, $firebaseAuth, $location) {
     var auth = $firebaseAuth();
     //var userEmail = "tawancharuspisan@gmail.com";
     //var userPass = "tawan1011";
 
-    $scope.signIn = function() {
+    $scope.signIn = function(user) {
       $scope.firebaseUser = null;
       $scope.error = null;
       var userEmail = $scope.userEmail;
       var userPass = $scope.userPass;
+      console.log(user);
+      // User is signed in.
+      //var emailVerified = user.emailVerified;
       console.log(userEmail+" : "+userPass);
+
       auth.$signInWithEmailAndPassword(userEmail, userPass).then(function(user) {
         $scope.firebaseUser = user;
+        if (user.emailVerified) {
+          $location.path('/landing')
+        }else{
+          alert("รอการอนุมัติ");
+        }
       }).catch(function(error) {
         $scope.error = error;
       });
     };
+
+    var initApp = function(){
+      // Listening for auth state changes.
+      // [START authstatelistener]
+      firebase.auth().onAuthStateChanged(function(user) {
+        if (user) {
+          // User is signed in.
+          var displayName = user.displayName;
+          var email = user.email;
+          var emailVerified = user.emailVerified;
+          var photoURL = user.photoURL;
+          var isAnonymous = user.isAnonymous;
+          var uid = user.uid;
+          var providerData = user.providerData;
+          // [START_EXCLUDE]
+          
+          if (emailVerified) {
+            $location.path('/landing')
+          }else{
+            alert("รอการอนุมัติ");
+          }
+          $('#loginbt').text('Sign out');
+          console.log("Signin Ready : " + email +" Verification : "+emailVerified);
+          //console.log(JSON.stringify(user, null, '  '));
+          // [END_EXCLUDE]
+        } else {
+          // User is signed out.
+          // [START_EXCLUDE]
+          //document.getElementById('loginbt').textContent = 'Sign in';
+          $('#loginbt').text('Sign in')
+          console.log("Still Signout");
+          // [END_EXCLUDE]
+        }
+        // [START_EXCLUDE]
+        //document.getElementById('loginbt').disabled = false;
+        // [END_EXCLUDE]
+      });
+    }
+    initApp();
   }
-]);
+])
+
+.controller('landingCtrl', ["$scope", "$firebaseAuth", function($scope, $firebaseAuth) {
+  var auth = $firebaseAuth();
+  auth.$onAuthStateChanged((user) => {
+    
+    $scope.signOut = function(user) {
+      if (user) {
+        firebase.auth().signOut();
+        console.log("Now loged out");
+      }else{
+        console.log("Not login");
+      }
+    };
+
+
+  }); 
+}]);
