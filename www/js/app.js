@@ -49,6 +49,10 @@ angular.module('BMON', ['ionic','firebase'])
       url:'/users',
       templateUrl:'partial/manageUsers.html'
     })
+    .state('locations', {
+      url:'/locations',
+      templateUrl:'partial/locations.html'
+    })
 
   $urlRouterProvider.otherwise('/login')  
 
@@ -176,5 +180,6 @@ angular.module('BMON', ['ionic','firebase'])
 
     }; 
 }])
+
 
 ;

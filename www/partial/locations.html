@@ -1,0 +1,34 @@
+<ion-view>
+	<ion-content>
+		<div class="list list-inset" ng-controller="manageLocationsCtrl">
+			<h1>locationsCtrl{{5*3}}</h1>
+
+			<label class="item item-input">
+			    <input id="inputProvOnProv" ng-model="inputProvOnProv" type="text" placeholder="จังหวัด">
+			</label>
+			<label class="item item-input">
+			    <input id="inputAreaOnProv" ng-model="inputAreaOnProv" type="text" placeholder="พื้นที่">
+			</label>
+			<label class="item item-input">
+			    <input id="inputPinOnProv" ng-model="inputPinOnProv" type="text" placeholder="จุดสำรวจ">
+			</label>
+			<label class="item item-input">
+			    <input id="inputLatOnProv" ng-model="inputLatOnProv" type="text" placeholder="Latitute">
+			</label>
+			<label class="item item-input">
+			    <input id="inputLngOnProv" ng-model="inputLngOnProv" type="text" placeholder="Longtitute">
+			</label>
+			<br />
+			<button id="signupbt" ng-click="signUp()" class="button button-dark">
+				เพิ่มจังหวัด
+			</button>
+
+			<br /><br />
+			<div id="timerStamp"></div>
+			<div id="showProv"></div>
+
+			<!-- <div class="modal"></div> -->
+
+		</div>
+	</ion-content>
+</ion-view>
