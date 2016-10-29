@@ -1,6 +1,6 @@
 <ion-view>
 	<ion-content>
-		<div class="list list-inset" ng-controller="manageLocationsCtrl">
+		<div id="wrapper" class="list list-inset" ng-controller="manageLocationsCtrl">
 			<h1>locationsCtrl{{5*3}}</h1>
 
 			<label class="item item-input">
@@ -24,16 +24,31 @@
 			</button>
 
 			<br /><br />
-			<div id="timerStamp"></div>
-			<div id="showProv"></div>
 
-			<!-- <div class="modal"></div> -->
-			<div ng-repeat="prov in data">
-				{{prov}}
-			</div><br /><br />
-			<div ng-repeat="provSatoon in data.Satoon">
-				{{provSatoon}}
-			</div>
+<!-- 			<ion-list ng-repeat="(key, value) in datas | groupBy: 'province'">
+			  <ion-item>
+			    {{key}}
+			    <ion-list ng-repeat="(key, value) in value | groupBy: 'area'">
+			    	<ion-item>
+			    		{{key}}
+			    		<ion-list ng-repeat="item in value track by $index">
+			    			<ion-item>pin: {{ item.pin }} | Lat: {{item.lat}} | Lng: {{item.lng}}</ion-item>
+			    		</ion-list>
+			    	</ion-item>
+			    </ion-list>
+			  </ion-item>
+			</ion-list> -->
+
+<ul ng-repeat="(key, value) in datas | groupBy: 'province'">
+  Province: {{ key }}
+  <li ng-repeat="(key, value) in value | groupBy: 'area'">
+    area: {{ key }}
+    <ul ng-repeat="item in value">
+      <li>pin: {{ item.pin }} | Lat: {{item.lat}} | Lng: {{item.lng}}</li>
+    </ul>
+  </li><br />
+</ul>
+
 
 		</div>
 	</ion-content>

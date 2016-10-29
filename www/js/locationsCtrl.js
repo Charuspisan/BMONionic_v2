@@ -2,11 +2,10 @@ angular.module('BMON').controller('manageLocationsCtrl', ["$scope", "$firebaseOb
 
 var t0 = performance.now();
 
-var ref = firebase.database().ref();
-var refLocations = firebase.database().ref('locations');
+var refLocations = new Firebase("https://project-3351723142096034396.firebaseio.com/locations"); 
 var obj = $firebaseObject(refLocations);
+
  obj.$loaded().then(function() {
-        console.log("loaded record:"+ obj.$id);
 
        // To iterate the key/value pairs of the object, use angular.forEach()
        angular.forEach(obj, function(value, key) {
@@ -15,17 +14,14 @@ var obj = $firebaseObject(refLocations);
 
         var t1 = performance.now();
         console.log("Init on " + ((t1 - t0)/1000) + " seconds.")
-        alert("Init on " + ((t1 - t0)/1000) + " seconds.");
+        //alert("Init on " + ((t1 - t0)/1000) + " seconds.");
 
-  		//initLocaList(obj);
+  		// To make the data available in the DOM, assign it to $scope
+	    $scope.datas = obj;
+	    // For three-way data bindings, bind it to the scope instead
+	    obj.$bindTo($scope, "datas");
+
      });
-
-     // To make the data available in the DOM, assign it to $scope
-     $scope.data = obj;
-
-     // For three-way data bindings, bind it to the scope instead
-     obj.$bindTo($scope, "data");
-
   }
 ]);
 

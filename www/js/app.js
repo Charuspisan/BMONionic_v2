@@ -8,14 +8,14 @@
 var config = {
   apiKey: "AIzaSyAT2zGRp1nxRNbozq8RXoAprelLBSJXeLw",
   authDomain: "project-3351723142096034396.firebaseapp.com",
-  databaseURL: "https://project-3351723142096034396.firebaseio.com",
+  //databaseURL: "https://project-3351723142096034396.firebaseio.com",
   storageBucket: "project-3351723142096034396.appspot.com",
   messagingSenderId: "765512598560"
 };
 
 firebase.initializeApp(config);
 
-angular.module('BMON', ['ionic','firebase'])
+angular.module('BMON', ['ionic','firebase','angular.filter'])
 
 .run(function($ionicPlatform) {
   $ionicPlatform.ready(function() {
@@ -174,12 +174,5 @@ angular.module('BMON', ['ionic','firebase'])
 
   }); 
 }])
-
-.controller('manageUsersCTRL', ["$scope", "$location", function($scope, $location) {
-    $scope.deleteUser = function(data) {
-
-    }; 
-}])
-
 
 ;
