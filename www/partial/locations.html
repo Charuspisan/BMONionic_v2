@@ -25,11 +25,16 @@
 
 			<br /><br />
 
-<!-- 			<ion-list ng-repeat="(key, value) in datas | groupBy: 'province'">
+			<ion-list ng-repeat="(key, value) in datas | groupBy: 'province'">
 			  <ion-item>
 			    {{key}}
+			    <span style="float:right;">
+			        <button class="button button-positive button-small" ng-click="editProv(key)" style="padding: 0.25em 1em;">แก้ไข
+			        </button>
+		        </span>
+
 			    <ion-list ng-repeat="(key, value) in value | groupBy: 'area'">
-			    	<ion-item>
+			    	<ion-item style="clear:both;">
 			    		{{key}}
 			    		<ion-list ng-repeat="item in value track by $index">
 			    			<ion-item>pin: {{ item.pin }} | Lat: {{item.lat}} | Lng: {{item.lng}}</ion-item>
@@ -37,17 +42,13 @@
 			    	</ion-item>
 			    </ion-list>
 			  </ion-item>
-			</ion-list> -->
+			</ion-list>
 
-<ul ng-repeat="(key, value) in datas | groupBy: 'province'">
-  Province: {{ key }}
-  <li ng-repeat="(key, value) in value | groupBy: 'area'">
-    area: {{ key }}
-    <ul ng-repeat="item in value">
-      <li>pin: {{ item.pin }} | Lat: {{item.lat}} | Lng: {{item.lng}}</li>
-    </ul>
-  </li><br />
-</ul>
+
+
+    <script id="editProv-template.html" type="text/ng-template">
+      <input type="text" ng-model="data.newProvName">
+    </script>
 
 
 		</div>
