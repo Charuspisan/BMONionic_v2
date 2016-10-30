@@ -1,1 +1,19 @@
-/* Empty. Add your own CSS if you like */
+.material-icons {line-height: 1.5em;}
+.provWrapper, .areaWrapper, .pinWrapper {display:block; padding:0.5em; border:solid 1px #ccc;}
+input[type="text"] {
+    border: solid 1px #ccc;
+    display: inline-block;
+}
+.modal {
+    display:    block;
+    position:   fixed;
+    z-index:    1000;
+    top:        0;
+    left:       0;
+    height:     100%;
+    width:      100%;
+    background: rgba( 255, 255, 255, .8 ) 
+                url('http://i.stack.imgur.com/FhHRx.gif') 
+                50% 50% 
+                no-repeat;
+}
