@@ -1,8 +1,78 @@
-<ion-view view-title="Title" ng-controller="manageUsersCTRL">
-  <ion-content>
-    <h1>Manage Users</h1>
-    <ul ng-repeat="u in users">
-    	<li><p>{{u.email}} : {{u.name}}</p></li>
-    </ul>
-  </ion-content>
-</ion-view>>
+<ion-view ng-controller="manageUsersCtrl">
+
+
+	<ion-header-bar class="bar-positive">
+	    <div class="buttons">
+	    	<button class="button button-icon icon ion-ios-minus-outline"
+	          ng-click="data.showDelete = !data.showDelete"></button>
+	    </div>
+  		<h1 class="title">Manage Users</h1>
+  		<button id="logoutbt" ng-click="signOut()" class="button button-dark">
+    		Sign out
+  	  	</button>
+	</ion-header-bar>
+
+    <ion-content class="has-footer" on-swipe-right="goBack()">
+
+      <ion-list ng-repeat="(key, user) in dataUsers" show-delete="data.showDelete">
+
+          <ion-item>
+              {{user.email}}
+              <ion-delete-button class="ion-minus-circled" 
+                ng-click="deleteUser(key)">
+              </ion-delete-button>
+          </ion-item>
+
+      </ion-list>
+
+    </ion-content>
+
+    <ion-footer-bar align-title="left" class="bar-positive" style="height:auto;">
+ 
+        <button class="button button-full button-positive" ng-click="showCreateJobPopup()">
+          <i class="icon ion-ios-plus-outline"></i> <span style="font-size:1.2em;">เพิ่มอาสาสมัคร</span>
+        </button> 
+
+    </ion-footer-bar>
+    
+
+
+
+
+
+
+
+
+
+
+
+<script id="AddProvPopup.html" type="text/ng-template">
+  <!-- <input ng-model="AddProvData.provInTxt" type="text" placeholder="Add Province"> -->
+  <select style="width: 100%; padding: 0.5em;" ng-model="AddProvData.provInTxt" ng-change="filterArea()">
+    <option value="" disabled selected>เลือกจังหวัด</option>
+    <option ng-repeat="prov in queryProv | orderBy">{{prov}}</option>
+  </select>
+  <!-- <input ng-model="AddProvData.areaInTxt" type="text" placeholder="Add Area"> -->
+  <select style="width: 100%; padding: 0.5em;" ng-model="AddProvData.areaInTxt">
+    <option value="" disabled selected>เลือกพื้นที่</option>
+    <option ng-repeat="area in queryArea | orderBy">{{area}}</option>
+  </select>
+  <input ng-model="AddProvData.pinInTxt" type="text" placeholder="Add Pin">
+  <input ng-model="AddProvData.latInTxt" type="text" placeholder="Add Latitude">
+  <input ng-model="AddProvData.lngInTxt" type="text" placeholder="Add Longtitude">
+</script>
+
+    
+    <script id="editUserPopup.html" type="text/ng-template">
+        <input type="text" id="queryUser" ng-model="queryUser" placeholder="ใส่อีเมล์เพื่อค้นหาอาสาสมัคร"/>
+        <select style="width: 100%; padding: 0.5em;" ng-model="selectedUser.userDD">
+          <option value="" disabled selected>อีเมล์สมาชิกที่ตรงกัน</option>
+          <option ng-repeat="user in selectUsers | filter:queryUser" >{{user}}</option>
+        </select>
+    </script>
+
+
+
+
+</ion-view>
+ 

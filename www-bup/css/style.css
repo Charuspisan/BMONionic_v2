@@ -1,0 +1,50 @@
+.material-icons {line-height: 1.5em;}
+.provWrapper, .areaWrapper, .pinWrapper {display:block; padding:0.5em; border:solid 1px #ccc;}
+input[type="text"] {
+    border: solid 1px #ccc;
+    display: inline-block;
+}
+.modal {
+    display:    block;
+    position:   fixed;
+    z-index:    1000;
+    top:        0;
+    left:       0;
+    height:     100%;
+    width:      100%;
+    background: rgba( 255, 255, 255, .8 ) 
+                url('http://i.stack.imgur.com/FhHRx.gif') 
+                50% 50% 
+                no-repeat;
+}
+.button-right {right: 1em;position: absolute !important;}
+.button-small {font-size: 17px !important;}
+
+.boxInSlide{height: 100%; padding-top:44px; box-sizing:border-box;}
+ion-slide{height: 100vh !important;}
+.material-icons {vertical-align: top;}
+.list .item.item-accordion {
+  line-height: 38px;
+  padding-top: 0;
+  padding-bottom: 0;
+  transition: 0.09s all linear;
+}
+.list .item.item-accordion.ng-hide {
+  line-height: 0px;
+}
+.list .item.item-accordion.ng-hide-add,
+.list .item.item-accordion.ng-hide-remove {
+  display: block !important;
+}
+.bar .button .icon:before, .bar .button.button-icon:before, .bar .button.icon-left:before, .bar .button.icon-right:before, .bar .button.icon:before, .bar button .icon:before, .bar button.button-icon:before, .bar button.icon-left:before, .bar button.icon-right:before, .bar button.icon:before {
+    line-height: 1.25em !important;
+}
+.button-left {
+    float: left;
+    margin-right: 1em !important;
+}
+.button.button-block, .button.button-full {
+    margin-top: 0 !important;
+    margin-bottom: 0 !important;
+}
+.item-input {height:2em;}

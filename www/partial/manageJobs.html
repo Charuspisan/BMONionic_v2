@@ -1,0 +1,138 @@
+<ion-view ng-controller="manageJobsCtrl">
+
+
+	<ion-header-bar class="bar-positive">
+	    <div class="buttons">
+	    	<button class="button button-icon icon ion-ios-minus-outline"
+	          ng-click="data.showDelete = !data.showDelete"></button>
+	    </div>
+  		<h1 class="title">Manage Jobs</h1>
+  		<button id="logoutbt" ng-click="signOut()" class="button button-dark">
+    		Sign out
+  	  	</button>
+	</ion-header-bar>
+
+    <ion-content class="has-footer" on-swipe-left="goNext('/manageusers')" on-swipe-right="goBack()">
+
+      <ion-list ng-repeat="(key, group) in jobListData" show-delete="data.showDelete">
+
+          <ion-item class="item-stable" ng-click="toggleGroup(key, group)" ng-class="{active: isGroupShown(group)}" item="group" class="item-remove-animate">
+              <i class="icon" ng-class="isGroupShown(group) ? 'ion-ios-minus-outline' : 'ion-ios-plus-outline'"></i>
+            &nbsp;
+            {{group.province}} : {{group.area}} : {{group.operate_date}}
+              <ion-delete-button class="ion-minus-circled" 
+                ng-click="deleteJob(key)">
+              </ion-delete-button>
+          </ion-item>
+
+          <ion-item class="item-accordion" ng-show="isGroupShown(group)||onEditGroup(key)">
+            {{group.operate_date}}
+            <button class="button button-small button-positive button-right" ng-click="editOperDatePopup(key);"><i class="icon ion-edit"></i></button>
+          </ion-item>
+
+          <ion-item class="item-accordion" ng-repeat="(pinkey, item) in group" ng-show="isGroupShown(group)||onEditGroup(key)" ng-if="item.pin!=null">
+            {{item.pin}} ผู้บันทึก : {{item.user}}            
+            <button class="button button-small button-positive button-right" ng-click="editUserPopup(key, pinkey);"><i class="icon ion-edit"></i></button><br />
+            เครื่องมือที่ใช้ : {{item.tool}}
+            <button class="button button-small button-positive button-right" ng-click="editToolPopup(key, pinkey);"><i class="icon ion-edit"></i></button>
+          </ion-item>
+
+      </ion-list>
+
+    </ion-content>
+
+    <ion-footer-bar align-title="left" class="bar-positive" style="height:auto;">
+ 
+        <button class="button button-full button-positive" ng-click="showCreateJobPopup()">
+          <i class="icon ion-ios-plus-outline"></i> <span style="font-size:1.2em;">Create Job</span>
+        </button> 
+
+    </ion-footer-bar>
+    
+		<script id="createJobPopup.html" type="text/ng-template">
+<!-- 			<input ng-model="createJobData.provInTxt" type="text" placeholder="Select Province">
+		  	<input ng-model="createJobData.areaInTxt" type="text" placeholder="Select Area">
+		  	<input ng-model="createJobData.operateDateInTxt" type="text" placeholder="Operating Date"> -->
+        <select style="width: 100%; padding: 0.5em;" ng-model="createJobData.provInTxt" ng-change="filterArea()">
+          <option value="" disabled selected>เลือกจังหวัด</option>
+          <option ng-repeat="prov in queryProv | orderBy">{{prov}}</option>
+        </select>
+        <!-- <input ng-model="AddProvData.areaInTxt" type="text" placeholder="Add Area"> -->
+        <select style="width: 100%; padding: 0.5em;" ng-model="createJobData.areaInTxt">
+          <option value="" disabled selected>เลือกพื้นที่</option>
+          <option ng-repeat="area in queryArea | orderBy">{{area}}</option>
+        </select>
+        <!-- <input ng-model="createJobData.operateDateInTxt" type="text" placeholder="Operating Date"> -->
+        <datepicker date-format="dd-MM-yyyy">
+          <input ng-model="createJobData.operateDateInTxt" type="text" placeholder="Operating Date"/>
+        </datepicker>
+
+		</script>
+
+
+
+
+
+
+
+
+
+
+<script id="AddProvPopup.html" type="text/ng-template">
+  <!-- <input ng-model="AddProvData.provInTxt" type="text" placeholder="Add Province"> -->
+  <select style="width: 100%; padding: 0.5em;" ng-model="AddProvData.provInTxt" ng-change="filterArea()">
+    <option value="" disabled selected>เลือกจังหวัด</option>
+    <option ng-repeat="prov in queryProv | orderBy">{{prov}}</option>
+  </select>
+  <!-- <input ng-model="AddProvData.areaInTxt" type="text" placeholder="Add Area"> -->
+  <select style="width: 100%; padding: 0.5em;" ng-model="AddProvData.areaInTxt">
+    <option value="" disabled selected>เลือกพื้นที่</option>
+    <option ng-repeat="area in queryArea | orderBy">{{area}}</option>
+  </select>
+  <input ng-model="AddProvData.pinInTxt" type="text" placeholder="Add Pin">
+  <input ng-model="AddProvData.latInTxt" type="text" placeholder="Add Latitude">
+  <input ng-model="AddProvData.lngInTxt" type="text" placeholder="Add Longtitude">
+</script>
+
+
+
+
+
+
+
+
+
+
+		<script id="editOperDatePopup.html" type="text/ng-template">
+		  	<!-- <input ng-model="editOperDateData.operateDateInTxt" type="text" placeholder="Operating Date"> -->
+        <datepicker date-format="dd-MM-yyyy">
+          <input ng-model="editOperDateData.operateDateInTxt" type="text" placeholder="Operating Date"/>
+        </datepicker>
+		</script>
+    
+    <script id="editUserPopup.html" type="text/ng-template">
+        <input type="text" id="queryUser" ng-model="queryUser" placeholder="ใส่อีเมล์เพื่อค้นหาอาสาสมัคร"/>
+        <select style="width: 100%; padding: 0.5em;" ng-model="selectedUser.userDD">
+          <option value="" disabled selected>อีเมล์สมาชิกที่ตรงกัน</option>
+          <option ng-repeat="user in selectUsers | filter:queryUser" >{{user}}</option>
+        </select>
+    </script>
+
+		<script id="editToolPopup.html" type="text/ng-template">
+		  	<!-- <input ng-model="editToolData.toolInTxt" type="text" placeholder="Tool type"> -->
+			  <label class="item item-input item-select">
+			    <!-- <div class="input-label">
+			      ประเภทของเครื่องมือที่ใช้
+			    </div> -->
+			    <select ng-model="editToolData.toolInTxt">
+            <option value="" disabled selected>เลือกวิธีวัด</option>
+			      <option>One-man</option>
+			      <option>Water-level</option>
+			    </select>
+			  </label>
+		</script>
+
+
+
+</ion-view>
+ 

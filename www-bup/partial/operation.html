@@ -1,0 +1,124 @@
+<ion-view>
+
+
+  <ion-header-bar class="bar-positive">
+    <h1 class="title">Operation Page</h1>
+  </ion-header-bar>
+
+
+
+<ion-content scroll="true" style="top:0px;">
+  <ion-slide-box options="data.sliderOptions" slider="data.sliderDelegate">
+
+    <ion-slide>
+      <div class="boxInSlide" id="graphContainer" ng-controller="operationCtrl">
+
+        <ion-content scroll="false" style="padding-top: 44px;" on-swipe-right="goBack()">
+          <div class="bar">
+             <h2 class="title">{{GetrefJobPin}} : {{GetrefJobProv}} : {{GetrefJobArea}} : {{GetrefJobDate}}</h2>
+          </div>
+          <canvas id="bar" class="chart chart-line" data="graph.data" labels="graph.labels" series='graph.series' style="height:50vh; margin-top:50px; padding:0 1em;"></canvas>
+        </ion-content>
+
+
+        <ion-content style="top:50vh;">
+
+              <div style="padding:1em">
+                <button class="button button-small button-positive" ng-click="editSlopePopup();" style="vertical-align:middle; margin-right:1em;"><i class="icon ion-edit"></i></button>       
+                Slope : {{objRec.slope}}        
+              </div>
+              <ion-list ng-repeat="(key, PinData) in objRec" ng-show="key!='timeStamp'&&key!='jobIdRef'&&key!='slope'&&key!='graph'&&key!='diff'&&key!='note'" ng-if="toolType()=='even'?$even:true">
+          <!--       One-man case or not identify -->
+                <ion-item ng-if="GetrefJobTool!='Water-level'"> 
+                    <button class="button button-small button-positive" ng-click="editMeterPopup(key);" style="vertical-align:middle; margin-right:1em;"><i class="icon ion-edit"></i></button> 
+                    {{key}} : <span ng-repeat="(keyItem, PinItem) in PinData track by $index" ng-show="$last">{{PinItem}} cm</span>
+                    <button class="button button-small button-positive ion-chatbox-working button-right" ng-click="editNotePopup(key);"></button>    
+                 </ion-item>
+                
+           <!--       Water-level case  -->
+                <ion-item ng-if="GetrefJobTool=='Water-level'&&!$first">
+                    <button class="button button-small button-positive" ng-click="edit2MeterPopup(key);" style="vertical-align:middle; margin-right:1em;"><i class="icon ion-edit"></i></button> 
+                    {{key-2}} - {{key}} : <span ng-repeat="(keyItem, PinItem) in PinData track by $index" ng-show="$last" style="text-align: right;display: inline-block;vertical-align: text-top;width: 50%;">ไม้นำ = {{PinItem[0]}} cm<br />ไม้ตาม = {{PinItem[1]}} cm</span>
+                    <button class="button button-small button-positive ion-chatbox-working button-right" ng-click="editNotePopup(key);"></button>    
+                 </ion-item>
+
+              </ion-list>
+
+        </ion-content>  
+
+
+
+      </div>
+    </ion-slide>
+
+    <ion-slide>
+      <div class="boxInSlide" id="4imgContainer" ng-controller="cameraController">
+
+
+        <ion-content class="has-header" data-tap-disabled="true">
+
+          <div id="show4imgs" style="width:100%; height:50vh; text-align:center; background-repeat: no-repeat; background-position: center; background-size: contain; background-color:#000;">
+          </div>
+          <div style="background-color: rgba(0,0,0,0.5);">
+              <i class="ion-camera" style="font-size: 3em; margin-top: -1em; display: block; color: #fff; text-align: center;"  ng-click="btnCamera()"></i>
+          </div>
+
+          <div style="padding:1em;">
+            <span style="display: inline-block; width:24%; text-align: center;">
+              <img id="frontImg" style="width:100%; height:auto;" ng-click="btnPreview('front')">
+              หน้า
+            </span>
+            <span style="display: inline-block; width:24%; text-align: center;">
+              <img id="rightImg" style="width:100%; height:auto;" ng-click="btnPreview('right')">
+              ขวา
+            </span>
+            <span style="display: inline-block; width:24%; text-align: center;">
+              <img id="backImg" style="width:100%; height:auto;" ng-click="btnPreview('back')">
+              หลัง
+            </span>
+            <span style="display: inline-block; width:24%; text-align: center;">
+              <img id="leftImg" style="width:100%; height:auto;" ng-click="btnPreview('left')">
+              ซ้าย
+            </span>
+            
+            <!-- <img id="frontImg" style="width:24%; height:auto;" ng-click="btnCamera('front')">
+            <img id="rightImg" style="width:24%; height:auto;" ng-click="btnCamera('right')">
+            <img id="backImg" style="width:24%; height:auto;" ng-click="btnCamera('back')">
+            <img id="leftImg" style="width:24%; height:auto;" ng-click="btnCamera('left')">   --> 
+
+          </div>
+
+
+          <button class="button button-positive button-full" ng-click="btnOtherImg()">ถ่ายภาพอื่นๆ</button>
+          <!-- <button class="button button-positive button-full" ng-click="btnGallery()">Gallery</button> -->
+          <!-- <button class="button button-positive button-full" ng-click="btnUpload()">Upload</button> -->
+          <!-- <button class="button button-positive button-full" ng-click="viewExif()">View EXIF</button> -->
+
+        </ion-content>
+
+
+
+      </div>
+    </ion-slide>
+
+  </ion-slide-box>
+</ion-content>
+
+
+
+
+
+
+  
+  
+<script id="editSlopePopup.html" type="text/ng-template"><input ng-model="editSlopeData.slopeInTxt" type="number" placeholder="Slope"></script>
+<script id="editMeterPopup.html" type="text/ng-template"><input ng-model="editMeterData.meterInTxt" type="number" placeholder="Result / cm."></script>
+<script id="edit2MeterPopup.html" type="text/ng-template"><input ng-model="edit2MeterData.pole1InTxt" type="number" placeholder="Pole 1 Result / cm."><input ng-model="edit2MeterData.pole2InTxt" type="number" placeholder="Pole 2 Result / cm."></script>
+<script id="editNotePopup.html" type="text/ng-template"><textarea rows="4" ng-model="editNoteData.noteInTxt" type="text" placeholder="Set new note"></textarea></script> 
+
+
+
+
+
+</ion-view>
+ 

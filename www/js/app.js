@@ -6,16 +6,15 @@
 
 // Initialize Firebase
 var config = {
-  apiKey: "AIzaSyAT2zGRp1nxRNbozq8RXoAprelLBSJXeLw",
-  authDomain: "project-3351723142096034396.firebaseapp.com",
-  //databaseURL: "https://project-3351723142096034396.firebaseio.com",
-  storageBucket: "project-3351723142096034396.appspot.com",
-  messagingSenderId: "765512598560"
+  apiKey: "AIzaSyCx-rNzY3vIUrhSCP5WYirhiAss7sFqTuI",
+  authDomain: "bmon-41086.firebaseapp.com",
+  //databaseURL: "https://bmon-41086.firebaseio.com",
+  storageBucket: "bmon-41086.appspot.com",
+  messagingSenderId: "170191502662"
 };
-
 firebase.initializeApp(config);
 
-angular.module('BMON', ['ionic','firebase','angular.filter'])
+angular.module('BMON', ['ionic','ngCordova','firebase','angular.filter','chart.js','720kb.datepicker'])
 
 .run(function($ionicPlatform) {
   $ionicPlatform.ready(function() {
@@ -35,144 +34,112 @@ angular.module('BMON', ['ionic','firebase','angular.filter'])
   });
 })
 
+
 .config(function($stateProvider, $urlRouterProvider) {
   $stateProvider
     .state('login', {
       url:'/login',
       templateUrl:'partial/login.html'
     })
-    .state('landing', {
-      url:'/landing',
-      templateUrl:'partial/landing.html'
+    // .state('admin', {
+    //   url:'/admin',
+    //   templateUrl:'partial/admin.html'
+    // })
+    .state('leader', {
+      url:'/leader',
+      templateUrl:'partial/leader.html'
     })
-    .state('users', {
-      url:'/users',
-      templateUrl:'partial/manageUsers.html'
+    .state('getjobs', {
+      url:'/getjobs',
+      templateUrl:'partial/getjobs.html'
+    })
+    .state('operation', {
+      url:'/operation',
+      templateUrl:'partial/operation.html'
     })
     .state('locations', {
       url:'/locations',
       templateUrl:'partial/locations.html'
+    })
+    .state('managejobs', {
+      url:'/managejobs',
+      templateUrl:'partial/manageJobs.html'
+    })
+    .state('manageusers', {
+      url:'/manageusers',
+      templateUrl:'partial/manageUsers.html'
+    })
+    .state('otherPhoto', {
+      url:'/otherPhoto',
+      templateUrl:'partial/otherPhoto.html'
     })
 
   $urlRouterProvider.otherwise('/login')  
 
 })
 
-.controller("loginCtrl", ["$scope", "$firebaseAuth", "$location",
-  function($scope, $firebaseAuth, $location) {
-    var auth = $firebaseAuth();
-    //var userEmail = "tawancharuspisan@gmail.com";
-    //var userPass = "tawan1011";
+.service('sharedProp', function () {
 
-    $scope.signIn = function(user) {
-      $scope.firebaseUser = null;
-      $scope.error = null;
-      var userEmail = $scope.userEmail;
-      var userPass = $scope.userPass;
-      console.log(user);
-      // User is signed in.
-      //var emailVerified = user.emailVerified;
-      console.log(userEmail+" : "+userPass);
+  this.sharedUserData = {email:"Not loged in user or leader/admin"};
 
-      auth.$signInWithEmailAndPassword(userEmail, userPass).then(function(user) {
-        $scope.firebaseUser = user;
-        if (user.emailVerified) {
-          $location.path('/landing')
-        }else{
-          alert("รอการอนุมัติ");
-        }
-      }).catch(function(error) {
-        $scope.error = error;
-      });
-    };
+    // this.userData = {yearSetCount: 0};
 
-    $scope.signOut = function() {
+  this.getEmail = function() {
+        return this.sharedUserData.email;
+  };
+
+  this.setEmail = function(email) {
+        this.sharedUserData.email = email;
+  };
+
+  this.sharedJobInfo = {};
+
+  this.setJobInfo = function(jobId,jobPin,jobProv,jobArea,jobDate,jobTool,jobLocate) {
+        this.sharedJobInfo.jobId = jobId;
+        this.sharedJobInfo.jobPin = jobPin;
+        this.sharedJobInfo.jobProv = jobProv;
+        this.sharedJobInfo.jobArea = jobArea;
+        this.sharedJobInfo.jobDate = jobDate;
+        this.sharedJobInfo.jobTool = jobTool;
+        this.sharedJobInfo.jobLocate = jobLocate;
+  };
+
+  this.getJobInfo = function() {
+        return this.sharedJobInfo
+  };
+
+  this.sharedJobLatLng = {Lat:"1234",Lng:"5678"};
+
+  this.setJobLatLng = function(jobLat,jobLng) {
+        this.sharedJobLatLng.Lat = jobLat;
+        this.sharedJobLatLng.Lng = jobLng;
+  };
+
+  this.getJobLatLng = function() {
+        return this.sharedJobLatLng
+  };
+
+  this.signOut = function(){
+
       if (firebase.auth().currentUser) {
         firebase.auth().signOut();
         console.log("Now loged out");
-        $scope.userEmail = "";
-        $scope.userPass = "";
-        //$location.path('/login');
+        $location.path('/login');
+        $scope.userEmail = '';
+        $scope.userPass = '';
+
       }else{
         console.log("Not login login page");
-        //$location.path('/login');
+        // $location.path('/login');
       }
-    };
 
-    $scope.signUp = function(user) {
-      $scope.firebaseUser = null;
-      $scope.error = null;
-      var userEmail = $scope.userEmail;
-      var userPass = $scope.userPass;
-
-      auth.$createUserWithEmailAndPassword(userEmail, userPass).then(function(user){
-        firebase.auth().currentUser.sendEmailVerification();
-      }).catch(function(error) {
-        $scope.error = error;
-      });
-
-    };
-
-    var initApp = function(){
-      // Listening for auth state changes.
-      // [START authstatelistener]
-      firebase.auth().onAuthStateChanged(function(user) {
-        if (user) {
-          // User is signed in.
-          var displayName = user.displayName;
-          var email = user.email;
-          var emailVerified = user.emailVerified;
-          var photoURL = user.photoURL;
-          var isAnonymous = user.isAnonymous;
-          var uid = user.uid;
-          var providerData = user.providerData;
-          // [START_EXCLUDE]
-          
-          if (emailVerified) {
-            $location.path('/landing');
-          }else{
-            //alert("รอการอนุมัติ");
-            $('#userEmail').val(email);
-            $('#userPass').val("รอการอนุมัติ กรุณาเช็คอีเมล์");
-          }
-          //$('#loginbt').text('Sign out');
-          console.log("Signin Ready : " + email +" Verification : "+emailVerified);
-          //console.log(JSON.stringify(user, null, '  '));
-          // [END_EXCLUDE]
-        } else {
-          // User is signed out.
-          // [START_EXCLUDE]
-          //document.getElementById('loginbt').textContent = 'Sign in';
-          //$('#loginbt').text('Sign in');
-          console.log("Still Signout");
-          // [END_EXCLUDE]
-        }
-        // [START_EXCLUDE]
-        //document.getElementById('loginbt').disabled = false;
-        // [END_EXCLUDE]
-      });
-    }
-    initApp();
-  }
-])
-
-.controller('landingCtrl', ["$scope", "$firebaseAuth", "$location", function($scope, $firebaseAuth, $location) {
-  var auth = $firebaseAuth();
-  auth.$onAuthStateChanged((user) => {
-    
-    $scope.signOut = function(user) {
-      if (firebase.auth().currentUser) {
-        firebase.auth().signOut();
-        console.log("Now loged out");
-        $location.path('/login');
-      }else{
-        console.log("Not login landing page");
-        $location.path('/login');
-      }
-    };
+  };
 
 
-  }); 
-}])
+
+
+})
+
+
 
 ;

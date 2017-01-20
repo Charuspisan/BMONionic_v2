@@ -1,0 +1,154 @@
+angular.module('BMON')
+
+.controller('loginCtrl', function($scope, $firebaseAuth, $location, sharedProp) {
+
+    var auth = $firebaseAuth();
+    //var userEmail = "tawancharuspisan@gmail.com";
+    //var userPass = "tawan1011";
+    var usersDB = new Firebase("https://bmon-41086.firebaseio.com/users/");
+
+    $scope.signIn = function(user) {
+      $scope.firebaseUser = null;
+      $scope.error = null;
+      var userEmail = $scope.userEmail;
+      var userPass = $scope.userPass;
+      // console.log(user);
+      // User is signed in.
+      // var emailVerified = user.emailVerified;
+      // console.log(userEmail+" : "+userPass);
+
+      auth.$signInWithEmailAndPassword(userEmail, userPass).then(function(user) {
+      //   $scope.firebaseUser = user;
+      //   if (user.emailVerified) {
+          
+      //       usersDB.child(user.uid).once("value", function(snap){
+      //         var data = snap.val();
+      //         if(data.role=="admin"){ 
+      //           $scope.$apply(function(){
+      //             $location.path('/admin');
+      //           });
+      //           console.log("admin");
+      //         }else{
+      //           //pass email to next page
+      //           sharedProp.setEmail(user.email);
+      //           $scope.$apply(function(){ 
+      //             $location.path('/getjobs');
+      //           });
+      //           console.log("getjobs");    
+      //         }
+      //       });
+      //     // $("#loginbt").trigger('click');
+
+      //   }else{
+      //     $('#userEmail').val(user.email);
+      //     $('#userPass').val("รอการอนุมัติ กรุณาเช็คอีเมล์");
+      //   }
+      }).catch(function(error) {
+        $scope.error = error;
+      });
+    };
+
+
+    $scope.signOut = function() {
+      if (firebase.auth().currentUser) {
+        firebase.auth().signOut();
+        console.log("Now loged out");
+        $location.path('/login');
+        $scope.userEmail = '';
+        $scope.userPass = '';
+
+      }else{
+        console.log("Not login login page");
+        // $location.path('/login');
+      }
+    };
+
+    $scope.signUp = function(user) {
+      $scope.firebaseUser = null;
+      $scope.error = null;
+      var userEmail = $scope.userEmail;
+      var userPass = $scope.userPass;
+
+      auth.$createUserWithEmailAndPassword(userEmail, userPass).then(function(user){
+        
+
+        firebase.auth().currentUser.sendEmailVerification();
+        // console.log("user.uid : "+user.uid);
+        //rec to db
+        usersDB.child(user.uid).set({
+          //username: name,
+          email:userEmail,
+          role:"user",
+          regisDate:Date.now(),
+          lastAccess:Date.now(),
+        });
+
+
+      }).catch(function(error) {
+        $scope.error = error;
+      });
+
+    };
+
+    // Listening for auth state changes.
+    // [START authstatelistener]
+    firebase.auth().onAuthStateChanged(function(user) {
+
+        $scope.firebaseUser = user;
+
+        if(user!=null){
+          if (user.emailVerified) {
+          
+            usersDB.child(user.uid).once("value", function(snap){
+              var data = snap.val();
+
+                if(data.role=="admin"){ 
+                  $scope.$apply(function(){
+                    $location.path('/admin');
+                  });
+                  console.log("admin");
+                }else if(data.role=="leader"){
+                  $scope.$apply(function(){
+                    $location.path('/leader');
+                  });                 
+                }else{
+                  //pass email to next page
+                  sharedProp.setEmail(user.email);
+                  setTimeout(function(){
+                    $scope.$apply(function(){ 
+                      $location.path('/getjobs');
+                    });
+                    console.log("getjobs");
+                  }, 500);
+                };
+            });
+          }else{
+            console.log("รอการอนุมัติ กรุณาเช็คอีเมล์")
+          }    
+
+
+        }else{
+          $('#userPass').val("กรุณาล็อกอิน");
+        }
+
+
+    });
+
+
+  });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
