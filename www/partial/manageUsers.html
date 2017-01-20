@@ -19,7 +19,7 @@
           <ion-item>
               {{user.email}}
               <ion-delete-button class="ion-minus-circled" 
-                ng-click="deleteUser(key)">
+                ng-click="deleteUser(key, user.email, user.password)">
               </ion-delete-button>
           </ion-item>
 

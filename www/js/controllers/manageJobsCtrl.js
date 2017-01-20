@@ -283,7 +283,7 @@ angular.module('BMON')
                     var graph = [];
                     var note = [];
                     var metaJobRec = selectedProv+'_'+selectedArea+'_'+value.pin;
-                    for(i=0; i<100; i++){newSet[i]=""; graph.push(""); note.push("");}
+                    for(i=0; i<300; i++){newSet[i]=""; graph.push(""); note.push("");}
                     // newSet.timeStamp=time;
                     // console.log("timeStamp : ",time);
                     newSet.slope="";

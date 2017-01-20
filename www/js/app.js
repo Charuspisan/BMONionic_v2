@@ -80,7 +80,7 @@ angular.module('BMON', ['ionic','ngCordova','firebase','angular.filter','chart.j
 
 .service('sharedProp', function () {
 
-  this.sharedUserData = {email:"Not loged in user or leader/admin"};
+  this.sharedUserData = {email:"Not loged in user or leader/admin",isLoginPage:true};
 
     // this.userData = {yearSetCount: 0};
 
@@ -90,6 +90,22 @@ angular.module('BMON', ['ionic','ngCordova','firebase','angular.filter','chart.j
 
   this.setEmail = function(email) {
         this.sharedUserData.email = email;
+  };
+
+  this.getPass = function() {
+        return this.sharedUserData.pass;
+  };
+
+  this.setPass = function(pass) {
+        this.sharedUserData.pass = pass;
+  };
+
+  this.getIsLoginPage = function() {
+        return this.sharedUserData.isLoginPage;
+  };
+
+  this.setIsLoginPage = function(isLoginPage) {
+        this.sharedUserData.isLoginPage = isLoginPage;
   };
 
   this.sharedJobInfo = {};

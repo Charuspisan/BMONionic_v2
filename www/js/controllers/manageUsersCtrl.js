@@ -1,9 +1,10 @@
 angular.module('BMON')
 
-.controller('manageUsersCtrl', function($scope, $firebaseObject, $firebaseArray, $ionicPopup, $timeout, sharedProp, $location, $ionicHistory) {
+.controller('manageUsersCtrl', function($scope, $firebaseObject, $firebaseArray, $firebaseAuth, $ionicPopup, $timeout, sharedProp, $location, $ionicHistory) {
 
 	console.log("user is : "+sharedProp.getEmail());
 
+  var auth = $firebaseAuth();
   var ref = new Firebase("https://bmon-41086.firebaseio.com");
   var refLocations = new Firebase("https://bmon-41086.firebaseio.com/locations/"); 
   var refJobsID = new Firebase("https://bmon-41086.firebaseio.com/jobsID/");
@@ -71,39 +72,41 @@ angular.module('BMON')
     }
   };
 
-  $scope.deleteUser = function(uid) {
-    console.log("Key for delete : "+uid);
 
-      ref.removeUser({
-        email: "tk2553u1@gmail.com",
-        password: "tawan1011"
-      }, function(error) {
-        if (error) {
-          switch (error.code) {
-            case "INVALID_USER":
-              console.log("The specified user account does not exist.");
-              break;
-            case "INVALID_PASSWORD":
-              console.log("The specified user account password is incorrect.");
-              break;
-            default:
-              console.log("Error removing user:", error);
-          }
-        } else {
-          refUsers.child(uid).remove();
-          console.log("User account deleted successfully!");
-        }
+  $scope.deleteUser = function(uid, email, pass) {
+    console.log("uid : "+uid+" email for delete : "+email+" password : "+pass);
+
+      var userEmail = email;
+      var userPass = pass;
+      var adminEmail = sharedProp.getEmail();
+      var adminPass = sharedProp.getPass();
+      console.log("adminEmail : "+adminEmail+" adminPass : "+adminPass);
+
+      sharedProp.setIsLoginPage(false);
+      var isLogin = sharedProp.getIsLoginPage();
+      console.log("From delete user isLogin : "+isLogin);
+
+      auth.$signInWithEmailAndPassword(userEmail, userPass).then(function(user) {
+        console.log("login to user want to delete");
+          var user = firebase.auth().currentUser;
+          user.delete().then(function() {
+            refUsers.child(uid).remove();
+            console.log("user deleted");
+              auth.$signInWithEmailAndPassword(adminEmail, adminPass).then(function(user) {
+                console.log("login to admin again");
+              }).catch(function(error) {
+                $scope.error = error;
+              });
+          }, function(error) {
+            console.log(error);
+          });
+      }).catch(function(error) {
+        $scope.error = error;
       });
-      // ref.auth().deleteUser(uid)
-      // .then(function() {
-      //   console.log("Successfully deleted user");
-      // })
-      // .catch(function(error) {
-      //   console.log("Error deleting user:", error);
-      // });
-
+    
   }
    
+
 
 
 
