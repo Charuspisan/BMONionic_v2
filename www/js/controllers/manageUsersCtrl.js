@@ -105,45 +105,53 @@ angular.module('BMON')
       });
     
   }
-   
+ 
+  $scope.createUserPopup = function() {
+    $scope.newUser={};
+    var myPopup = $ionicPopup.show({
+      templateUrl: 'createUserPopup.html',
+      title: 'Create User',
+      subTitle: '',
+      scope: $scope,
+      buttons: [
+        { text: 'Cancel' },
+        {
+          text: '<b>Save</b>',
+          type: 'button-positive',
+          onTap: function(){
+                var userEmail = $scope.newUser.Email;
+                var userPass = $scope.newUser.Pass;
 
+                console.log("userEmail : "+userEmail);
+                console.log("userPass : "+userPass);
 
-
-
-
-
-
-    $scope.editUserPopup = function(jobIdRef, pinIdRef) {
-      console.log("Key for edit user : "+pinIdRef);
-      $scope.selectedUser = {};
-      var myPopup = $ionicPopup.show({
-        templateUrl: 'editUserPopup.html',
-        title: 'Edit Recorder',
-        subTitle: '',
-        scope: $scope,
-        buttons: [
-          { text: 'Cancel' },
-          {
-            text: '<b>Save</b>',
-            type: 'button-positive',
-            onTap: function(e) {
-                var newUser=$scope.selectedUser.userDD;
-                refJobsID.child(jobIdRef).child(pinIdRef).update({user:newUser});
-                console.log("jobIdRef : ",jobIdRef, "pinIdRef : ",pinIdRef, " newUser : ",newUser );
-            }
-          }
-        ]
-      });
-      myPopup.then(function() {
-        // setTimeout(function(){
-        //   console.log($(".expanding").parent().parent().find(".list .item.item-accordion").length);
-        //   $(".expanding").parent().parent().find(".list .item.item-accordion").css({"display":"block !important","line-height":"38px !important"})
-        // }, 3000);
-      });
-      $timeout(function() {
-        myPopup.close(); //close the popup after 3 seconds for some reason
-      }, 100000);     
-    }
+                auth.$createUserWithEmailAndPassword(userEmail, userPass).then(function(user){
+                  firebase.auth().currentUser.sendEmailVerification();
+                  // console.log("user.uid : "+user.uid);
+                  //rec to db
+                  refUsers.child(user.uid).set({
+                    //username: name,
+                    email:userEmail,
+                    password:userPass,
+                    role:"user",
+                    regisDate:Date.now(),
+                    lastAccess:Date.now(),
+                  });
+                })
+              }
+        }
+      ]
+    });
+    myPopup.then(function() {
+      // setTimeout(function(){
+      //   console.log($(".expanding").parent().parent().find(".list .item.item-accordion").length);
+      //   $(".expanding").parent().parent().find(".list .item.item-accordion").css({"display":"block !important","line-height":"38px !important"})
+      // }, 3000);
+    });
+    $timeout(function() {
+      myPopup.close(); //close the popup after 3 seconds for some reason
+    }, 100000);     
+  }
     
 
 

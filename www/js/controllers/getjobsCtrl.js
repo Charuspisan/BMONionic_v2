@@ -27,6 +27,8 @@ angular.module('BMON')
     	$location.path('/operation');
         // $window.open('zoBPgN?'+refJobsID+'?'+pin+'?'+prov+'?'+area+'?'+date+'?'+tool);
         //console.log("refJobsID : "+refJobsID);
+        // var data = getJobInfo();
+        // alert(data.prov);
     };
 
     $scope.signOut = function() {

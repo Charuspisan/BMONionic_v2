@@ -1,0 +1,66 @@
+<ion-view ng-controller="cameraController" >
+
+
+  <ion-header-bar class="bar-positive">
+    <h1 class="title">Camera Page</h1>
+    <button id="logoutbt" ng-click="signOut()" class="button button-dark">
+      Sign out
+    </button>
+  </ion-header-bar>
+
+
+
+<ion-content scroll="true" style="top:0px;" on-swipe-right="goBack()">
+
+      <div class="boxInSlide" id="4imgContainer">
+
+
+        <ion-content class="has-header" data-tap-disabled="true">
+
+          <div id="show4imgs" style="width:100%; height:50vh; text-align:center; background-repeat: no-repeat; background-position: center; background-size: contain; background-color:#000;">
+          </div>
+          <div style="background-color: rgba(0,0,0,0.5);">
+              <i class="ion-camera" style="font-size: 3em; margin-top: -1em; display: block; color: #fff; text-align: center;"  ng-click="btnCamera()"></i>
+          </div>
+
+          <div style="padding:1em;">
+            <span style="display: inline-block; width:24%; text-align: center;">
+              <img id="frontImg" style="width:100%; height:auto;" ng-click="btnPreview('front')">
+              หน้า
+            </span>
+            <span style="display: inline-block; width:24%; text-align: center;">
+              <img id="rightImg" style="width:100%; height:auto;" ng-click="btnPreview('right')">
+              ขวา
+            </span>
+            <span style="display: inline-block; width:24%; text-align: center;">
+              <img id="backImg" style="width:100%; height:auto;" ng-click="btnPreview('back')">
+              หลัง
+            </span>
+            <span style="display: inline-block; width:24%; text-align: center;">
+              <img id="leftImg" style="width:100%; height:auto;" ng-click="btnPreview('left')">
+              ซ้าย
+            </span>
+            
+            <!-- <img id="frontImg" style="width:24%; height:auto;" ng-click="btnCamera('front')">
+            <img id="rightImg" style="width:24%; height:auto;" ng-click="btnCamera('right')">
+            <img id="backImg" style="width:24%; height:auto;" ng-click="btnCamera('back')">
+            <img id="leftImg" style="width:24%; height:auto;" ng-click="btnCamera('left')">   --> 
+
+          </div>
+
+
+          <button class="button button-positive button-full" ng-click="btnOtherImg()">ถ่ายภาพอื่นๆ</button>
+          <!-- <button class="button button-positive button-full" ng-click="btnGallery()">Gallery</button> -->
+          <!-- <button class="button button-positive button-full" ng-click="btnUpload()">Upload</button> -->
+          <!-- <button class="button button-positive button-full" ng-click="viewExif()">View EXIF</button> -->
+
+        </ion-content>
+
+
+
+      </div>
+
+</ion-content>
+
+</ion-view>
+ 

@@ -1,6 +1,6 @@
 angular.module('BMON')
 
-.controller('operationCtrl', function($scope, $ionicViewService, $firebaseObject, $firebaseArray, $ionicPopup, $timeout, $location, $window, sharedProp) {
+.controller('operationCtrl', function($scope, $ionicViewService, $firebaseObject, $firebaseArray, $ionicPopup, $timeout, $location, $window, sharedProp, $ionicLoading, $ionicScrollDelegate) {
 
 
   var refLocations = new Firebase("https://bmon-41086.firebaseio.com/locations/"); 
@@ -12,9 +12,50 @@ angular.module('BMON')
   console.log("Pass value : ",sharedProp.getJobInfo());
   console.log("jobInfo.jobId : "+jobInfo.jobId);
 
+  var isZoom = false;
+  $scope.zoom= function(){
+    // $ionicScrollDelegate.zoomBy(1.2,true);
+    if(isZoom==false){
+      $("#bar").css({"width":"150%","height":"150%"});
+      isZoom=true;
+    }else{
+      $("#bar").css({"width":"100%","height":"100%"});
+      isZoom=false;     
+    }
+  }
+
+  $scope.showLoading = function() {
+    $ionicLoading.show({     
+      content: '<div class="ionic-logo"></div>',
+      animation: 'fade-in',
+      showBackdrop: true,
+      maxWidth: 0,
+      showDelay: 0
+      // duration: 3000
+    }).then(function(){
+       console.log("The loading indicator is now displayed");
+    });
+  };
+
+  $scope.hideLoading = function(){
+    $ionicLoading.hide().then(function(){
+       console.log("The loading indicator is now hidden");
+    });
+  };
+  // $scope.$on('$viewContentLoaded', function(){
+  //   $scope.hideLoading();
+  // });
+
+  $scope.showLoading();
+
   $scope.goBack = function() {
     console.log('Going back');
     $ionicViewService.getBackView().go();
+  }
+
+  $scope.goNext = function(page) {
+    console.log('Going to : '+page);
+    $location.path(page);
   }
 
   $scope.signOut = function() {
@@ -63,6 +104,7 @@ angular.module('BMON')
      objRec.$loaded().then(function() {
          // To iterate the key/value pairs of the object, use angular.forEach()
          $scope.objRec = objRec;
+         $scope.hideLoading();
          angular.forEach(objRec, function(value, key) {
             //console.log("key ", key, "val ", value);
             // angular.forEach(value, function(val2, key2){

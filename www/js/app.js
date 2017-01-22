@@ -17,6 +17,7 @@ firebase.initializeApp(config);
 angular.module('BMON', ['ionic','ngCordova','firebase','angular.filter','chart.js','720kb.datepicker'])
 
 .run(function($ionicPlatform) {
+
   $ionicPlatform.ready(function() {
     if(window.cordova && window.cordova.plugins.Keyboard) {
       // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
@@ -68,6 +69,10 @@ angular.module('BMON', ['ionic','ngCordova','firebase','angular.filter','chart.j
     .state('manageusers', {
       url:'/manageusers',
       templateUrl:'partial/manageUsers.html'
+    })
+    .state('camera', {
+      url:'/camera',
+      templateUrl:'partial/camera.html'
     })
     .state('otherPhoto', {
       url:'/otherPhoto',

@@ -1,6 +1,6 @@
 angular.module('BMON')
 
-.controller('cameraController',function ($scope, $firebaseObject, $firebaseArray, $cordovaGeolocation, sharedProp, $ionicSlideBoxDelegate, $location) {
+.controller('cameraController',function ($scope, $firebaseObject, $firebaseArray, $cordovaGeolocation, $ionicViewService, sharedProp, $ionicSlideBoxDelegate, $location, $ionicLoading) {
 
     // // Initialize Firebase
     // var config = {
@@ -31,7 +31,6 @@ angular.module('BMON')
 
   // alert("userEmail : "+userEmail);  
 
-
   var posOptions = {timeout: 10000, enableHighAccuracy: false};
   $cordovaGeolocation
     .getCurrentPosition(posOptions)
@@ -43,7 +42,7 @@ angular.module('BMON')
       lngImg = long;
 
       sharedProp.setJobLatLng(latImg,lngImg);
-      alert("shared lat : "+latImg+" shared long : "+lngImg);  
+      // alert("shared lat : "+latImg+" shared long : "+lngImg);  
 
     }, function(err) {
       // error
@@ -69,12 +68,57 @@ angular.module('BMON')
       lngImg = long;
 
       sharedProp.setJobLatLng(latImg,lngImg);
-      alert("shared lat : "+latImg+" shared long : "+lngImg);  
+      // alert("shared lat : "+latImg+" shared long : "+lngImg);  
       
   });
 
 
   watch.clearWatch();
+
+  $scope.goBack = function() {
+    console.log('Going back');
+    $ionicViewService.getBackView().go();
+  }
+
+  $scope.signOut = function() {
+    if (firebase.auth().currentUser) {
+      firebase.auth().signOut();
+      console.log("Now loged out");
+      $location.path('/login');
+      $scope.userEmail = '';
+      $scope.userPass = '';
+
+    }else{
+      console.log("Not login login page");
+      // $location.path('/login');
+    }
+  };
+
+
+    $scope.showLoading = function() {
+      $ionicLoading.show({     
+        content: '<div class="ionic-logo"></div>',
+        animation: 'fade-in',
+        showBackdrop: true,
+        maxWidth: 0,
+        showDelay: 0
+        // duration: 3000
+      }).then(function(){
+         console.log("The loading indicator is now displayed");
+      });
+    };
+
+    $scope.hideLoading = function(){
+      $ionicLoading.hide().then(function(){
+         console.log("The loading indicator is now hidden");
+      });
+    };
+
+    // $scope.$on('$viewContentLoaded', function(){
+    //   $scope.hideLoading();
+    // });
+
+    $scope.showLoading();  
 
 
 
@@ -84,13 +128,13 @@ $scope.btnCamera = function(bt){
   if(btnWhere!=undefined){
     navigator.camera.getPicture(onSuccess, onFail, { 
 
-      quality : 75,
+      quality : 80,
       destinationType : Camera.DestinationType.DATA_URL,
       sourceType : Camera.PictureSourceType.CAMERA,
       allowEdit : false,
       encodingType: Camera.EncodingType.JPEG,
-      targetWidth: 300,
-      targetHeight: 300,
+      targetWidth: 560,
+      targetHeight: 560,
       popoverOptions: CameraPopoverOptions,
       saveToPhotoAlbum: false 
 
@@ -105,7 +149,7 @@ $scope.btnCamera = function(bt){
 function onSuccess(result) {
 
   
-  alert("btnWhere : "+btnWhere);
+  // alert("btnWhere : "+btnWhere);
 
    // convert JSON string to JSON Object
    var thisResult = JSON.parse(result);
@@ -119,38 +163,38 @@ function onSuccess(result) {
     //var image = document.getElementById('myImage');
     //image.src = "data:image/jpeg;base64," + fileName
 
-    alert(upImgData);
+    // alert(upImgData);
 
-    if (thisResult.json_metadata != "{}") {
-        if ((device.platform) == 'iOS') {
+    // if (thisResult.json_metadata != "{}") {
+    //     if ((device.platform) == 'iOS') {
 
-          // notice the difference in the properties below and the format of the result when you run the app.
-          // iOS and Android return the exif and gps differently and I am not converting or accounting for the Lat/Lon reference.
-          // This is simply the raw data being returned.
+    //       // notice the difference in the properties below and the format of the result when you run the app.
+    //       // iOS and Android return the exif and gps differently and I am not converting or accounting for the Lat/Lon reference.
+    //       // This is simply the raw data being returned.
 
-          alert('Lat: '+metadata.GPS.Latitude+' Lon: '+metadata.GPS.Longitude);
-        } else {
-          alert('Lat: '+metadata.gpsLatitude+' Lon: '+metadata.gpsLongitude);
-          alert('Date: '+metadata.datetime);
-        }
-    }
+    //           alert('Lat: '+metadata.GPS.Latitude+' Lon: '+metadata.GPS.Longitude);
+    //         } else {
+    //           alert('Lat: '+metadata.gpsLatitude+' Lon: '+metadata.gpsLongitude);
+    //           alert('Date: '+metadata.datetime);
+    //         }
+    //     }
 
     $scope.btnUpload();
-}
+  }
 
 function onFail(message) {
     alert('Failed because: ' + message);
 }
 
 $scope.viewExif = function(){
-      alert("viewExif : "+upImgData);
+      // alert("viewExif : "+upImgData);
 }
 
 
 
 $scope.btnGallery = function(){
   console.log('btnGallery');
-  alert("btnGallery");
+  // alert("btnGallery");
 
   navigator.camera.getPicture(onSuccess, onFail, { 
 
@@ -170,8 +214,8 @@ $scope.btnGallery = function(){
 
 // function btnUpload(){
 $scope.btnUpload = function(){
-  alert('btnUpload' + fileName);
-
+  // alert('btnUpload' + fileName);
+  $scope.showLoading();
   //auto gen ID
   jobsRecMeta = jobInfo.jobProv+"_"+jobInfo.jobArea+"_"+jobInfo.jobPin;
   metaImg = btnWhere+"_"+jobsRecMeta;
@@ -185,7 +229,7 @@ $scope.btnUpload = function(){
   // };
   refBMONimg.putString(fileName, 'base64').then(function(snapshot) {
 
-    alert("userEmail : "+userEmail); 
+    // alert("userEmail : "+userEmail); 
 
     imgDB.push({"date":Date.now(),"lat":latImg,"lng":lngImg,"user":userEmail,"meta":metaImg,"name":imgName,"status":"new","type":btnWhere});
 
@@ -194,38 +238,46 @@ $scope.btnUpload = function(){
     setTimeout(function(){
       if(btnWhere=='front'){
           imgOnLocate.update({"front":imgName});
-          alert('Uploaded front : '+imgName);
+          // alert('Uploaded front : '+imgName);
+          alert("บันทึกภาพแล้ว");
           refShowImg.getDownloadURL().then(function(url) {
             frontImg = imgName;
             $("#frontImg").attr("src",url);
             $("#show4imgs").css("background-image","url('"+url+"')");
+            $scope.hideLoading();
           });
       }else if(btnWhere=='right'){
           imgOnLocate.update({"right":imgName});
-          alert('Uploaded right : '+imgName);
+          // alert('Uploaded right : '+imgName);
+          alert("บันทึกภาพแล้ว");
           refShowImg.getDownloadURL().then(function(url) {
             rightImg = imgName;
             $("#rightImg").attr("src",url);
             $("#show4imgs").css("background-image","url('"+url+"')");
+            $scope.hideLoading();
           });
       }else if(btnWhere=='back'){
           imgOnLocate.update({"back":imgName});
-          alert('Uploaded back : '+imgName);      
+          // alert('Uploaded back : '+imgName);
+          alert("บันทึกภาพแล้ว");      
           refShowImg.getDownloadURL().then(function(url) {
             backImg = imgName;
             $("#backImg").attr("src",url);
             $("#show4imgs").css("background-image","url('"+url+"')");
+            $scope.hideLoading();
           });
       }else if(btnWhere=='left'){
           imgOnLocate.update({"left":imgName});
-          alert('Uploaded left : '+imgName);
+          // alert('Uploaded left : '+imgName);
+          alert("บันทึกภาพแล้ว");
           refShowImg.getDownloadURL().then(function(url) {
             leftImg = imgName;
             $("#leftImg").attr("src",url);
             $("#show4imgs").css("background-image","url('"+url+"')");
+            $scope.hideLoading();
           });
       };
-    }, 2500);
+    }, 2500); 
 
   },function(err){alert(err)});
 
@@ -292,7 +344,7 @@ $scope.btnUpload = function(){
 
   })
 
-
+  var imgsNum = 0;
   // Get the download URL
   function initImg(frontImg,rightImg,backImg,leftImg){
   console.log("frontImg : "+frontImg);
@@ -304,21 +356,34 @@ $scope.btnUpload = function(){
     refFrontImg.getDownloadURL().then(function(url) {
       console.log(url);
       $("#frontImg").attr("src",url);
+      imgsNum = imgsNum+1;
     });
     refRightImg.getDownloadURL().then(function(url) {
       console.log(url);
       $("#rightImg").attr("src",url);
+      imgsNum = imgsNum+1;
     });
     refBackImg.getDownloadURL().then(function(url) {
       console.log(url);
       $("#backImg").attr("src",url);
+      imgsNum = imgsNum+1;
     });
     refLeftImg.getDownloadURL().then(function(url) {
       console.log(url);
       $("#leftImg").attr("src",url);
+      imgsNum = imgsNum+1;
     });
   };
 
+  var checkLoaded = setInterval(imgs4loaed, 1000);
+
+  function imgs4loaed() {
+      if(imgsNum==4){
+        clearInterval(checkLoaded);
+        $scope.hideLoading();
+        console.log("4 imgs loaded");
+      }
+  } 
 
 
 })
