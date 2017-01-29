@@ -12,6 +12,7 @@ angular.module('BMON')
   console.log("Pass value : ",sharedProp.getJobInfo());
   console.log("jobInfo.jobId : "+jobInfo.jobId);
 
+
   $scope.showLoading = function() {
     $ionicLoading.show({     
       content: '<div class="ionic-logo"></div>',
@@ -106,27 +107,27 @@ angular.module('BMON')
       });
   
   
-      //Start graph
-      var refGraph = refJobsRec.child(jobInfo.jobId).child('graph')
 
-        $scope.graph = {};
-        $scope.graph.data = [
-          //Awake
-          //[-5, null, -12, null, -23,null, -28],
-          //Asleep
-          //[-8, -9, -14, -12, -18, -22, -24],
-          //Add more
-          //[-10, -19, -24, -28, -28, -36, -34]
-        ];
-    
-        //$scope.graph.labels = [];
-        //$scope.graph.series = ['1 ม.ค. 2559', '1 ก.พ. 2559', '1 มี.ค. 2559'];
-        $scope.graph.options = {
-            zoom: {
-              enabled: true,
-              mode: 'x'
-            }
-        };
+
+
+    var isZoom = false;
+    $scope.zoom= function(){
+      // $ionicScrollDelegate.zoomBy(1.2,true);
+      if(isZoom==false){
+        $("#bar").css({"width":"150%","height":"150%"});
+        isZoom=true;
+      }else{
+        $("#bar").css({"width":"100%","height":"100%"});
+        isZoom=false;     
+      }
+    }
+
+
+
+      //Start graph
+    function initGraph(){
+
+      var refGraph = refJobsRec.child(jobInfo.jobId).child('graph')
         
         refGraph.on("value",function(snapshot){
           
@@ -152,22 +153,55 @@ angular.module('BMON')
              
           });
 
-          $scope.graph.data[0] = dataArray;
-          console.log("Graph Data : ",$scope.graph.data[0]);
+          // $scope.graph.data[0] = dataArray;
+          console.log("Graph Data : ",dataArray);
           console.log("Graph index : ",indexArray);
-          console.log("Graph length : ",$scope.graph.data[0].length);
+          // console.log("Graph length : ",$scope.graph.data[0].length);
           //console.log("indexArray : ",indexArray.toString);
           var max = Math.max(...indexArray);
           console.log("Last data at : ",max);
 
-            for(i=0;i<=max;i++){
-              labelsArray.push(i);
-            }
-  
-          $scope.graph.labels=labelsArray;
+          for(i=0;i<=max;i++){
+            labelsArray.push(i);
+          }
 
-        });
-        //End graph
+          var exitdata = dataArray.slice(0,max+1);
+
+          var chart = c3.generate({
+              bindto: '#chart',
+              data: {
+                columns: [
+                  // ['data1', -20, -50, -100, -120, -150, -180, -200, -200, -100, -100, -150, -80]
+                  exitdata
+                ]
+              },
+              axis: {
+                  y: {
+                      tick: {
+                          format: d3.format('.2f')
+                      }
+                  },
+              },
+              legend: {
+                show: false
+              },
+              zoom: {
+                  enabled: true
+              }
+
+          });
+          var divHeight = document.getElementById('graphSec').offsetHeight - 44;
+          chart.resize({height:divHeight});
+
+
+
+        })
+
+
+    }
+
+    initGraph();  
+     //End graph
 
 
     //check tools from jobs assign detect tool type
@@ -389,138 +423,6 @@ angular.module('BMON')
   };
 
   setupSlider();
-
-
-
-
-
-
-
-    var randomScalingFactor = function() {
-      return (Math.random() > 0.5 ? 1.0 : -1.0) * Math.round(Math.random() * 100);
-    };
-    var randomColor = function(opacity) {
-      return 'rgba(' + Math.round(Math.random() * 255) + ',' + Math.round(Math.random() * 255) + ',' + Math.round(Math.random() * 255) + ',' + (opacity || '.3') + ')';
-    };
-
-    var scatterChartData = {
-      datasets: [{
-        label: "My First dataset",
-        data: [{
-          x: randomScalingFactor(),
-          y: randomScalingFactor(),
-        }, {
-          x: randomScalingFactor(),
-          y: randomScalingFactor(),
-        }, {
-          x: randomScalingFactor(),
-          y: randomScalingFactor(),
-        }, {
-          x: randomScalingFactor(),
-          y: randomScalingFactor(),
-        }, {
-          x: randomScalingFactor(),
-          y: randomScalingFactor(),
-        }, {
-          x: randomScalingFactor(),
-          y: randomScalingFactor(),
-        }, {
-          x: randomScalingFactor(),
-          y: randomScalingFactor(),
-        }]
-      }, {
-        label: "My Second dataset",
-        data: [{
-          x: randomScalingFactor(),
-          y: randomScalingFactor(),
-        }, {
-          x: randomScalingFactor(),
-          y: randomScalingFactor(),
-        }, {
-          x: randomScalingFactor(),
-          y: randomScalingFactor(),
-        }, {
-          x: randomScalingFactor(),
-          y: randomScalingFactor(),
-        }, {
-          x: randomScalingFactor(),
-          y: randomScalingFactor(),
-        }, {
-          x: randomScalingFactor(),
-          y: randomScalingFactor(),
-        }, {
-          x: randomScalingFactor(),
-          y: randomScalingFactor(),
-        }]
-      }]
-    };
-
-    scatterChartData.datasets.forEach(function(dataset) {
-      dataset.borderColor = randomColor(0.4);
-      dataset.backgroundColor = randomColor(0.1);
-      dataset.pointBorderColor = randomColor(0.7);
-      dataset.pointBackgroundColor = randomColor(0.5);
-      dataset.pointBorderWidth = 1;
-    });
-
-    var loadGraph = function() {
-      var ctx = document.getElementById("canvas").getContext("2d");
-      window.myScatter = Chart.Scatter(ctx, {
-        data: scatterChartData,
-        options: {
-          title: {
-            display: true,
-            text: 'Chart.js Scatter Chart'
-          },
-          scales: {
-            xAxes: [{
-              position: 'top',
-              gridLines: {
-                zeroLineColor: "rgba(0,255,0,1)"
-              },
-              scaleLabel: {
-                display: true,
-                labelString: 'x axis'
-              },
-              ticks: {
-                maxRotation: 0,
-                reverse: true
-              }
-            }],
-            yAxes: [{
-              position: 'right',
-              gridLines: {
-                zeroLineColor: "rgba(0,255,0,1)"
-              },
-              scaleLabel: {
-                display: true,
-                labelString: 'y axis'
-              },
-              ticks: {
-                reverse: true
-              }
-            }]
-          },
-          pan: {
-            enabled: true,
-            mode: 'xy'
-          },
-          zoom: {
-            enabled: true,
-            mode: 'xy',
-            limits: {
-              max: 10,
-              min: 0.5
-            }
-          },
-          onClick: function(e) {
-            alert(e.type);
-          }
-        }
-      });
-    };
-
-    loadGraph();
 
 
 

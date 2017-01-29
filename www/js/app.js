@@ -14,7 +14,7 @@ var config = {
 };
 firebase.initializeApp(config);
 
-angular.module('BMON', ['ionic','ngCordova','firebase','angular.filter','chart.js','720kb.datepicker'])
+angular.module('BMON', ['ionic','ngCordova','firebase','angular.filter','720kb.datepicker'])
 
 .run(function($ionicPlatform) {
 
