@@ -45,3 +45,8 @@ ion-slide{height: 100vh !important;}
 }
 .item-input {height:2em;}
 ._720kb-datepicker-calendar {position: fixed !important; top: -50% !important;left: 0%;margin-top: 5% !important;}
+  canvas {
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+  }

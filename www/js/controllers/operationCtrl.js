@@ -12,18 +12,6 @@ angular.module('BMON')
   console.log("Pass value : ",sharedProp.getJobInfo());
   console.log("jobInfo.jobId : "+jobInfo.jobId);
 
-  var isZoom = false;
-  $scope.zoom= function(){
-    // $ionicScrollDelegate.zoomBy(1.2,true);
-    if(isZoom==false){
-      $("#bar").css({"width":"150%","height":"150%"});
-      isZoom=true;
-    }else{
-      $("#bar").css({"width":"100%","height":"100%"});
-      isZoom=false;     
-    }
-  }
-
   $scope.showLoading = function() {
     $ionicLoading.show({     
       content: '<div class="ionic-logo"></div>',
@@ -133,6 +121,12 @@ angular.module('BMON')
     
         //$scope.graph.labels = [];
         //$scope.graph.series = ['1 ม.ค. 2559', '1 ก.พ. 2559', '1 มี.ค. 2559'];
+        $scope.graph.options = {
+            zoom: {
+              enabled: true,
+              mode: 'x'
+            }
+        };
         
         refGraph.on("value",function(snapshot){
           
@@ -171,7 +165,8 @@ angular.module('BMON')
             }
   
           $scope.graph.labels=labelsArray;
-        })
+
+        });
         //End graph
 
 
@@ -394,6 +389,138 @@ angular.module('BMON')
   };
 
   setupSlider();
+
+
+
+
+
+
+
+    var randomScalingFactor = function() {
+      return (Math.random() > 0.5 ? 1.0 : -1.0) * Math.round(Math.random() * 100);
+    };
+    var randomColor = function(opacity) {
+      return 'rgba(' + Math.round(Math.random() * 255) + ',' + Math.round(Math.random() * 255) + ',' + Math.round(Math.random() * 255) + ',' + (opacity || '.3') + ')';
+    };
+
+    var scatterChartData = {
+      datasets: [{
+        label: "My First dataset",
+        data: [{
+          x: randomScalingFactor(),
+          y: randomScalingFactor(),
+        }, {
+          x: randomScalingFactor(),
+          y: randomScalingFactor(),
+        }, {
+          x: randomScalingFactor(),
+          y: randomScalingFactor(),
+        }, {
+          x: randomScalingFactor(),
+          y: randomScalingFactor(),
+        }, {
+          x: randomScalingFactor(),
+          y: randomScalingFactor(),
+        }, {
+          x: randomScalingFactor(),
+          y: randomScalingFactor(),
+        }, {
+          x: randomScalingFactor(),
+          y: randomScalingFactor(),
+        }]
+      }, {
+        label: "My Second dataset",
+        data: [{
+          x: randomScalingFactor(),
+          y: randomScalingFactor(),
+        }, {
+          x: randomScalingFactor(),
+          y: randomScalingFactor(),
+        }, {
+          x: randomScalingFactor(),
+          y: randomScalingFactor(),
+        }, {
+          x: randomScalingFactor(),
+          y: randomScalingFactor(),
+        }, {
+          x: randomScalingFactor(),
+          y: randomScalingFactor(),
+        }, {
+          x: randomScalingFactor(),
+          y: randomScalingFactor(),
+        }, {
+          x: randomScalingFactor(),
+          y: randomScalingFactor(),
+        }]
+      }]
+    };
+
+    scatterChartData.datasets.forEach(function(dataset) {
+      dataset.borderColor = randomColor(0.4);
+      dataset.backgroundColor = randomColor(0.1);
+      dataset.pointBorderColor = randomColor(0.7);
+      dataset.pointBackgroundColor = randomColor(0.5);
+      dataset.pointBorderWidth = 1;
+    });
+
+    var loadGraph = function() {
+      var ctx = document.getElementById("canvas").getContext("2d");
+      window.myScatter = Chart.Scatter(ctx, {
+        data: scatterChartData,
+        options: {
+          title: {
+            display: true,
+            text: 'Chart.js Scatter Chart'
+          },
+          scales: {
+            xAxes: [{
+              position: 'top',
+              gridLines: {
+                zeroLineColor: "rgba(0,255,0,1)"
+              },
+              scaleLabel: {
+                display: true,
+                labelString: 'x axis'
+              },
+              ticks: {
+                maxRotation: 0,
+                reverse: true
+              }
+            }],
+            yAxes: [{
+              position: 'right',
+              gridLines: {
+                zeroLineColor: "rgba(0,255,0,1)"
+              },
+              scaleLabel: {
+                display: true,
+                labelString: 'y axis'
+              },
+              ticks: {
+                reverse: true
+              }
+            }]
+          },
+          pan: {
+            enabled: true,
+            mode: 'xy'
+          },
+          zoom: {
+            enabled: true,
+            mode: 'xy',
+            limits: {
+              max: 10,
+              min: 0.5
+            }
+          },
+          onClick: function(e) {
+            alert(e.type);
+          }
+        }
+      });
+    };
+
+    loadGraph();
 
 
 

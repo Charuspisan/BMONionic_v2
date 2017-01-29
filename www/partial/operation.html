@@ -19,10 +19,15 @@
             <div class="bar">
                <h2 class="title">{{GetrefJobPin}} : {{GetrefJobProv}} : {{GetrefJobArea}} : {{GetrefJobDate}}</h2>
             </div>
-            <canvas id="bar" class="chart chart-line" data="graph.data" labels="graph.labels" series='graph.series' style="margin-top:50px; padding:0 1em;" on-double-tap="zoom()"></canvas>
-          </ion-scroll>  
-        </ion-content>
+            <!-- <canvas id="bar" class="chart chart-line" data="graph.data" labels="graph.labels" series='graph.series' chart-options="graph.options" style="margin-top:50px; padding:0 1em;"></canvas> -->
 
+              <div style="width:100%">
+                <div>
+                  <canvas id="canvas"></canvas>
+                </div>
+              </div>
+
+        </ion-content>
 
         <ion-content style="top:50vh;" on-swipe-right="goBack()" on-swipe-left="goNext('/camera')">
 
