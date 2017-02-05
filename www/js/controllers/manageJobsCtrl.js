@@ -114,7 +114,7 @@ angular.module('BMON')
 
   $scope.deleteJob = function(jobIdRef) {
     console.log("Key for delete : "+jobIdRef);
-    //query form jobIdRef
+    // query form jobIdRef
     refJobsRec.orderByChild("jobIdRef").equalTo(jobIdRef).once("value", function(snapshot){
       console.log("snapshot : ",snapshot.val());
       //var s=snapshot.val();
@@ -129,6 +129,77 @@ angular.module('BMON')
     });
     refJobsID.child(jobIdRef).remove();
   }
+
+
+ var idDelete
+ $scope.showDeleteJob = function($event, key) {
+
+  $event.stopPropagation();
+  idDelete = key 
+
+   var confirmPopup = $ionicPopup.confirm({
+     title: 'ลบงาน',
+     template: 'คุณต้องการจะลบงานนี้ใช่หรือไม่ การลบจะไม่สามารถเรียกคืนข้อมูลได้'
+   });
+
+   confirmPopup.then(function(res, id) {
+
+     if(res) {
+       console.log('You are sure');
+       $scope.deleteJob(idDelete);
+     } else {
+       console.log('You are not sure');
+     }
+   });
+ };
+
+
+
+
+
+
+
+
+
+
+
+  $scope.finishedJob = function(jobId) {
+    alert(jobId);
+    refJobsID.child(jobId).update({"status":"closed"});
+  }
+
+  var jobClosed
+
+   $scope.showFinishedJob = function($event, key) {
+
+    jobClosed = key
+
+    $event.stopPropagation();
+     var confirmPopup = $ionicPopup.confirm({
+       title: 'เสร็จสิ้นงาน',
+       template: 'คุณต้องการจะเสร็จสิ้นงานนี้ใช่หรือไม่'
+     });
+
+     confirmPopup.then(function(res) {
+       if(res) {
+         console.log('You are sure');
+         $scope.finishedJob(jobClosed);
+       } else {
+         console.log('You are not sure');
+       }
+     });
+   };
+
+
+
+
+
+
+
+
+
+
+
 
     $scope.editOperDatePopup = function(jobIdRef) {
       console.log("Key for edit date : "+jobIdRef);

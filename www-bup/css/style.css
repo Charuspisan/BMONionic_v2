@@ -50,3 +50,6 @@ ion-slide{height: 100vh !important;}
     -webkit-user-select: none;
     -ms-user-select: none;
   }
+text.highcharts-credits {
+    display: none;
+}

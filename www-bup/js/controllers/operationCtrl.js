@@ -101,39 +101,40 @@ angular.module('BMON')
             //   console.log("key2 ", key2, "val2 ", val2);
             //   }
             // })
-            //objGraphData.push(value);
+            // objGraphData.push(value);
          });
-     //console.log("objGraphData : ",objGraphData);
+     // console.log("objGraphData : ",objGraphData);
       });
-  
-  
-
-
-
-    var isZoom = false;
-    $scope.zoom= function(){
-      // $ionicScrollDelegate.zoomBy(1.2,true);
-      if(isZoom==false){
-        $("#bar").css({"width":"150%","height":"150%"});
-        isZoom=true;
-      }else{
-        $("#bar").css({"width":"100%","height":"100%"});
-        isZoom=false;     
-      }
-    }
-
 
 
       //Start graph
-    function initGraph(){
+      var dataArray=[]
+      var graphData=[]
+      var dataForCheckIndex=[]
+      var indexArray=[]
+      var labelsArray=[]
+      var labelsData=[]
 
       var refGraph = refJobsRec.child(jobInfo.jobId).child('graph')
+
+        $scope.graph = {};
+        $scope.graph.data = [
+          //Awake
+          //[-5, null, -12, null, -23,null, -28],
+          //Asleep
+          //[-8, -9, -14, -12, -18, -22, -24],
+          //Add more
+          //[-10, -19, -24, -28, -28, -36, -34]
+        ];
+    
+        //$scope.graph.labels = [];
+        //$scope.graph.series = ['1 ม.ค. 2559', '1 ก.พ. 2559', '1 มี.ค. 2559'];
         
         refGraph.on("value",function(snapshot){
-          
-          var dataArray=[]
-          var indexArray=[]
-          var labelsArray=[]
+
+          dataArray = [];
+          dataForCheckIndex = [];
+          labelsArray=[]
           
           snapshot.forEach(function(childSnapshot) {
 
@@ -141,66 +142,114 @@ angular.module('BMON')
             var childData = childSnapshot.val();
             if(childData==""){
               dataArray.push(null);
-              indexArray.push(dataArray.indexOf(childData));
+              dataForCheckIndex.push(null);
+              // indexArray.push(dataArray.indexOf(childData));
             }else if(childData==0){
-              dataArray.push("0");
-              indexArray.push(dataArray.indexOf(childData));
+              dataArray.push(0);
+              dataForCheckIndex.push(0);
+              // indexArray.push(dataArray.indexOf(childData));
             }else{
-              dataArray.push(childData);
-              indexArray.push(dataArray.indexOf(childData));
+              dataArray.push(parseFloat(childData)); //why take effect to indexArray
+              dataForCheckIndex.push(childData);
+              // indexArray.push(dataArray.indexOf(childData));
             }
-  
+              indexArray.push(dataForCheckIndex.indexOf(childData));
              
           });
 
-          // $scope.graph.data[0] = dataArray;
-          console.log("Graph Data : ",dataArray);
-          console.log("Graph index : ",indexArray);
-          // console.log("Graph length : ",$scope.graph.data[0].length);
-          //console.log("indexArray : ",indexArray.toString);
           var max = Math.max(...indexArray);
           console.log("Last data at : ",max);
 
-          for(i=0;i<=max;i++){
-            labelsArray.push(i);
+            for(i=0;i<=max;i++){
+              var data = i.toString()
+              labelsArray.push(data);
+            }
+          console.log("labelsArray : ",labelsArray);
+
+
+
+          if(jobInfo.jobTool=="One-man"){
+            graphData = [];
+            labelsData = [];
+            graphData = dataArray.slice(0, max+1);
+            labelsData = labelsArray;
+            console.log("tool is One-man graphData : ",graphData);
+            console.log("labelsData : ",labelsData);
+
+          }else{
+
+            graphData = [];
+            labelsData = [];
+            for (i=0;i<max+1;i++){
+                if ((i+2)%2==0) {
+                    graphData.push(dataArray[i]);
+                    labelsData.push(labelsArray[i]);
+                }
+            }
+            console.log("tool is Water-level graphData : ",graphData);
+            console.log("labelsData : ",labelsData);
+
           }
 
-          var exitdata = dataArray.slice(0,max+1);
-
-          var chart = c3.generate({
-              bindto: '#chart',
-              data: {
-                columns: [
-                  // ['data1', -20, -50, -100, -120, -150, -180, -200, -200, -100, -100, -150, -80]
-                  exitdata
-                ]
-              },
-              axis: {
-                  y: {
-                      tick: {
-                          format: d3.format('.2f')
-                      }
-                  },
-              },
-              legend: {
-                show: false
-              },
-              zoom: {
-                  enabled: true
-              }
-
-          });
-          var divHeight = document.getElementById('graphSec').offsetHeight - 44;
-          chart.resize({height:divHeight});
-
-
+          initChart();
+ 
 
         })
 
 
-    }
 
-    initGraph();  
+function initChart() {
+
+    Highcharts.chart('container', {
+        chart: {
+            type: 'line',
+            zoomType: 'x',
+            resetZoomButton: {
+              theme: {
+              display: 'none'
+              }
+            }
+        },
+        legend: {
+            enabled: false
+        },
+        title: {
+            text: false
+        },
+        subtitle: {
+            text: false
+        },
+        xAxis: {
+            // categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+            categories: labelsData
+        },
+        yAxis: {
+            title: {
+                text: false
+            }
+        },
+        plotOptions: {
+            line: {
+                dataLabels: {
+                    enabled: false
+                },
+                enableMouseTracking: false
+            }
+        },
+        series: [{
+                name: 'stat',
+                //data: [49.9, 71.5, 106.4, 129.2, 144.0, 176.0, 135.6, 148.5, 216.4, 194.1, 95.6, 54.4]
+                data: graphData
+            }]
+    });
+};
+
+
+
+
+
+
+
      //End graph
 
 
@@ -263,9 +312,9 @@ angular.module('BMON')
             type: 'button-positive',
             onTap: function(e) {
               var objNewMeter=$scope.editMeterData.meterInTxt;
-              console.log("meter key : ",key);
+              // console.log("meter key : ",key);
               //console.log("meter keyItem : ",keyItem);
-              console.log("objNewMeter : ",objNewMeter);
+              // console.log("objNewMeter : ",objNewMeter);
               //refJobsRec.child($scope.GetrefJobID).update(objNewMeter);
               refJobsRec.child(jobInfo.jobId).child(key).push(objNewMeter);   
               
@@ -277,9 +326,9 @@ angular.module('BMON')
               refDiff.limitToFirst(parseInt(key)+1).on("value",function(snapshot){
                 snapshot.forEach(function(childSnapshot) {
                   var childData = childSnapshot.val();
-                  console.log("childSnapshot Inside : ",childData);
+                  // console.log("childSnapshot Inside : ",childData);
                   GraphItem = GraphItem + childData
-                  console.log("GraphItem Inside : ",GraphItem);
+                  // console.log("GraphItem Inside : ",GraphItem);
                 }) 
               })
               console.log("GraphItem : "+GraphItem);

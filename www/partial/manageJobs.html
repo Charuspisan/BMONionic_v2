@@ -20,8 +20,9 @@
               <i class="icon" ng-class="isGroupShown(group) ? 'ion-ios-minus-outline' : 'ion-ios-plus-outline'"></i>
             &nbsp;
             {{group.province}} : {{group.area}} : {{group.operate_date}}
+            <button class="button button-small button-positive button-right" ng-click="showFinishedJob($event, key);"><i class="icon ion-archive"></i></button>
               <ion-delete-button class="ion-minus-circled" 
-                ng-click="deleteJob(key)">
+                ng-click="showDeleteJob($event, key)">
               </ion-delete-button>
           </ion-item>
 
@@ -68,13 +69,6 @@
         </datepicker>
 
 		</script>
-
-
-
-
-
-
-
 
 
 
