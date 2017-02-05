@@ -1,4 +1,4 @@
-<ion-view ng-controller="leaderCtrl">
+<ion-view ng-controller="manageJobsCtrl">
 
 
 	<ion-header-bar class="bar-positive">
@@ -12,7 +12,7 @@
   	  	</button>
 	</ion-header-bar>
 
-    <ion-content class="has-footer">
+    <ion-content class="has-footer" on-swipe-left="goNext('/manageusers')" on-swipe-right="goBack()">
 
       <ion-list ng-repeat="(key, group) in jobListData" show-delete="data.showDelete">
 
@@ -41,19 +41,67 @@
 
     </ion-content>
 
-<!--     <ion-footer-bar align-title="left" class="bar-positive" style="height:auto;">
+    <ion-footer-bar align-title="left" class="bar-positive" style="height:auto;">
  
         <button class="button button-full button-positive" ng-click="showCreateJobPopup()">
           <i class="icon ion-ios-plus-outline"></i> <span style="font-size:1.2em;">Create Job</span>
         </button> 
 
-    </ion-footer-bar> -->
+    </ion-footer-bar>
     
-<!-- 		<script id="createJobPopup.html" type="text/ng-template">
-			<input ng-model="createJobData.provInTxt" type="text" placeholder="Select Province">
+		<script id="createJobPopup.html" type="text/ng-template">
+<!-- 			<input ng-model="createJobData.provInTxt" type="text" placeholder="Select Province">
 		  	<input ng-model="createJobData.areaInTxt" type="text" placeholder="Select Area">
-		  	<input ng-model="createJobData.operateDateInTxt" type="text" placeholder="Operating Date">
-		</script> -->
+		  	<input ng-model="createJobData.operateDateInTxt" type="text" placeholder="Operating Date"> -->
+        <select style="width: 100%; padding: 0.5em;" ng-model="createJobData.provInTxt" ng-change="filterArea()">
+          <option value="" disabled selected>เลือกจังหวัด</option>
+          <option ng-repeat="prov in queryProv | orderBy">{{prov}}</option>
+        </select>
+        <!-- <input ng-model="AddProvData.areaInTxt" type="text" placeholder="Add Area"> -->
+        <select style="width: 100%; padding: 0.5em;" ng-model="createJobData.areaInTxt">
+          <option value="" disabled selected>เลือกพื้นที่</option>
+          <option ng-repeat="area in queryArea | orderBy">{{area}}</option>
+        </select>
+        <!-- <input ng-model="createJobData.operateDateInTxt" type="text" placeholder="Operating Date"> -->
+        <datepicker date-format="dd-MM-yyyy">
+          <input ng-model="createJobData.operateDateInTxt" type="text" placeholder="Operating Date"/>
+        </datepicker>
+
+		</script>
+
+
+
+
+
+
+
+
+
+
+<script id="AddProvPopup.html" type="text/ng-template">
+  <!-- <input ng-model="AddProvData.provInTxt" type="text" placeholder="Add Province"> -->
+  <select style="width: 100%; padding: 0.5em;" ng-model="AddProvData.provInTxt" ng-change="filterArea()">
+    <option value="" disabled selected>เลือกจังหวัด</option>
+    <option ng-repeat="prov in queryProv | orderBy">{{prov}}</option>
+  </select>
+  <!-- <input ng-model="AddProvData.areaInTxt" type="text" placeholder="Add Area"> -->
+  <select style="width: 100%; padding: 0.5em;" ng-model="AddProvData.areaInTxt">
+    <option value="" disabled selected>เลือกพื้นที่</option>
+    <option ng-repeat="area in queryArea | orderBy">{{area}}</option>
+  </select>
+  <input ng-model="AddProvData.pinInTxt" type="text" placeholder="Add Pin">
+  <input ng-model="AddProvData.latInTxt" type="text" placeholder="Add Latitude">
+  <input ng-model="AddProvData.lngInTxt" type="text" placeholder="Add Longtitude">
+</script>
+
+
+
+
+
+
+
+
+
 
 		<script id="editOperDatePopup.html" type="text/ng-template">
 		  	<!-- <input ng-model="editOperDateData.operateDateInTxt" type="text" placeholder="Operating Date"> -->

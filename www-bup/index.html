@@ -23,6 +23,7 @@
     <!-- IF using Sass (run gulp sass first), then uncomment below and remove the CSS includes above
     <link href="css/ionic.app.css" rel="stylesheet">
     -->
+    <link href="lib/datePicker/datepicker.css" rel="stylesheet" type="text/css" />
   </head>
   <body ng-app="BMON">
 
@@ -33,15 +34,23 @@
     <!-- Firebase -->
     <script src="/js/firebase.js"></script>
     <script src="https://cdn.firebase.com/js/client/2.2.7/firebase.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/3.6.1/firebase.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/3.6.2/firebase.js"></script>
     <!-- AngularFire -->
     <script src="https://cdn.firebase.com/libs/angularfire/2.1.0/angularfire.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-filter/0.5.11/angular-filter.min.js"></script>
 
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular-animate.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular-route.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular-aria.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular-messages.min.js"></script>
+    <script src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/t-114/svg-assets-cache.js"></script>
+    <script src="https://cdn.gitcdn.link/cdn/angular/bower-material/v1.1.1/angular-material.js"></script>
+    
     <!-- ionic/angularjs js -->
     <!-- cordova script (this will be a 404 during development) -->
     <script src="lib/ngCordova/dist/ng-cordova.js"></script>
     <script src="cordova.js"></script>
+
     <!-- your app's js -->
     <script src="js/app.js"></script>
     <script src="js/controllers/loginCtrl.js"></script>
@@ -51,12 +60,23 @@
     <script src="js/controllers/locationsCtrl.js"></script>
     <script src="js/controllers/otherPhotoCtrl.js"></script>
     <script src="js/controllers/leaderCtrl.js"></script>
+    <script src="js/controllers/manageJobsCtrl.js"></script>
+    <script src="js/controllers/manageUsersCtrl.js"></script>
+    <!-- <script src="js/pxtrack.js"></script> -->
     
     <!-- <script src="//cdnjs.cloudflare.com/ajax/libs/Chart.js/1.0.1/Chart.min.js"></script> -->
-    <script type="text/javascript" src="http://www.chartjs.org/assets/Chart.js"></script>
-    <script src="lib/angular-chart.min.js"></script>
+    <!-- <script type="text/javascript" src="http://www.chartjs.org/assets/Chart.js"></script>
+    <script src="lib/angular-chart.min.js"></script> -->
+    <!-- Load c3.css -->
+<link href="lib/c3/c3.css" rel="stylesheet" type="text/css">
+
+<!-- Load d3.js and c3.js -->
+<script src="lib/c3/d3.v3.min.js" charset="utf-8"></script>
+<script src="lib/c3/c3.min.js"></script>
+
+    <script src="lib/datePicker/datepicker.js"></script>
     <!-- AngularFire -->
     <!-- <script src="https://cdn.firebase.com/libs/angularfire/1.1.2/angularfire.min.js"></script> -->
-
+    <!-- <script src="src/js/angular-datepicker.js"></script>  -->
   </body>
 </html>

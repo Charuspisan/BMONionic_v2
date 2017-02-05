@@ -14,9 +14,10 @@ var config = {
 };
 firebase.initializeApp(config);
 
-angular.module('BMON', ['ionic','ngCordova','firebase','angular.filter','chart.js'])
+angular.module('BMON', ['ionic','ngCordova','firebase','angular.filter','720kb.datepicker'])
 
 .run(function($ionicPlatform) {
+
   $ionicPlatform.ready(function() {
     if(window.cordova && window.cordova.plugins.Keyboard) {
       // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
@@ -41,10 +42,10 @@ angular.module('BMON', ['ionic','ngCordova','firebase','angular.filter','chart.j
       url:'/login',
       templateUrl:'partial/login.html'
     })
-    .state('admin', {
-      url:'/admin',
-      templateUrl:'partial/admin.html'
-    })
+    // .state('admin', {
+    //   url:'/admin',
+    //   templateUrl:'partial/admin.html'
+    // })
     .state('leader', {
       url:'/leader',
       templateUrl:'partial/leader.html'
@@ -61,6 +62,18 @@ angular.module('BMON', ['ionic','ngCordova','firebase','angular.filter','chart.j
       url:'/locations',
       templateUrl:'partial/locations.html'
     })
+    .state('managejobs', {
+      url:'/managejobs',
+      templateUrl:'partial/manageJobs.html'
+    })
+    .state('manageusers', {
+      url:'/manageusers',
+      templateUrl:'partial/manageUsers.html'
+    })
+    .state('camera', {
+      url:'/camera',
+      templateUrl:'partial/camera.html'
+    })
     .state('otherPhoto', {
       url:'/otherPhoto',
       templateUrl:'partial/otherPhoto.html'
@@ -72,7 +85,7 @@ angular.module('BMON', ['ionic','ngCordova','firebase','angular.filter','chart.j
 
 .service('sharedProp', function () {
 
-  this.sharedUserData = {email:"Not loged in user or leader/admin"};
+  this.sharedUserData = {email:"Not loged in user or leader/admin",isLoginPage:true};
 
     // this.userData = {yearSetCount: 0};
 
@@ -82,6 +95,22 @@ angular.module('BMON', ['ionic','ngCordova','firebase','angular.filter','chart.j
 
   this.setEmail = function(email) {
         this.sharedUserData.email = email;
+  };
+
+  this.getPass = function() {
+        return this.sharedUserData.pass;
+  };
+
+  this.setPass = function(pass) {
+        this.sharedUserData.pass = pass;
+  };
+
+  this.getIsLoginPage = function() {
+        return this.sharedUserData.isLoginPage;
+  };
+
+  this.setIsLoginPage = function(isLoginPage) {
+        this.sharedUserData.isLoginPage = isLoginPage;
   };
 
   this.sharedJobInfo = {};
@@ -109,6 +138,22 @@ angular.module('BMON', ['ionic','ngCordova','firebase','angular.filter','chart.j
 
   this.getJobLatLng = function() {
         return this.sharedJobLatLng
+  };
+
+  this.signOut = function(){
+
+      if (firebase.auth().currentUser) {
+        firebase.auth().signOut();
+        console.log("Now loged out");
+        $location.path('/login');
+        $scope.userEmail = '';
+        $scope.userPass = '';
+
+      }else{
+        console.log("Not login login page");
+        // $location.path('/login');
+      }
+
   };
 
 

@@ -1,16 +1,30 @@
-angular.module('BMON').controller('manageLocationsCtrl', function($scope, $firebaseObject, $firebaseArray, $ionicPopup, $timeout) {
+angular.module('BMON').controller('manageLocationsCtrl', function($scope, $firebaseObject, $firebaseArray, $ionicPopup, $timeout, $location, $ionicViewService) {
 
 
-     var refLocations = new Firebase("https://bmon-41086.firebaseio.com/locations/");
+    var refLocations = new Firebase("https://bmon-41086.firebaseio.com/locations/");
 
-     var obj = $firebaseObject(refLocations);
+    $scope.queryProv=[];
+    $scope.queryArea=[]
+
+    var obj = $firebaseObject(refLocations);
      // to take an action after the data loads, use the $loaded() promise
      obj.$loaded().then(function() {
          // To iterate the key/value pairs of the object, use angular.forEach()
-         //console.log(obj);
+         console.log("obj is : ",obj);
+         $scope.data = obj;
+
          angular.forEach(obj, function(value, key) {
             //console.log("key ", key, "val ", value);
+            if($scope.queryProv.indexOf(value.province) == -1) {
+               $scope.queryProv.push(value.province);
+            }
+            if($scope.queryArea.indexOf(value.area) == -1) {
+               $scope.queryArea.push(value.area);
+            }
          });
+
+         console.log("$scope.queryProv : ",$scope.queryProv);
+
          // To make the data available in the DOM, assign it to $scope
          //$scope.data = obj;
         
@@ -18,12 +32,67 @@ angular.module('BMON').controller('manageLocationsCtrl', function($scope, $fireb
          //obj.$bindTo($scope, "data");  
        
       });
+
+  $scope.goNext = function(page) {
+    console.log('Going to : '+page);
+    $location.path(page);
+  }
+
+  $scope.goBack = function() {
+    console.log('Going back');
+    $ionicViewService.getBackView().go();
+  }
+
+      $scope.filterArea = function(){
+        console.log("prov : "+$scope.AddProvData.provInTxt);
+        var queryArea = [];
+        prov = $scope.AddProvData.provInTxt
+          refLocations.orderByChild("province").equalTo(prov).on("value", function(snapshot) {
+              // console.log("value : ",value);
+              snapshot.forEach(function(childSnapshot) {
+                  var key = childSnapshot.key;
+                  var childData = childSnapshot.val();
+                  if(queryArea.indexOf(childData.area) == -1) {
+                     queryArea.push(childData.area);
+                  }
+              });
+              $scope.$watch(function () {
+                  $scope.queryArea = queryArea;
+              });
+              console.log("$scope.queryArea : "+$scope.queryArea);
+          });
+      }    
   
-refLocations.on("value", function(snapshot) {
-    var snapData=snapshot.val();
-    $scope.data = snapData;
-    //console.log(snapData);
-});
+// refLocations.on("value", function(snapshot) {
+//     var snapData=snapshot.val();
+//     $scope.data = snapData;
+//     console.log("snapData : ",snapData);
+// });
+
+
+  // $scope.queryProv=[]
+  // refLocations.orderByChild("province").on("child_added", function(snapshot){
+  //   // console.log("data on location : ",snapshot.val());
+  //   dataLocateDD = snapshot.val();
+  //   if($scope.queryProv.indexOf(dataLocateDD.province) == -1) {
+  //      $scope.queryProv.push(dataLocateDD.province);
+  //   }
+  //   console.log("$scope.queryProv : ",$scope.queryProv);
+  // });
+
+  $scope.signOut = function() {
+    if (firebase.auth().currentUser) {
+      firebase.auth().signOut();
+      console.log("Now loged out");
+      $location.path('/login');
+      $scope.userEmail = '';
+      $scope.userPass = '';
+
+    }else{
+      console.log("Not login login page");
+      $location.path('/login');
+    }
+  };
 
   // Triggered on a button click, or some other target
     $scope.showAddProvPopup = function() {
@@ -85,10 +154,10 @@ refLocations.on("value", function(snapshot) {
                 lng:lng,
                 meta:prov+"_"+area+"_"+pin,
                 imgs:{
-                  front:"blank.jpg",
-                  right:"blank.jpg",
-                  back:"blank.jpg",
-                  left:"blank.jpg"
+                  front:"blank",
+                  right:"blank",
+                  back:"blank",
+                  left:"blank"
                 }
               })
               console.log("New item added "+prov+" : "+area+" : "+pin+" : "+lat+" : "+lng);             
@@ -398,6 +467,34 @@ refLocations.on("value", function(snapshot) {
     })                    
   } 
 
+  $scope.toggleGroup = function(key, group) {
+    if ($scope.isGroupShown(group)||$scope.onEditGroup(key)) {
+      //console.log("remove $scope.passShowGroup : ",$scope.passShowGroup);
+      $scope.shownGroup = null;
+      $scope.passShowGroup = null;
+    } else {
+      $scope.shownGroup = group;
+      $scope.passShowGroup = key;
+      //console.log("Set $scope.passShowGroup : ",$scope.passShowGroup);
+      return $scope.passShowGroup
+    }
+    //console.log("toggleGroup");
+  };
+  // $scope.isGroupShown = function(group) {
+  //   return $scope.shownGroup === group;
+  // };
+  $scope.isGroupShown = function(group) {
+    var checkGroup = $scope.shownGroup === group;
+    //console.log("Get group checkGroup : ",group);
+    return checkGroup
+  };
+  $scope.onEditGroup = function(key) {
+    //console.log("Get $scope.passShowGroup : ",$scope.passShowGroup);
+    //console.log("Get key onEditGroup : ",key);
+    var checkPassGroup = $scope.passShowGroup === key;
+    //console.log("checkPassGroup : ",checkPassGroup);
+    return checkPassGroup
+  };
 
 
 });

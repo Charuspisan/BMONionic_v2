@@ -1,6 +1,6 @@
 angular.module('BMON')
 
-.controller('leaderCtrl', function($scope, $firebaseObject, $firebaseArray, $ionicPopup, $timeout, sharedProp, $location) {
+.controller('manageJobsCtrl', function($scope, $firebaseObject, $firebaseArray, $ionicPopup, $timeout, sharedProp, $location, $ionicViewService) {
 
 	console.log("user is : "+sharedProp.getEmail());
 
@@ -14,7 +14,58 @@ angular.module('BMON')
   var objRec = $firebaseObject(refJobsRec);
   var objUsers = $firebaseObject(refUsers);
 
-  
+
+
+    $scope.queryProv=[];
+    $scope.queryArea=[];
+
+    var obj = $firebaseObject(refLocations);
+     // to take an action after the data loads, use the $loaded() promise
+     obj.$loaded().then(function() {
+         // To iterate the key/value pairs of the object, use angular.forEach()
+         console.log("obj is : ",obj);
+         $scope.data = obj;
+
+         angular.forEach(obj, function(value, key) {
+            //console.log("key ", key, "val ", value);
+            if($scope.queryProv.indexOf(value.province) == -1) {
+               $scope.queryProv.push(value.province);
+            }
+            if($scope.queryArea.indexOf(value.area) == -1) {
+               $scope.queryArea.push(value.area);
+            }
+         });
+
+         console.log("$scope.queryProv : ",$scope.queryProv);
+
+         // To make the data available in the DOM, assign it to $scope
+         //$scope.data = obj;
+        
+         // For three-way data bindings, bind it to the scope instead
+         //obj.$bindTo($scope, "data");  
+       
+      });
+
+      $scope.filterArea = function(){
+        console.log("prov : "+$scope.createJobData.provInTxt);
+        var queryArea = [];
+        prov = $scope.createJobData.provInTxt
+          refLocations.orderByChild("province").equalTo(prov).on("value", function(snapshot) {
+              // console.log("value : ",value);
+              snapshot.forEach(function(childSnapshot) {
+                  var key = childSnapshot.key;
+                  var childData = childSnapshot.val();
+                  if(queryArea.indexOf(childData.area) == -1) {
+                     queryArea.push(childData.area);
+                  }
+              });
+              $scope.$watch(function () {
+                  $scope.queryArea = queryArea;
+              });
+              console.log("$scope.queryArea : "+$scope.queryArea);
+          });
+      }   
+
   //Check login user by email and pass value to variable
   // $scope.assignedEmail = sharedProp.getEmail();
 
@@ -36,7 +87,15 @@ angular.module('BMON')
   });
 
 
+  $scope.goNext = function(page) {
+    console.log('Going to : '+page);
+    $location.path(page);
+  }
 
+  $scope.goBack = function() {
+    console.log('Going back');
+    $ionicViewService.getBackView().go();
+  }
 
 
   $scope.signOut = function() {
@@ -224,7 +283,7 @@ angular.module('BMON')
                     var graph = [];
                     var note = [];
                     var metaJobRec = selectedProv+'_'+selectedArea+'_'+value.pin;
-                    for(i=0; i<100; i++){newSet[i]=""; graph.push(""); note.push("");}
+                    for(i=0; i<300; i++){newSet[i]=""; graph.push(""); note.push("");}
                     // newSet.timeStamp=time;
                     // console.log("timeStamp : ",time);
                     newSet.slope="";

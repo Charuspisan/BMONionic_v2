@@ -27,6 +27,22 @@ angular.module('BMON')
     	$location.path('/operation');
         // $window.open('zoBPgN?'+refJobsID+'?'+pin+'?'+prov+'?'+area+'?'+date+'?'+tool);
         //console.log("refJobsID : "+refJobsID);
+        // var data = getJobInfo();
+        // alert(data.prov);
+    };
+
+    $scope.signOut = function() {
+      if (firebase.auth().currentUser) {
+        firebase.auth().signOut();
+        console.log("Now loged out");
+        $location.path('/login');
+        $scope.userEmail = '';
+        $scope.userPass = '';
+
+      }else{
+        console.log("Not login login page");
+        // $location.path('/login');
+      }
     };
   
 

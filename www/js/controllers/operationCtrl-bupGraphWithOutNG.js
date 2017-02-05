@@ -12,7 +12,6 @@ angular.module('BMON')
   console.log("Pass value : ",sharedProp.getJobInfo());
   console.log("jobInfo.jobId : "+jobInfo.jobId);
 
-
   $scope.showLoading = function() {
     $ionicLoading.show({     
       content: '<div class="ionic-logo"></div>',
@@ -106,103 +105,6 @@ angular.module('BMON')
      //console.log("objGraphData : ",objGraphData);
       });
   
-  
-
-
-
-    var isZoom = false;
-    $scope.zoom= function(){
-      // $ionicScrollDelegate.zoomBy(1.2,true);
-      if(isZoom==false){
-        $("#bar").css({"width":"150%","height":"150%"});
-        isZoom=true;
-      }else{
-        $("#bar").css({"width":"100%","height":"100%"});
-        isZoom=false;     
-      }
-    }
-
-
-
-      //Start graph
-    function initGraph(){
-
-      var refGraph = refJobsRec.child(jobInfo.jobId).child('graph')
-        
-        refGraph.on("value",function(snapshot){
-          
-          var dataArray=[]
-          var indexArray=[]
-          var labelsArray=[]
-          
-          snapshot.forEach(function(childSnapshot) {
-
-            var key = childSnapshot.key;
-            var childData = childSnapshot.val();
-            if(childData==""){
-              dataArray.push(null);
-              indexArray.push(dataArray.indexOf(childData));
-            }else if(childData==0){
-              dataArray.push("0");
-              indexArray.push(dataArray.indexOf(childData));
-            }else{
-              dataArray.push(childData);
-              indexArray.push(dataArray.indexOf(childData));
-            }
-  
-             
-          });
-
-          // $scope.graph.data[0] = dataArray;
-          console.log("Graph Data : ",dataArray);
-          console.log("Graph index : ",indexArray);
-          // console.log("Graph length : ",$scope.graph.data[0].length);
-          //console.log("indexArray : ",indexArray.toString);
-          var max = Math.max(...indexArray);
-          console.log("Last data at : ",max);
-
-          for(i=0;i<=max;i++){
-            labelsArray.push(i);
-          }
-
-          var exitdata = dataArray.slice(0,max+1);
-
-          var chart = c3.generate({
-              bindto: '#chart',
-              data: {
-                columns: [
-                  // ['data1', -20, -50, -100, -120, -150, -180, -200, -200, -100, -100, -150, -80]
-                  exitdata
-                ]
-              },
-              axis: {
-                  y: {
-                      tick: {
-                          format: d3.format('.2f')
-                      }
-                  },
-              },
-              legend: {
-                show: false
-              },
-              zoom: {
-                  enabled: true
-              }
-
-          });
-          var divHeight = document.getElementById('graphSec').offsetHeight - 44;
-          chart.resize({height:divHeight});
-
-
-
-        })
-
-
-    }
-
-    initGraph();  
-     //End graph
-
 
     //check tools from jobs assign detect tool type
     $scope.toolType = function() {
@@ -423,6 +325,138 @@ angular.module('BMON')
   };
 
   setupSlider();
+
+
+
+    // var dataGraph=[];
+    var loadGraph = function() {
+
+      //request data
+      var refGraph = refJobsRec.child(jobInfo.jobId).child('graph')
+
+        // $scope.graph = {};
+        // $scope.graph.data = [];
+    
+        //$scope.graph.labels = [];
+        //$scope.graph.series = [];
+
+        
+        // var indexArray=[]
+
+        refGraph.on("value",function(snapshot){
+          
+
+          var key = 0;
+          snapshot.forEach(function(childSnapshot) {
+
+            // var key = childSnapshot.key;
+            var childData = childSnapshot.val();
+            // console.log(key, childData);
+            
+            if(childData==""){
+              scatterChartData.datasets[0].data.push({x:key,y:null});
+            }else if(childData==0){
+              scatterChartData.datasets[0].data.push({x:key,y:0});
+            }else{
+              scatterChartData.datasets[0].data.push({x:key,y:childData});
+            }
+            key++
+             
+          });
+
+        });
+
+      var scatterChartData = {
+        datasets: [{
+          data: []  
+        }]
+      }
+
+
+    var randomScalingFactor = function() {
+      return (Math.random() > 0.5 ? 1.0 : -1.0) * Math.round(Math.random() * 100);
+    };
+    var randomColor = function(opacity) {
+      return 'rgba(' + Math.round(Math.random() * 255) + ',' + Math.round(Math.random() * 255) + ',' + Math.round(Math.random() * 255) + ',' + (opacity || '.3') + ')';
+    };
+    
+    scatterChartData.datasets.forEach(function(dataset) {
+      dataset.borderColor = randomColor(0.4);
+      dataset.backgroundColor = randomColor(0.1);
+      dataset.pointBorderColor = randomColor(0.7);
+      dataset.pointBackgroundColor = randomColor(0.5);
+      dataset.pointBorderWidth = 1;
+    });
+
+      console.log("scatterChartData : ",scatterChartData);
+
+
+      var ctx = document.getElementById("canvas").getContext("2d");
+
+       setTimeout(function(){ 
+
+          window.myScatter = Chart.Scatter(ctx, {
+            type: 'line',
+            data: scatterChartData,
+            options: {
+              // title: {
+              //   display: true,
+              //   text: 'Chart.js Scatter Chart'
+              // },
+              scales: {
+                xAxes: [{
+                  position: 'bottom',
+                  gridLines: {
+                    zeroLineColor: "rgba(0,255,0,1)"
+                  },
+                  scaleLabel: {
+                    display: false,
+                    labelString: 'x axis'
+                  },
+                  ticks: {
+                    maxRotation: 0,
+                    reverse: false
+                  }
+                }],
+                yAxes: [{
+                  position: 'left',
+                  gridLines: {
+                    zeroLineColor: "rgba(0,255,0,1)"
+                  },
+                  scaleLabel: {
+                    display: false,
+                    labelString: 'y axis'
+                  },
+                  ticks: {
+                    reverse: false
+                  }
+                }]
+              },
+              pan: {
+                enabled: true,
+                mode: 'xy'
+              },
+              zoom: {
+                enabled: true,
+                mode: 'xy',
+                limits: {
+                  max: 10,
+                  min: 0.5
+                }
+              }
+              // ,
+              // onClick: function(e) {
+              //   alert(e.type);
+              // }
+            }
+          });
+
+       
+       }, 1000);     
+
+    };
+
+    loadGraph();
 
 
 

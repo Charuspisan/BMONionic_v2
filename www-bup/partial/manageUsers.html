@@ -1,0 +1,50 @@
+<ion-view ng-controller="manageUsersCtrl">
+
+
+	<ion-header-bar class="bar-positive">
+	    <div class="buttons">
+	    	<button class="button button-icon icon ion-ios-minus-outline"
+	          ng-click="data.showDelete = !data.showDelete"></button>
+	    </div>
+  		<h1 class="title">Manage Users</h1>
+  		<button id="logoutbt" ng-click="signOut()" class="button button-dark">
+    		Sign out
+  	  	</button>
+	</ion-header-bar>
+
+    <ion-content class="has-footer" on-swipe-right="goBack()">
+
+      <ion-list ng-repeat="(key, user) in dataUsers" show-delete="data.showDelete">
+
+          <ion-item>
+              {{user.email}}
+              <ion-delete-button class="ion-minus-circled" 
+                ng-click="deleteUser(key, user.email, user.password)">
+              </ion-delete-button>
+          </ion-item>
+
+      </ion-list>
+
+    </ion-content>
+
+    <ion-footer-bar align-title="left" class="bar-positive" style="height:auto;">
+ 
+        <button class="button button-full button-positive" ng-click="createUserPopup()">
+          <i class="icon ion-ios-plus-outline"></i> <span style="font-size:1.2em;">เพิ่มอาสาสมัคร</span>
+        </button> 
+
+    </ion-footer-bar>
+    
+
+
+    
+    <script id="createUserPopup.html" type="text/ng-template">
+        <input id="userEmail" ng-model="newUser.Email" type="text" placeholder="Email">
+        <input id="userPass" ng-model="newUser.Pass" type="password" placeholder="Password">
+    </script>
+
+
+
+
+</ion-view>
+ 

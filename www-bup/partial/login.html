@@ -1,6 +1,6 @@
 <ion-view>
 <ion-content><div class="list list-inset" ng-controller="loginCtrl">
-	<h1>Login{{5*3}}</h1>
+	<h1>BMON DEMO</h1>
 	  <label class="item item-input">
 	    <input id="userEmail" ng-model="userEmail" type="text" placeholder="Email">
 	  </label>
@@ -10,15 +10,16 @@
 	  <button id="loginbt" ng-click="signIn()" class="button button-dark">
 	    Sign in
 	  </button>
-	  <button id="logoutbt" ng-click="signOut()" class="button button-dark">
+<!-- 	  <button id="logoutbt" ng-click="signOut()" class="button button-dark">
     	Sign out
-  	  </button>
+  	  </button> -->
 	  <button id="signupbt" ng-click="signUp()" class="button button-dark">
 	    Sign up
 	  </button>
 
 	  <p ng-if="firebaseUser">Signed in user: <strong>{{ firebaseUser.email }} <br />Verified : {{ firebaseUser.emailVerified }}</strong></p>
 	  <p ng-if="error">Error: <strong>{{ error.message }}</strong></p>
+	  <p id="statusReg"></p>
 
 	</div>
 	</ion-content>
