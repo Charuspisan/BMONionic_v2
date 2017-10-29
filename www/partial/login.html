@@ -1,28 +1,73 @@
 <ion-view>
-<ion-content><div class="list list-inset" ng-controller="loginCtrl">
-	<h1>BMON DEMO</h1>
-	  <label class="item item-input">
-	    <input id="userEmail" ng-model="userEmail" type="text" placeholder="Email">
-	  </label>
-	  <label class="item item-input">
-	    <input id="userPass" ng-model="userPass" type="password" placeholder="Password">
-	  </label><br/>
-	  <button id="loginbt" ng-click="signIn()" class="button button-dark">
-	    Sign in
-	  </button>
-<!-- 	  <button id="logoutbt" ng-click="signOut()" class="button button-dark">
-    	Sign out
-  	  </button> -->
-	  <button id="signupbt" ng-click="signUp()" class="button button-dark">
-	    Sign up
-	  </button>
+<style>
+.ion-ios-email-outline:before, .ion-ios-locked-outline:before, .ion-ios-people-outline:before, .ion-ios-person-outline:before {color: #aaa;}
+</style>
+<ion-content>
+	<div class="list list-inset" ng-controller="loginCtrl" style="max-width: 400px; margin: 0 auto; padding: 10%;">
+		<br /><br />
+		<center><img src="images/logo.png" style="width:30%; max-width: 100px; margin-bottom: 1.2em;">
+		<span style="font-size: 1.5em; color: #666; display: block;">Beach Monitoring</span></center><br /><br />
 
-	  <p ng-if="firebaseUser">Signed in user: <strong>{{ firebaseUser.email }} <br />Verified : {{ firebaseUser.emailVerified }}</strong></p>
-	  <p ng-if="error">Error: <strong>{{ error.message }}</strong></p>
-	  <p id="statusReg"></p>
+		  <label class="item item-input" style="border: none; border-bottom: solid 1px #ccc; padding: 1.5em 0;">
+		  	<i class="icon ion-ios-email-outline" style="font-size: 2em;"></i>&nbsp;
+		    <input id="userEmail" ng-model="userEmail" type="text" placeholder="" style="font-size: 1.2em;
+    font-weight: 200;">
+		  </label>
+		  <label class="item item-input" style="border: none; border-bottom: solid 1px #ccc; padding: 1.5em 0;    margin-top: 2px;">
+		  	<i class="icon ion-ios-locked-outline" style="font-size: 2em;"></i>&nbsp;
+		    <input id="userPass" ng-model="userPass" type="password" placeholder="" style="font-size: 1.2em;
+    font-weight: 200;">
+		  </label><br/>
+
+		  	<center>
+			  <button id="loginbt" ng-click="signIn()" class="button button-dark" style="font-weight: 200;">
+			    <i class="icon ion-log-in"></i> เข้าใช้งาน
+			  </button>
+		<!-- 	  <button id="logoutbt" ng-click="signOut()" class="button button-dark">
+		    	Sign out
+		  	  </button> -->
+			  <button id="signupbt" ng-click="signUpPopup()" class="button button-dark" style="font-weight: 200;">
+			    <i class="icon ion-ios-compose-outline"></i> สมัครสมาชิก
+			  </button>
+			</center>
+		  	<br /><br /><br />
+
+		  <!-- <p ng-if="firebaseUser" style="display: inline-block;">Signed in user: <strong>{{ firebaseUser.email }} <br />Verified : {{ firebaseUser.emailVerified }}</strong></p>
+		  <p ng-if="error" style="display: inline-block;">Error: <strong>{{ error.message }}</strong></p>
+		  <p id="statusReg" style="display: inline-block;"></p> -->
+		
+		  <a href="" style="float: right; display: inline-block; text-decoration: none;" ng-click="passResetPopup()"><i class="icon ion-ios-loop-strong"></i> ตั้งรหัสผ่านใหม่</a>
+
 
 	</div>
 	</ion-content>
+
+	<script id="passResetPopup.html" type="text/ng-template">
+		<label class="item item-input" style="border: none; border-bottom: solid 1px #ccc; padding: 1.5em 0;">
+		  	&nbsp;<i class="icon ion-ios-email-outline" style="font-size: 2em;"></i>&nbsp;&nbsp;
+		    <input ng-model="passReset.emailInTxt" type="text" placeholder="อีเมล์">
+		 </label>
+	</script>
+
+	<script id="signUpPopup.html" type="text/ng-template">
+		 <label class="item item-input" style="border: none; border-bottom: solid 1px #ccc; padding: 1.5em 0; margin: 2px 0px;">
+		  	&nbsp;<i class="icon ion-ios-email-outline" style="font-size: 2em;"></i>&nbsp;&nbsp;
+		    <input ng-model="signUpData.emailInTxt" type="text" placeholder="อีเมล์">
+		 </label>
+		 <label class="item item-input" style="border: none; border-bottom: solid 1px #ccc; padding: 1.5em 0; margin: 2px 0px;">
+		  	&nbsp;<i class="icon ion-ios-locked-outline" style="font-size: 2em;"></i>&nbsp;&nbsp;
+		    <input ng-model="signUpData.passInTxt" type="password" placeholder="รหัสผ่าน">
+		 </label>
+		 <label class="item item-input" style="border: none; border-bottom: solid 1px #ccc; padding: 1.5em 0; margin: 2px 0px;">
+		  	&nbsp;<i class="icon ion-ios-person-outline" style="font-size: 2em;"></i>&nbsp;&nbsp;
+		    <input ng-model="signUpData.nameInTxt" type="text" placeholder="ชื่อ">
+		 </label>
+		 <label class="item item-input" style="border: none; border-bottom: solid 1px #ccc; padding: 1.5em 0; margin: 2px 0px;">
+		  	&nbsp;<i class="icon ion-ios-people-outline" style="font-size: 2em;"></i>&nbsp;&nbsp;
+		    <input ng-model="signUpData.surnameInTxt" type="text" placeholder="นามสกุล">
+		 </label>
+	</script>		  
+	
 </ion-view>
 
 

@@ -1,6 +1,6 @@
 angular.module('BMON')
 
-.controller('cameraController',function ($scope, $firebaseObject, $firebaseArray, $cordovaGeolocation, $ionicViewService, sharedProp, $ionicSlideBoxDelegate, $location, $ionicLoading) {
+.controller('cameraController',function ($scope, $firebaseObject, $firebaseArray, $cordovaGeolocation, $ionicViewService, $ionicPopup, sharedProp, $ionicSlideBoxDelegate, $location, $ionicLoading) {
 
     // // Initialize Firebase
     // var config = {
@@ -11,19 +11,23 @@ angular.module('BMON')
     //   messagingSenderId: "170191502662"
     // };
     // firebase.initializeApp(config);
-
+    var refJobsRec = new Firebase("https://bmon-41086.firebaseio.com/jobsRec/");
     var userEmail = sharedProp.getEmail();
     var jobInfo = sharedProp.getJobInfo();
     var lacateID = jobInfo.jobLocate;
     var refStorage = firebase.storage().ref();
     var imgDB = new Firebase("https://bmon-41086.firebaseio.com/images/");
     var imgOnLocate = new Firebase("https://bmon-41086.firebaseio.com/locations/"+lacateID+"/imgs/");
-    var imgFolder = "bmon-img/";
+    var imgFolder = "img4d/";
+    var imgOther = "imgOther/";
     var imgName
+    var imgData
+    var otherPhotoNote
     var jobsRecMeta
     var metaImg
     var refBMONimg
     var upImgData
+    var filePath
     var fileName
     var btnWhere
     var latImg
@@ -31,7 +35,14 @@ angular.module('BMON')
 
   // alert("userEmail : "+userEmail);  
 
+document.addEventListener("deviceready", onDeviceReady, false);
+
+function onDeviceReady() {
+  
+    console.log("navigator.geolocation works well");
+
   var posOptions = {timeout: 10000, enableHighAccuracy: false};
+
   $cordovaGeolocation
     .getCurrentPosition(posOptions)
     .then(function (position) {
@@ -42,38 +53,91 @@ angular.module('BMON')
       lngImg = long;
 
       sharedProp.setJobLatLng(latImg,lngImg);
-      // alert("shared lat : "+latImg+" shared long : "+lngImg);  
+      console.log("shared lat : "+latImg+" shared long : "+lngImg);  
 
-    }, function(err) {
-      // error
-    });
+    }/*, function(err) {
+      console.log(err);
+      $scope.showAlert("กรุณาเปิด GPS มิฉะนั้นแอพริเคชั่นจะเกิดปัญหา และไม่สามารถบันทึกรูปถ่ายได้ หากเปิด GPS แล้วยังปรากฎข้อความนี้อีก กรุณารีสตาร์ทมือถือของคุณ");
+    }*/);
 
 
-  var watchOptions = {
-    timeout : 3000,
-    enableHighAccuracy: false // may cause errors if true
-  };
+  // var watchOptions = {
+  //   timeout : 10000,
+  //   enableHighAccuracy: false // may cause errors if true
+  // };
 
-  var watch = $cordovaGeolocation.watchPosition(watchOptions);
-  watch.then(
-    null,
-    function(err) {
-      // error
-    },
-    function(position) {
-      var lat  = position.coords.latitude
-      var long = position.coords.longitude
+  // var watch = $cordovaGeolocation.watchPosition(watchOptions);
+  // watch.then(
+  //   null,
+  //   function(err) {
+  //     console.log(err);
+  //     $scope.showAlert("กรุณาเปิด GPS มิฉะนั้นแอพริเคชั่นจะเกิดปัญหา และไม่สามารถบันทึกรูปถ่ายได้ หากเปิด GPS แล้วยังปรากฎข้อความนี้อีก กรุณารีสตาร์ทมือถือของคุณ");
+  //   },
+  //   function(position) {
+  //     var lat  = position.coords.latitude
+  //     var long = position.coords.longitude
 
-      latImg = lat;
-      lngImg = long;
+  //     latImg = lat;
+  //     lngImg = long;
 
-      sharedProp.setJobLatLng(latImg,lngImg);
-      // alert("shared lat : "+latImg+" shared long : "+lngImg);  
+  //     sharedProp.setJobLatLng(latImg,lngImg);
+  //     console.log("shared lat : "+latImg+" shared long : "+lngImg);  
       
-  });
+  // });
 
 
-  watch.clearWatch();
+  // watch.clearWatch();    
+}
+
+
+
+
+    // An alert dialog
+   $scope.showAlert = function(error) {
+     var alertPopup = $ionicPopup.alert({
+       title: '<center><i class="icon ion-error ion-android-warning"></i></center>',
+       template: '<center>'+error+'</center>',
+       buttons: [{
+          text: 'รับทราบ',
+          type: 'button-positive'
+        }]       
+        
+     });
+
+     alertPopup.then(function(res) {
+       
+     });
+   };
+
+   $scope.alertFactory = function(error) {
+      switch(error.message) {
+          case "The email address is badly formatted.":
+              $scope.showAlert("กรุณาตรวจสอบความถูกต้องของอีเมล์");
+              break;
+          case "The email address is badly formatted.":
+              $scope.showAlert("กรุณาตรวจสอบความถูกต้องของอีเมล์");
+              break;
+      }
+
+   }
+
+       // An alert dialog
+   $scope.showMessage = function(message) {
+     var alertPopup = $ionicPopup.alert({
+       title: '',
+       template: '<center>'+message+'</center>',
+       buttons: [{
+          text: 'รับทราบ',
+          type: 'button-positive'
+        }]       
+        
+     });
+
+     alertPopup.then(function(res) {
+       
+     });
+   };
+
 
   $scope.goBack = function() {
     console.log('Going back');
@@ -81,17 +145,34 @@ angular.module('BMON')
   }
 
   $scope.signOut = function() {
-    if (firebase.auth().currentUser) {
-      firebase.auth().signOut();
-      console.log("Now loged out");
-      $location.path('/login');
-      $scope.userEmail = '';
-      $scope.userPass = '';
 
-    }else{
-      console.log("Not login login page");
-      // $location.path('/login');
-    }
+     var confirmPopup = $ionicPopup.confirm({
+       title: "ออกจากระบบ",
+       template: "<center>คุณต้องการออกจากระบบหรือไม่</center>",
+       cancelText: 'ยกเลิก',
+       okText: 'ยืนยัน'
+     });
+     confirmPopup.then(function(res) {
+
+       if(res) {
+
+        if (firebase.auth().currentUser) {
+            firebase.auth().signOut();
+            console.log("Now loged out");
+            $location.path('/login');
+            $scope.userEmail = '';
+            $scope.userPass = '';
+
+          }else{
+            console.log("Not login login page");
+            // $location.path('/login');
+          }
+
+       } else {
+
+       }
+     });
+
   };
 
 
@@ -121,75 +202,151 @@ angular.module('BMON')
     $scope.showLoading();  
 
 
-
 $scope.btnCamera = function(bt){
 
-  // This iOS/Android only example requires the dialog and the device plugin as well.
-  if(btnWhere!=undefined){
-    navigator.camera.getPicture(onSuccess, onFail, { 
+console.log("latImg : "+latImg+" : lngImg : "+lngImg);
+ if(latImg==undefined||lngImg==undefined){
+    $scope.showAlert("กรุณาเปิด GPS มิฉะนั้นแอพริเคชั่นจะเกิดปัญหา และไม่สามารถบันทึกรูปถ่ายได้ หากเปิด GPS แล้วยังปรากฎข้อความนี้อีก กรุณารีสตาร์ทมือถือของคุณ"); 
+ }else{
+    // This iOS/Android only example requires the dialog and the device plugin as well.
+    if(btnWhere!=undefined){
+      navigator.camera.getPicture(onSuccess, onFail, { 
 
-      quality : 80,
-      destinationType : Camera.DestinationType.DATA_URL,
-      sourceType : Camera.PictureSourceType.CAMERA,
-      allowEdit : false,
-      encodingType: Camera.EncodingType.JPEG,
-      targetWidth: 560,
-      targetHeight: 560,
-      popoverOptions: CameraPopoverOptions,
-      saveToPhotoAlbum: false 
+        quality : 80,
+        destinationType : Camera.DestinationType.FILE_URI,
+        sourceType : Camera.PictureSourceType.CAMERA,
+        allowEdit : false,
+        encodingType: Camera.EncodingType.JPEG,
+        targetWidth: 800,
+        targetHeight: 800,
+        popoverOptions: CameraPopoverOptions,
+        saveToPhotoAlbum: false 
 
-    });
-  }else{
-    alert("กรุณาเลือกตำแหน่งภาพที่จะถ่าย");
-  }  
-  //alert("bt : "+bt);
-  // btnWhere = bt;
+      });
+    }else{
+      //alert("กรุณาเลือกตำแหน่งภาพที่จะถ่าย");
+      $scope.showAlert("กรุณาเลือกตำแหน่งภาพที่จะถ่าย");
+    }
+  }    
 }
 
 function onSuccess(result) {
 
-  
+  // alert("onSuccess callback");
   // alert("btnWhere : "+btnWhere);
 
    // convert JSON string to JSON Object
    var thisResult = JSON.parse(result);
+    // console.log('thisResult : ' + thisResult);
 
    // convert json_metadata JSON string to JSON Object 
    var metadata = JSON.parse(thisResult.json_metadata);
 
    upImgData = JSON.stringify(metadata);
-   fileName = thisResult.filename
+   filePath = thisResult.filename;
 
-    //var image = document.getElementById('myImage');
-    //image.src = "data:image/jpeg;base64," + fileName
+    console.log("filePath : "+filePath);
 
-    // alert(upImgData);
+    // Convert image
+    getFileContentAsBase64(filePath,function(base64Image){
+      //window.open(base64Image);
+      console.log("Convert to Base64 : "+base64Image); 
+      // Then you'll be able to handle the myimage.png file as base64
+      imgData = base64Image.split(",")[1]
+    });
 
-    // if (thisResult.json_metadata != "{}") {
-    //     if ((device.platform) == 'iOS') {
+    // alert(btnWhere);
+      function checkImg(){if(imgData!=undefined){
+        $scope.btnUpload(imgData);
+        clearInterval(waitImg);
+        //alert("clear");
+      }}
 
-    //       // notice the difference in the properties below and the format of the result when you run the app.
-    //       // iOS and Android return the exif and gps differently and I am not converting or accounting for the Lat/Lon reference.
-    //       // This is simply the raw data being returned.
+      if(btnWhere=="other"){
+        $scope.editNotePopup();
+      }else{
+        var waitImg = setInterval(function(){ checkImg() }, 1500);
+      }
 
-    //           alert('Lat: '+metadata.GPS.Latitude+' Lon: '+metadata.GPS.Longitude);
-    //         } else {
-    //           alert('Lat: '+metadata.gpsLatitude+' Lon: '+metadata.gpsLongitude);
-    //           alert('Date: '+metadata.datetime);
-    //         }
-    //     }
-
-    $scope.btnUpload();
   }
 
+
 function onFail(message) {
-    alert('Failed because: ' + message);
+    //alert('Failed because: ' + message);
+    $scope.showAlert(message);
+    btnWhere = undefined;
+    //alert(btnCamera);
 }
 
 $scope.viewExif = function(){
       // alert("viewExif : "+upImgData);
 }
 
+
+
+   $scope.editNotePopup = function() {
+      //console.log("Key for edit Slope : "+refJobsRec);
+      $scope.otherImgs = {};
+      var myPopup = $ionicPopup.show({
+        templateUrl: 'editNotePopup.html',
+        title: 'บันทึกช่วยจำ',
+        subTitle: 'คำอธิบายสำหรับรูปถ่าย',
+        scope: $scope,
+        buttons: [
+          { 
+            text: 'ไม่บันทึกภาพ',
+            onTap: function(e) {
+              btnWhere = undefined; 
+            }
+          },
+          {
+            text: '<b>บันทึกภาพ</b>',
+            type: 'button-positive',
+            onTap: function(e) {
+              otherPhotoNote=$scope.otherImgs.note;
+              if(otherPhotoNote==undefined){
+                $scope.showAlert("กรุณาถ่ายภาพอีกครั้ง และจำเป็นต้องใส่บันทึกช่วยจำทุกครั้ง");
+              }else{
+                $scope.btnUpload(imgData);
+              }
+            }
+          }
+        ]
+      });
+      myPopup.then(function() {
+
+      });
+      $timeout(function() {
+        myPopup.close(); //close the popup after 3 seconds for some reason
+      }, 100000);     
+    } 
+
+/**
+ * This function will handle the conversion from a file to base64 format
+ *
+ * @path string
+ * @callback function receives as first parameter the content of the image
+ */
+function getFileContentAsBase64(path,callback){
+
+    window.resolveLocalFileSystemURL(path, gotFile, fail);
+            
+    function fail(e) {
+          alert('Cannot found requested file');
+    }
+
+    function gotFile(fileEntry) {
+           fileEntry.file(function(file) {
+              var reader = new FileReader();
+              reader.onloadend = function(e) {
+                   var content = this.result;
+                   callback(content);
+              };
+              // The most important point, use the readAsDatURL Method from the file plugin
+              reader.readAsDataURL(file);
+           });
+    }
+}
 
 
 $scope.btnGallery = function(){
@@ -213,73 +370,100 @@ $scope.btnGallery = function(){
 }
 
 // function btnUpload(){
-$scope.btnUpload = function(){
-  // alert('btnUpload' + fileName);
+$scope.btnUpload = function(fileData){
+  console.log('btnUpload' + fileData);
   $scope.showLoading();
   //auto gen ID
   jobsRecMeta = jobInfo.jobProv+"_"+jobInfo.jobArea+"_"+jobInfo.jobPin;
   metaImg = btnWhere+"_"+jobsRecMeta;
   imgName = metaImg+"@"+Date.now();
 
+  var getStamp = new Date();
+  var dd = ("0" + getStamp.getDate()).slice(-2);
+  var mm = ("0" + (getStamp.getMonth() + 1)).slice(-2)
+  var yyyy = getStamp.getFullYear();
+  var dateRec = dd+"-"+mm+"-"+yyyy;
 
-  refBMONimg = refStorage.child(imgFolder+imgName+".jpg");
-  // Base64url formatted string
-  // var metaData = {
-  //   contentType: 'image/jpeg'
-  // };
-  refBMONimg.putString(fileName, 'base64').then(function(snapshot) {
+  if(btnWhere=="other"){
 
-    // alert("userEmail : "+userEmail); 
+    refBMONimg = refStorage.child(imgOther+imgName+".jpg");
+    refBMONimg.putString(fileData, 'base64').then(function(snapshot) {
+        //alert("Uploaded Other Photo");
+        imgDB.child("other").push({"jobRecId":jobInfo.jobId,"date":dateRec,"lat":latImg,"lng":lngImg,"user":userEmail,"meta":metaImg,"name":imgName,"status":"new","type":btnWhere,"note":otherPhotoNote});
+        refJobsRec.child(jobInfo.jobId+"/imgOther").push({"name":imgName,"note":otherPhotoNote});
+        setTimeout(function(){
+          $scope.hideLoading();
+          $scope.showMessage("บันทึกภาพแล้ว");
+          btnWhere = undefined;     
+        },1000)
+    }) 
 
-    imgDB.push({"date":Date.now(),"lat":latImg,"lng":lngImg,"user":userEmail,"meta":metaImg,"name":imgName,"status":"new","type":btnWhere});
+  
 
-    var refShowImg = refStorage.child(imgFolder+imgName+".jpg");
+  }else{
 
-    setTimeout(function(){
-      if(btnWhere=='front'){
-          imgOnLocate.update({"front":imgName});
-          // alert('Uploaded front : '+imgName);
-          alert("บันทึกภาพแล้ว");
-          refShowImg.getDownloadURL().then(function(url) {
-            frontImg = imgName;
-            $("#frontImg").attr("src",url);
-            $("#show4imgs").css("background-image","url('"+url+"')");
-            $scope.hideLoading();
-          });
-      }else if(btnWhere=='right'){
-          imgOnLocate.update({"right":imgName});
-          // alert('Uploaded right : '+imgName);
-          alert("บันทึกภาพแล้ว");
-          refShowImg.getDownloadURL().then(function(url) {
-            rightImg = imgName;
-            $("#rightImg").attr("src",url);
-            $("#show4imgs").css("background-image","url('"+url+"')");
-            $scope.hideLoading();
-          });
-      }else if(btnWhere=='back'){
-          imgOnLocate.update({"back":imgName});
-          // alert('Uploaded back : '+imgName);
-          alert("บันทึกภาพแล้ว");      
-          refShowImg.getDownloadURL().then(function(url) {
-            backImg = imgName;
-            $("#backImg").attr("src",url);
-            $("#show4imgs").css("background-image","url('"+url+"')");
-            $scope.hideLoading();
-          });
-      }else if(btnWhere=='left'){
-          imgOnLocate.update({"left":imgName});
-          // alert('Uploaded left : '+imgName);
-          alert("บันทึกภาพแล้ว");
-          refShowImg.getDownloadURL().then(function(url) {
-            leftImg = imgName;
-            $("#leftImg").attr("src",url);
-            $("#show4imgs").css("background-image","url('"+url+"')");
-            $scope.hideLoading();
-          });
-      };
-    }, 2500); 
+    //alert("Uploaded 4d Photo"); 
 
-  },function(err){alert(err)});
+      refBMONimg = refStorage.child(imgFolder+imgName+".jpg");
+      refBMONimg.putString(fileData, 'base64').then(function(snapshot) {
+
+      imgDB.child("4d").push({"jobRecId":jobInfo.jobId,"date":dateRec,"lat":latImg,"lng":lngImg,"user":userEmail,"meta":metaImg,"name":imgName,"status":"new","type":btnWhere});
+
+      var refShowImg = refStorage.child(imgFolder+imgName+".jpg");
+
+      setTimeout(function(){
+        if(btnWhere=='front'){
+            imgOnLocate.update({"front":imgName});
+            refJobsRec.child(jobInfo.jobId+"/img4d").update({"front":imgName});
+            $scope.showMessage("บันทึกภาพแล้ว");
+            refShowImg.getDownloadURL().then(function(url) {
+              frontImg = imgName;
+              $("#frontImg").attr("src",url);
+              $("#show4imgs").css("background-image","url('"+url+"')");
+              $scope.hideLoading();
+            });
+        }else if(btnWhere=='right'){
+            imgOnLocate.update({"right":imgName});
+            refJobsRec.child(jobInfo.jobId+"/img4d").update({"right":imgName});
+            $scope.showMessage("บันทึกภาพแล้ว");
+            refShowImg.getDownloadURL().then(function(url) {
+              rightImg = imgName;
+              $("#rightImg").attr("src",url);
+              $("#show4imgs").css("background-image","url('"+url+"')");
+              $scope.hideLoading();
+            });
+        }else if(btnWhere=='back'){
+            imgOnLocate.update({"back":imgName});
+            refJobsRec.child(jobInfo.jobId+"/img4d").update({"back":imgName});  
+            $scope.showMessage("บันทึกภาพแล้ว");    
+            refShowImg.getDownloadURL().then(function(url) {
+              backImg = imgName;
+              $("#backImg").attr("src",url);
+              $("#show4imgs").css("background-image","url('"+url+"')");
+              $scope.hideLoading();
+            });
+        }else if(btnWhere=='left'){
+            imgOnLocate.update({"left":imgName});
+            refJobsRec.child(jobInfo.jobId+"/img4d").update({"left":imgName});
+            $scope.showMessage("บันทึกภาพแล้ว");
+            refShowImg.getDownloadURL().then(function(url) {
+              leftImg = imgName;
+              $("#leftImg").attr("src",url);
+              $("#show4imgs").css("background-image","url('"+url+"')");
+              $scope.hideLoading();
+            });
+        };
+      }, 2500); 
+
+    // }
+
+    },function(err){
+      $scope.showAlert(err);
+      btnWhere = undefined;
+    });
+  }
+
+
 
 
 }
@@ -322,9 +506,9 @@ $scope.btnUpload = function(){
 
 
   $scope.btnOtherImg = function(){
-    // $("#otherImgContainer").show();
-    // $ionicSlideBoxDelegate.next();
-    $location.path('/otherPhoto');
+    btnWhere = "other";
+    $("#show4imgs").css("background-image","none");
+    $scope.btnCamera();
   }
 
 

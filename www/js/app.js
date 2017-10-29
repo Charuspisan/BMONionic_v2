@@ -8,17 +8,37 @@
 var config = {
   apiKey: "AIzaSyCx-rNzY3vIUrhSCP5WYirhiAss7sFqTuI",
   authDomain: "bmon-41086.firebaseapp.com",
-  //databaseURL: "https://bmon-41086.firebaseio.com",
+  databaseURL: "https://bmon-41086.firebaseio.com",
   storageBucket: "bmon-41086.appspot.com",
   messagingSenderId: "170191502662"
 };
 firebase.initializeApp(config);
 
-angular.module('BMON', ['ionic','ngCordova','firebase','angular.filter','720kb.datepicker'])
+angular.module('BMON', ['ionic','ngCordova','firebase','angular.filter','720kb.datepicker','ui.router'])
 
 .run(function($ionicPlatform) {
 
   $ionicPlatform.ready(function() {
+
+    var AppVer = "0.0.4"
+
+    firebase.database().ref('AppCtr').once('value').then(function(snapshot) {
+      data = snapshot.val();
+      console.log("ver : "+data.ver);
+      console.log("AppVer : "+AppVer);
+      if(AppVer<data.ver){
+        if(data.forceUpdate==true){
+          alert("แอพพริเคชั่นนี้มีการอัพเดทรุ่น กรุณาอัพเดทจาก App Store (ios), Play Store (Android) และลองเข้าใช้งานอีกครั้ง");
+          window.open('https://play.google.com/store/apps/details?id=com.bmon_ku.bmon', '_system'); 
+          ionic.Platform.exitApp();
+        }
+      }else if(AppVer>data.ver){
+          alert("ขออภัยแอพพริเคชั่นอยู่ระหว่างการปรับปรุง กรุณารอการแจ้งเตือนการอัพเดทจาก App Store (ios), Play Store (Android) อัพเดทแอพพริเคชั่น และลองเข้าใช้งานอีกครั้ง");
+          window.open('https://play.google.com/store/apps/details?id=com.bmon_ku.bmon', '_system'); 
+          ionic.Platform.exitApp();
+      }
+    });
+
     if(window.cordova && window.cordova.plugins.Keyboard) {
       // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
       // for form inputs)
@@ -35,8 +55,11 @@ angular.module('BMON', ['ionic','ngCordova','firebase','angular.filter','720kb.d
   });
 })
 
+.config(function($ionicConfigProvider) {
+  $ionicConfigProvider.navBar.alignTitle('center');
+})
 
-.config(function($stateProvider, $urlRouterProvider) {
+.config(function($stateProvider, $urlRouterProvider) {  
   $stateProvider
     .state('login', {
       url:'/login',
@@ -55,12 +78,22 @@ angular.module('BMON', ['ionic','ngCordova','firebase','angular.filter','720kb.d
       templateUrl:'partial/getjobs.html'
     })
     .state('operation', {
+      cache: false,
       url:'/operation',
       templateUrl:'partial/operation.html'
     })
     .state('locations', {
       url:'/locations',
       templateUrl:'partial/locations.html'
+      ,
+      resolve: {
+        loadContacts:  function(locationDataCon) {
+          return locationDataCon.promiseToHaveData();
+        }  
+      },
+      controller: function ($scope, locationDataCon) {
+          $scope.data = locationDataCon.locationData;
+      }
     })
     .state('managejobs', {
       url:'/managejobs',
@@ -74,13 +107,30 @@ angular.module('BMON', ['ionic','ngCordova','firebase','angular.filter','720kb.d
       url:'/camera',
       templateUrl:'partial/camera.html'
     })
-    .state('otherPhoto', {
-      url:'/otherPhoto',
-      templateUrl:'partial/otherPhoto.html'
-    })
 
-  $urlRouterProvider.otherwise('/login')  
+  $urlRouterProvider.otherwise('/login');
 
+})
+
+.factory('locationDataCon', function($firebase, $q) {
+  return {
+    locationData: null,
+    promiseToHaveData: function() {
+      var deferred = $q.defer();
+
+      if (this.locationData === null) {
+        this.locationData = new Firebase('https://bmon-41086.firebaseio.com/locations/');
+        this.locationData.on('value', function(loadedData) {
+          deferred.resolve();
+        });
+      }
+      else {
+        deferred.resolve();
+      }
+
+      return deferred.promise;
+    }
+  }
 })
 
 .service('sharedProp', function () {
@@ -113,9 +163,24 @@ angular.module('BMON', ['ionic','ngCordova','firebase','angular.filter','720kb.d
         this.sharedUserData.isLoginPage = isLoginPage;
   };
 
+
+  this.sharedLocateData = {};
+
+  this.setLocateData = function(all,filterProv,filterArea) {
+        this.sharedLocateData.all = all;
+        this.sharedLocateData.filterProv = filterProv;
+        this.sharedLocateData.filterArea = filterArea;
+  };
+
+  this.getLocateData = function() {
+        return this.sharedLocateData
+  };
+
+
   this.sharedJobInfo = {};
 
-  this.setJobInfo = function(jobId,jobPin,jobProv,jobArea,jobDate,jobTool,jobLocate) {
+  this.setJobInfo = function(parentJobId,jobId,jobPin,jobProv,jobArea,jobDate,jobTool,jobLocate) {
+        this.sharedJobInfo.parentID = parentJobId;
         this.sharedJobInfo.jobId = jobId;
         this.sharedJobInfo.jobPin = jobPin;
         this.sharedJobInfo.jobProv = jobProv;
@@ -125,8 +190,16 @@ angular.module('BMON', ['ionic','ngCordova','firebase','angular.filter','720kb.d
         this.sharedJobInfo.jobLocate = jobLocate;
   };
 
+  this.setJobTool = function(jobTool){
+        this.sharedJobInfo.jobTool = jobTool;
+  };
+
   this.getJobInfo = function() {
         return this.sharedJobInfo
+  };
+
+  this.getJobTool = function() {
+        return this.sharedJobInfo.jobTool
   };
 
   this.sharedJobLatLng = {Lat:"1234",Lng:"5678"};

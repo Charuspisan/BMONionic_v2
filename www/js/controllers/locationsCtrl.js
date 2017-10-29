@@ -1,46 +1,107 @@
-angular.module('BMON').controller('manageLocationsCtrl', function($scope, $firebaseObject, $firebaseArray, $ionicPopup, $timeout, $location, $ionicViewService) {
+angular.module('BMON').controller('manageLocationsCtrl', function($scope, $firebaseObject, $firebaseArray, $ionicPopup, $timeout, $location, $ionicViewService, sharedProp, $ionicLoading) {
 
 
     var refLocations = new Firebase("https://bmon-41086.firebaseio.com/locations/");
 
+    $scope.data
     $scope.queryProv=[];
-    $scope.queryArea=[]
+    $scope.queryArea=[];
 
-    var obj = $firebaseObject(refLocations);
-     // to take an action after the data loads, use the $loaded() promise
-     obj.$loaded().then(function() {
-         // To iterate the key/value pairs of the object, use angular.forEach()
-         console.log("obj is : ",obj);
-         $scope.data = obj;
-
-         angular.forEach(obj, function(value, key) {
-            //console.log("key ", key, "val ", value);
-            if($scope.queryProv.indexOf(value.province) == -1) {
-               $scope.queryProv.push(value.province);
+    refLocations.on("value", function(snapshot) {
+        // console.log("value : ",value);
+        $scope.data = snapshot.val();
+        var queryData = snapshot.val();
+        var queryProv = [];
+        var queryArea = [];
+        snapshot.forEach(function(childSnapshot) {
+            var key = childSnapshot.key;
+            var childData = childSnapshot.val();
+            if(queryProv.indexOf(childData.province) == -1) {
+               queryProv.push(childData.province);
+               console.log("queryProv : ",queryProv);
             }
-            if($scope.queryArea.indexOf(value.area) == -1) {
-               $scope.queryArea.push(value.area);
+            if(queryArea.indexOf(childData.area) == -1) {
+               queryArea.push(childData.area);
+               console.log("queryArea : ",queryArea);
             }
-         });
 
-         console.log("$scope.queryProv : ",$scope.queryProv);
+        });
 
-         // To make the data available in the DOM, assign it to $scope
-         //$scope.data = obj;
-        
-         // For three-way data bindings, bind it to the scope instead
-         //obj.$bindTo($scope, "data");  
-       
+        $scope.queryProv = queryProv;
+        $scope.queryArea = queryArea;
+
+        console.log("$scope.data : ",$scope.data);
+        console.log("$scope.queryProv : ",$scope.queryProv);
+        console.log("$scope.queryArea : ",$scope.queryArea);
+
+        sharedProp.setLocateData(queryData,queryProv,queryArea);
+
+    });
+
+    $scope.hideLoading = function(){
+      $ionicLoading.hide().then(function(){
+         console.log("The loading indicator is now hidden");
       });
+    };
+
+  $scope.hideLoading();
+
+   $scope.alertFactory = function(error) {
+      switch(error.message) {
+          case "The email address is badly formatted.":
+              $scope.showAlert("กรุณาตรวจสอบความถูกต้องของอีเมล์");
+              break;
+          case "The email address is badly formatted.":
+              $scope.showAlert("กรุณาตรวจสอบความถูกต้องของอีเมล์");
+              break;
+      }
+
+   }
+
+
+  $scope.showAlert = function(error) {
+     var alertPopup = $ionicPopup.alert({
+       title: '<center><i class="icon ion-error ion-android-warning"></i></center>',
+       template: '<center>'+error+'</center>',
+       buttons: [{
+          text: 'รับทราบ',
+          type: 'button-positive'
+        }]       
+        
+     });
+
+     alertPopup.then(function(res) {
+       
+     });
+   };
+
+       // An alert dialog
+   $scope.showMessage = function(message) {
+     var alertPopup = $ionicPopup.alert({
+       title: '',
+       template: '<center>'+message+'</center>',
+       buttons: [{
+          text: 'รับทราบ',
+          type: 'button-positive'
+        }]       
+        
+     });
+
+     alertPopup.then(function(res) {
+       
+     });
+   };
+
+
 
   $scope.goNext = function(page) {
     console.log('Going to : '+page);
     $location.path(page);
   }
 
-  $scope.goBack = function() {
+  $scope.goBack = function(page) {
     console.log('Going back');
-    $ionicViewService.getBackView().go();
+    $location.path(page);
   }
 
       $scope.filterArea = function(){
@@ -81,17 +142,34 @@ angular.module('BMON').controller('manageLocationsCtrl', function($scope, $fireb
   // });
 
   $scope.signOut = function() {
-    if (firebase.auth().currentUser) {
-      firebase.auth().signOut();
-      console.log("Now loged out");
-      $location.path('/login');
-      $scope.userEmail = '';
-      $scope.userPass = '';
 
-    }else{
-      console.log("Not login login page");
-      $location.path('/login');
-    }
+     var confirmPopup = $ionicPopup.confirm({
+       title: "ออกจากระบบ",
+       template: "<center>คุณต้องการออกจากระบบหรือไม่</center>",
+       cancelText: 'ยกเลิก',
+       okText: 'ยืนยัน'
+     });
+     confirmPopup.then(function(res) {
+
+       if(res) {
+
+        if (firebase.auth().currentUser) {
+            firebase.auth().signOut();
+            console.log("Now loged out");
+            $location.path('/login');
+            $scope.userEmail = '';
+            $scope.userPass = '';
+
+          }else{
+            console.log("Not login login page");
+            // $location.path('/login');
+          }
+
+       } else {
+
+       }
+     });
+
   };
 
   // Triggered on a button click, or some other target
@@ -101,13 +179,13 @@ angular.module('BMON').controller('manageLocationsCtrl', function($scope, $fireb
       // An elaborate, custom popup
       var myPopup = $ionicPopup.show({
         templateUrl: 'AddProvPopup.html',
-        title: 'Add Province',
+        title: 'สร้างข้อมูลพื้นที่',
         subTitle: '',
         scope: $scope,
         buttons: [
-          { text: 'Cancel' },
+          { text: 'ยกเลิก' },
           {
-            text: '<b>Save</b>',
+            text: '<b>บันทึก</b>',
             type: 'button-positive',
             onTap: function(e) {
               if (!$scope.AddProvData.provInTxt||!$scope.AddProvData.areaInTxt||!$scope.AddProvData.pinInTxt||!$scope.AddProvData.latInTxt||!$scope.AddProvData.lngInTxt) {
@@ -144,7 +222,8 @@ angular.module('BMON').controller('manageLocationsCtrl', function($scope, $fireb
 
           if(checkExit){
              console.log("Pin Exiting");
-                alert("มีจุดสำรวจนี้อยู่แล้ว ไม่สามารถบันทึกทับได้");
+                //alert("มีจุดสำรวจนี้อยู่แล้ว ไม่สามารถบันทึกทับได้");
+                $scope.alertFactory("มีจุดสำรวจนี้อยู่แล้ว ไม่สามารถบันทึกทับได้");
            }else{
               refLocations.push({
                 province:prov,
@@ -172,13 +251,13 @@ angular.module('BMON').controller('manageLocationsCtrl', function($scope, $fireb
     // An elaborate, custom popup
     var myPopup = $ionicPopup.show({
       templateUrl: 'EditProvPopup.html',
-      title: 'Edit Province',
+      title: 'แก้ไฃชื่อจังหวัด',
       subTitle: '',
       scope: $scope,
       buttons: [
-        { text: 'Cancel' },
+        { text: 'ยกเลิก' },
         {
-          text: '<b>Save</b>',
+          text: '<b>บันทึก</b>',
           type: 'button-positive',
           onTap: function(e) {
             if (!$scope.EditProvData.provInTxt) {
@@ -207,24 +286,32 @@ angular.module('BMON').controller('manageLocationsCtrl', function($scope, $fireb
 
   function EditProvData(curentProv, newProv){
     console.log(curentProv, newProv);
-    refLocations.orderByChild("province").equalTo(curentProv).once("value", function(snapshot) {
-      var checkExit = Object.keys(snapshot.val());
-      var provArray
-      var curentArea
-      var curentPin
-      //console.log(checkExit);
-      checkExit.forEach(function(val){
-        //console.log(val);
-        provArray = refLocations.child(val);
-        provArray.once("value",function(snap){
-          curentArea=snap.val().area;
-          curentPin=snap.val().pin;
-        });
-        //console.log("meta ",curentArea,curentPin);
-        provArray.update({province:newProv,meta:newProv+"_"+curentArea+"_"+curentPin})
-      })
-    })                    
-  }
+
+    if($scope.queryProv.includes(newProv)==false){
+        refLocations.orderByChild("province").equalTo(curentProv).once("value", function(snapshot) {
+          var checkExit = Object.keys(snapshot.val());
+          var provArray
+          var curentArea
+          var curentPin
+          //console.log(checkExit);
+          checkExit.forEach(function(val){
+            //console.log(val);
+            provArray = refLocations.child(val);
+            provArray.once("value",function(snap){
+              curentArea=snap.val().area;
+              curentPin=snap.val().pin;
+            });
+            //console.log("meta ",curentArea,curentPin);
+            provArray.update({province:newProv,meta:newProv+"_"+curentArea+"_"+curentPin})
+          })
+        })                    
+      }else{
+        $scope.showAlert("ชื่อจังหวัดซ้ำกับที่มีอยู่แล้ว");
+      }
+
+    }
+
+
   
   
   $scope.showEditAreaPopup = function(prov, area) {
@@ -233,13 +320,13 @@ angular.module('BMON').controller('manageLocationsCtrl', function($scope, $fireb
     // An elaborate, custom popup
     var myPopup = $ionicPopup.show({
       templateUrl: 'EditAreaPopup.html',
-      title: 'Edit Area',
+      title: 'แก้ไฃชื่อพื้นที่',
       subTitle: '',
       scope: $scope,
       buttons: [
-        { text: 'Cancel' },
+        { text: 'ยกเลิก' },
         {
-          text: '<b>Save</b>',
+          text: '<b>บันทึก</b>',
           type: 'button-positive',
           onTap: function(e) {
             if (!$scope.EditAreaData.provInTxt) {
@@ -264,27 +351,33 @@ angular.module('BMON').controller('manageLocationsCtrl', function($scope, $fireb
 
   function EditAreaData(currentArea, newArea, currentProv){
     //console.log(currentArea, newArea, currentProv);
-    refLocations.orderByChild("province").equalTo(currentProv).once("value", function(snapshot) {
-      var data = snapshot.val();
-     //console.log(data);
-      
-      $.each( data, function( key, value ) {
-          //console.log(key, value.area);
-          if(value.area==currentArea){
-            //resultArea.push(key);
-            //console.log("key  "+key);
-            var currentPin
-             var AreaArray = refLocations.child(key);
-             AreaArray.once("value",function(snap){
-               //console.log("snap  "+snap);
-                currentPin = snap.val().pin;
-            });
-            //console.log("meta ",currentProv,currentArea,currentPin);
-            AreaArray.update({area:newArea,meta:currentProv+"_"+newArea+"_"+currentPin})
-          }
-      });
+    if($scope.queryArea.includes(newArea)==false){
 
-    })                    
+        refLocations.orderByChild("province").equalTo(currentProv).once("value", function(snapshot) {
+          var data = snapshot.val();
+         //console.log(data);
+          
+          $.each( data, function( key, value ) {
+              //console.log(key, value.area);
+              if(value.area==currentArea){
+                //resultArea.push(key);
+                //console.log("key  "+key);
+                var currentPin
+                 var AreaArray = refLocations.child(key);
+                 AreaArray.once("value",function(snap){
+                   //console.log("snap  "+snap);
+                    currentPin = snap.val().pin;
+                });
+                //console.log("meta ",currentProv,currentArea,currentPin);
+                AreaArray.update({area:newArea,meta:currentProv+"_"+newArea+"_"+currentPin})
+              }
+          });
+
+        })       
+               
+      }else{
+        $scope.showAlert("ชื่อพื้นที่ซ้ำกับที่มีอยู่แล้ว");
+      }             
   }
   
   
@@ -294,13 +387,13 @@ angular.module('BMON').controller('manageLocationsCtrl', function($scope, $fireb
     // An elaborate, custom popup
     var myPopup = $ionicPopup.show({
       templateUrl: 'EditPinPopup.html',
-      title: 'Edit Pin',
+      title: 'แก้ไฃจุดสำรวจ',
       subTitle: '',
       scope: $scope,
       buttons: [
-        { text: 'Cancel' },
+        { text: 'ยกเลิก' },
         {
-          text: '<b>Save</b>',
+          text: '<b>บันทึก</b>',
           type: 'button-positive',
           onTap: function(e) {
             if (!$scope.EditPinData.pinInTxt) {
@@ -326,26 +419,35 @@ angular.module('BMON').controller('manageLocationsCtrl', function($scope, $fireb
 
   function EditPinData(currentPin, newPin, currentArea, currentProv){
     console.log(currentPin, "newPin " + newPin, currentArea, currentProv);
-    refLocations.orderByChild("province").equalTo(currentProv).once("value", function(snapshot) {
-      var data = snapshot.val();
-     //console.log(data);
-      
-      $.each( data, function( key, value ) {
-          //console.log(key, value.pin);
-          if(value.area==currentArea&&value.pin==currentPin){
-            //console.log("key  "+key);
-              var pinArray = refLocations.child(key);
-            //  pinArray.once("value",function(snap){
-            //    //console.log("snap  "+snap);
-            //     currentPin = snap.val().pin;
-            // });
-            //console.log("meta ",currentProv,currentArea,currentPin);
-            pinArray.update({pin:newPin,meta:currentProv+"_"+currentArea+"_"+newPin})
-          }
-      });
+        var pinRef = refLocations.orderByChild("meta").equalTo(currentProv+"_"+currentArea+"_"+currentPin)
+        var checkPinDup = refLocations.orderByChild("meta").equalTo(currentProv+"_"+currentArea+"_"+newPin)
 
-    })                    
+        checkPinDup.once("value", function(snapshot) {
+        var checkDup = snapshot.val();
+        console.log("checkDup : ",checkDup);
+          if(checkDup==null){
+
+            refLocations.orderByChild("province").equalTo(currentProv).once("value", function(snapshot) {
+              var data = snapshot.val();
+             //console.log(data);
+              
+              $.each( data, function( key, value ) {
+                  //console.log(key, value.pin);
+                  if(value.area==currentArea&&value.pin==currentPin){
+                    console.log("key  "+key);
+                    var pinArray = refLocations.child(key);
+                    pinArray.update({pin:newPin,meta:currentProv+"_"+currentArea+"_"+newPin})
+                  }
+              });
+            })  
+
+          }else{
+            $scope.showAlert("มีจุดสำรวจนี้อยู่แล้ว");
+          }
+        })
+        
   }
+
     
   $scope.showEditLatPopup = function(prov, area, pin, lat) {
     $scope.EditLatData = {};
@@ -353,13 +455,13 @@ angular.module('BMON').controller('manageLocationsCtrl', function($scope, $fireb
     // An elaborate, custom popup
     var myPopup = $ionicPopup.show({
       templateUrl: 'EditLatPopup.html',
-      title: 'Edit Latitute',
+      title: 'แก้ไข Latitute',
       subTitle: '',
       scope: $scope,
       buttons: [
-        { text: 'Cancel' },
+        { text: 'ยกเลิก' },
         {
-          text: '<b>Save</b>',
+          text: '<b>บันทึก</b>',
           type: 'button-positive',
           onTap: function(e) {
             if (!$scope.EditLatData.pinInTxt) {
@@ -413,13 +515,13 @@ angular.module('BMON').controller('manageLocationsCtrl', function($scope, $fireb
     // An elaborate, custom popup
     var myPopup = $ionicPopup.show({
       templateUrl: 'EditLngPopup.html',
-      title: 'Edit Longtitute',
+      title: 'แก้ไข Longtitute',
       subTitle: '',
       scope: $scope,
       buttons: [
-        { text: 'Cancel' },
+        { text: 'ยกเลิก' },
         {
-          text: '<b>Save</b>',
+          text: '<b>บันทึก</b>',
           type: 'button-positive',
           onTap: function(e) {
             if (!$scope.EditLngData.pinInTxt) {

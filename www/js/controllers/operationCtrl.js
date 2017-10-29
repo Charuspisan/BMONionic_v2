@@ -35,8 +35,6 @@ angular.module('BMON')
   //   $scope.hideLoading();
   // });
 
-  $scope.showLoading();
-
   $scope.goBack = function() {
     console.log('Going back');
     $ionicViewService.getBackView().go();
@@ -48,17 +46,34 @@ angular.module('BMON')
   }
 
   $scope.signOut = function() {
-    if (firebase.auth().currentUser) {
-      firebase.auth().signOut();
-      console.log("Now loged out");
-      $location.path('/login');
-      $scope.userEmail = '';
-      $scope.userPass = '';
 
-    }else{
-      console.log("Not login login page");
-      // $location.path('/login');
-    }
+     var confirmPopup = $ionicPopup.confirm({
+       title: "ออกจากระบบ",
+       template: "<center>คุณต้องการออกจากระบบหรือไม่</center>",
+       cancelText: 'ยกเลิก',
+       okText: 'ยืนยัน'
+     });
+     confirmPopup.then(function(res) {
+
+       if(res) {
+
+        if (firebase.auth().currentUser) {
+            firebase.auth().signOut();
+            console.log("Now loged out");
+            $location.path('/login');
+            $scope.userEmail = '';
+            $scope.userPass = '';
+
+          }else{
+            console.log("Not login login page");
+            // $location.path('/login');
+          }
+
+       } else {
+
+       }
+     });
+
   };
 
   //get value from Get Assign Jobs page to variable
@@ -76,6 +91,7 @@ angular.module('BMON')
   // console.log("Tool : "+$scope.GetrefJobTool);
   //////////////////////////////////////////////////
 
+  $scope.GetrefJobParentID=jobInfo.parentID;
   $scope.GetrefJobID=jobInfo.jobId;
   $scope.GetrefJobPin=jobInfo.jobPin;
   $scope.GetrefJobProv=jobInfo.jobProv;
@@ -84,27 +100,38 @@ angular.module('BMON')
   $scope.GetrefJobTool=jobInfo.jobTool;
   $scope.GetrefJobLocate=jobInfo.jobLocate;
 
+  $scope.showLoading();
   
-  var objRec = $firebaseObject(refJobsRec.child(jobInfo.jobId));
-  var objGraphData = [];
-  var objGraphLabels = [];
+  $scope.objRec
+
+  refJobsRec.child(jobInfo.jobId).on("value", function(snapshot) {
+    // console.log("value : ",value);
+    $scope.objRec = snapshot.val();
+    $scope.hideLoading();
+  });
+
+  //alert($scope.GetrefJobParentID);
+
+    // var objRec = $firebaseObject(refJobsRec.child(jobInfo.jobId));
+    // var objGraphData = [];
+    // var objGraphLabels = [];
   
-     // to take an action after the data loads, use the $loaded() promise
-     objRec.$loaded().then(function() {
-         // To iterate the key/value pairs of the object, use angular.forEach()
-         $scope.objRec = objRec;
-         $scope.hideLoading();
-         angular.forEach(objRec, function(value, key) {
-            //console.log("key ", key, "val ", value);
-            // angular.forEach(value, function(val2, key2){
-            //   if(key2!==''){
-            //   console.log("key2 ", key2, "val2 ", val2);
-            //   }
-            // })
-            // objGraphData.push(value);
-         });
-     // console.log("objGraphData : ",objGraphData);
-      });
+     // // to take an action after the data loads, use the $loaded() promise
+     // objRec.$loaded().then(function() {
+     //     // To iterate the key/value pairs of the object, use angular.forEach()
+     //     $scope.objRec = objRec;
+     //     $scope.hideLoading();
+     //     angular.forEach(objRec, function(value, key) {
+     //        //console.log("key ", key, "val ", value);
+     //        // angular.forEach(value, function(val2, key2){
+     //        //   if(key2!==''){
+     //        //   console.log("key2 ", key2, "val2 ", val2);
+     //        //   }
+     //        // })
+     //        // objGraphData.push(value);
+     //     });
+     // // console.log("objGraphData : ",objGraphData);
+     //  });
 
 
       //Start graph
@@ -114,6 +141,7 @@ angular.module('BMON')
       var indexArray=[]
       var labelsArray=[]
       var labelsData=[]
+      var lastGraphData
 
       var refGraph = refJobsRec.child(jobInfo.jobId).child('graph')
 
@@ -159,6 +187,8 @@ angular.module('BMON')
 
           var max = Math.max(...indexArray);
           console.log("Last data at : ",max);
+
+          lastGraphData = max;
 
             for(i=0;i<=max;i++){
               var data = i.toString()
@@ -221,12 +251,21 @@ function initChart() {
         },
         xAxis: {
             // categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
-            categories: labelsData
+            categories: labelsData,
+            tickmarkPlacement:'on',
+            title: {
+              text: "เมตร",
+              align: "high",
+              margin: -15
+          }
         },
         yAxis: {
+            tickmarkPlacement:'on',
             title: {
-                text: false
-            }
+              text: "เมตร",
+              align: "high",
+              margin: -15
+          }
         },
         plotOptions: {
             line: {
@@ -244,16 +283,10 @@ function initChart() {
     });
 };
 
-
-
-
-
-
-
      //End graph
 
 
-    //check tools from jobs assign detect tool type
+    // check tools from jobs assign detect tool type
     $scope.toolType = function() {
       //if 2man tool
       //return "odd"
@@ -272,13 +305,13 @@ function initChart() {
       $scope.editSlopeData = {};
       var myPopup = $ionicPopup.show({
         templateUrl: 'editSlopePopup.html',
-        title: 'Edit Slope',
+        title: 'บันทึกค่าความลาดชัน',
         subTitle: '',
         scope: $scope,
         buttons: [
-          { text: 'Cancel' },
+          { text: 'ยกเลิก' },
           {
-            text: '<b>Save</b>',
+            text: '<b>บันทึก</b>',
             type: 'button-positive',
             onTap: function(e) {
               var newSlope=$scope.editSlopeData.slopeInTxt;
@@ -302,13 +335,13 @@ function initChart() {
       $scope.editMeterData = {};
       var myPopup = $ionicPopup.show({
         templateUrl: 'editMeterPopup.html',
-        title: 'Edit Meter (One-man)',
+        title: 'บันทึกค่า (One-man)',
         subTitle: '',
         scope: $scope,
         buttons: [
-          { text: 'Cancel' },
+          { text: 'ยกเลิก' },
           {
-            text: '<b>Save</b>',
+            text: '<b>บันทึก</b>',
             type: 'button-positive',
             onTap: function(e) {
               var objNewMeter=$scope.editMeterData.meterInTxt;
@@ -316,10 +349,25 @@ function initChart() {
               //console.log("meter keyItem : ",keyItem);
               // console.log("objNewMeter : ",objNewMeter);
               //refJobsRec.child($scope.GetrefJobID).update(objNewMeter);
-              refJobsRec.child(jobInfo.jobId).child(key).push(objNewMeter);   
+              refJobsRec.child(jobInfo.jobId).child(key).set(objNewMeter);   
               
               //One man tool
               //minus width of tool 1.05m
+
+              var checkReEdit
+              refJobsRec.child(jobInfo.jobId).child(key).once("value",function(snapshot){
+                checkReEdit = snapshot.val()
+                // console.log("data : ",data);
+              })
+
+              console.log("checkReEdit : ",checkReEdit);
+
+              if(checkReEdit!=""){
+
+                reCalGraphDiffOne(key,objNewMeter)
+
+              }else{
+
               refJobsRec.child(jobInfo.jobId).child('diff').child(key).set((objNewMeter/100)-1.05);
               var GraphItem = 1.05;
               var refDiff=refJobsRec.child(jobInfo.jobId).child('diff');
@@ -333,7 +381,9 @@ function initChart() {
               })
               console.log("GraphItem : "+GraphItem);
               //Sum of diff show on graph
-              refJobsRec.child(jobInfo.jobId).child('graph').child(key).set(GraphItem.toFixed(3));           
+              refJobsRec.child(jobInfo.jobId).child('graph').child(key).set(GraphItem.toFixed(3));
+
+              }
             }
           }
         ]
@@ -359,13 +409,13 @@ function initChart() {
       $scope.edit2MeterData = {};
       var myPopup = $ionicPopup.show({
         templateUrl: 'edit2MeterPopup.html',
-        title: 'Edit Meter (Water-level)',
+        title: 'บันทึกค่า (Water-level)',
         subTitle: '',
         scope: $scope,
         buttons: [
-          { text: 'Cancel' },
+          { text: 'ยกเลิก' },
           {
-            text: '<b>Save</b>',
+            text: '<b>บันทึก</b>',
             type: 'button-positive',
             onTap: function(e) {
               var objNew2MeterPole1=$scope.edit2MeterData.pole1InTxt;
@@ -375,23 +425,42 @@ function initChart() {
               console.log("pole 1 : ",objNew2MeterPole1);
               console.log("pole 2 : ",objNew2MeterPole2);
 
-              refJobsRec.child(jobInfo.jobId).child(key).push([objNew2MeterPole1,objNew2MeterPole2]);
-              
-              //Water level tool
-              refJobsRec.child(jobInfo.jobId).child('diff').child(key).set(-((objNew2MeterPole1/100)-(objNew2MeterPole2/100)).toFixed(3));
-              var GraphItem = 0;
-              var refDiff=refJobsRec.child(jobInfo.jobId).child('diff');
-              refDiff.limitToFirst(parseInt(key)+1).on("value",function(snapshot){
-                snapshot.forEach(function(childSnapshot) {
-                  var childData = childSnapshot.val();
-                  //console.log("childSnapshot Inside : ",childData);
-                  GraphItem = GraphItem+childData
-                  //console.log("GraphItem Inside : ",GraphItem);
-                }) 
+              var checkReEdit
+              refJobsRec.child(jobInfo.jobId).child(key).once("value",function(snapshot){
+                checkReEdit = snapshot.val()
+                // console.log("data : ",data);
               })
-              // console.log("GraphItem : "+GraphItem);
-              // //Sum of diff show on graph
-              refJobsRec.child(jobInfo.jobId).child('graph').child(key).set(GraphItem.toFixed(3));           
+
+              console.log("checkReEdit : ",checkReEdit);
+
+              if(checkReEdit!=""){
+                reCalGraphDiffWater(key,objNew2MeterPole1,objNew2MeterPole2)
+              }else{
+                refJobsRec.child(jobInfo.jobId).child(key).set([objNew2MeterPole1,objNew2MeterPole2]);
+                
+                //Water level tool
+                refJobsRec.child(jobInfo.jobId).child('diff').child(key).set(-((objNew2MeterPole1/100)-(objNew2MeterPole2/100)));
+                var showDiff = -((objNew2MeterPole1/100)-(objNew2MeterPole2/100))
+                console.log("diff : "+ showDiff);
+                var GraphItem = 0;
+                var refDiff=refJobsRec.child(jobInfo.jobId).child('diff');
+                refDiff.limitToFirst(parseInt(key)+1).on("value",function(snapshot){
+                  console.log("key is : "+key);
+                  snapshot.forEach(function(childSnapshot) {
+                    var childData = childSnapshot.val();
+                    console.log("childSnapshot Inside : ",childData);
+                    GraphItem = parseFloat(GraphItem)+parseFloat(childData)
+                    console.log("GraphItem Inside : ",GraphItem);
+                  }) 
+                })
+                console.log("GraphItem : "+GraphItem);
+                // //Sum of diff show on graph
+                refJobsRec.child(jobInfo.jobId).child('graph').child(key).set(GraphItem.toFixed(3));
+              }
+
+
+
+
             }
           }
         ]
@@ -403,22 +472,127 @@ function initChart() {
         myPopup.close(); //close the popup after 3 seconds for some reason
       }, 100000);     
     } 
-    
-    
+
+
+
+    //re-calulate graph and diff
+    function reCalGraphDiffWater(key,objNew2MeterPole1,objNew2MeterPole2){
+
+      console.log("reCalGraphDiff last graph data at : "+lastGraphData);
+
+      refJobsRec.child(jobInfo.jobId).child(key).set([objNew2MeterPole1,objNew2MeterPole2]);
+                
+      //Water level tool
+      refJobsRec.child(jobInfo.jobId).child('diff').child(key).set(-((objNew2MeterPole1/100)-(objNew2MeterPole2/100)));
+
+        var GraphItem = 0;
+        var RunIndex = 0;
+        var refDiff=refJobsRec.child(jobInfo.jobId).child('diff');
+        //console.log("key is : "+key);
+        refDiff.limitToFirst(parseInt(lastGraphData)+1).on("value",function(snapshot){
+          snapshot.forEach(function(childSnapshot) {
+            console.log("RunIndex is : "+RunIndex);
+            var childData = childSnapshot.val();
+            console.log("childSnapshot Inside : ",childData);
+            GraphItem = parseFloat(GraphItem)+parseFloat(childData)
+            
+            if((RunIndex%2)==0&&RunIndex<=lastGraphData){
+              console.log("GraphItem renew : ",GraphItem);
+              console.log("RunIndex matching is : "+RunIndex);
+              refJobsRec.child(jobInfo.jobId).child('graph').child(RunIndex).set(GraphItem.toFixed(3));
+            }
+
+            RunIndex++;
+
+          }) 
+        })  
+
+
+    }
+
+    function reCalGraphDiffOne(key,objNewMeter){
+
+      console.log("reCalGraphDiff last graph data at : "+lastGraphData);
+
+      refJobsRec.child(jobInfo.jobId).child(key).set(objNewMeter);
+                
+      refJobsRec.child(jobInfo.jobId).child('diff').child(key).set((objNewMeter/100)-1.05);
+
+        var GraphItem = 0;
+        var RunIndex = 0;
+        var refDiff=refJobsRec.child(jobInfo.jobId).child('diff');
+        //console.log("key is : "+key);
+        refDiff.limitToFirst(parseInt(lastGraphData)+1).on("value",function(snapshot){
+          snapshot.forEach(function(childSnapshot) {
+            console.log("RunIndex is : "+RunIndex);
+            var childData = childSnapshot.val();
+            console.log("childSnapshot Inside : ",childData);
+            GraphItem = parseFloat(GraphItem)+parseFloat(childData)
+            
+            if(RunIndex<=lastGraphData){
+              console.log("GraphItem renew : ",GraphItem);
+              console.log("RunIndex matching is : "+RunIndex);
+              refJobsRec.child(jobInfo.jobId).child('graph').child(RunIndex).set(GraphItem.toFixed(3));
+            }
+
+            RunIndex++;
+
+          }) 
+        })  
+
+
+    }
+
+
+    $scope.editToolPopup = function(jobIdRef) {
+      console.log("Key for edit tool : "+jobIdRef);
+      $scope.editToolData = {};
+      var myPopup = $ionicPopup.show({
+        templateUrl: 'editToolPopup.html',
+        title: 'แก้ไขชนิดของอุปกรณ์การวัด',
+        subTitle: '',
+        scope: $scope,
+        buttons: [
+          { text: 'ยกเลิก' },
+          {
+            text: '<b>บันทึก</b>',
+            type: 'button-positive',
+            onTap: function(e) {
+                var newTool=$scope.editToolData.toolInTxt;
+                refJobsID.child($scope.GetrefJobParentID).child(jobIdRef).update({tool:newTool});
+                sharedProp.setJobTool(newTool);
+                $scope.GetrefJobTool=jobInfo.jobTool;
+                console.log("GetrefJobParentID : ",$scope.GetrefJobParentID, "jobIdRef : ",jobIdRef, " newTool : ",newTool);
+            }
+          }
+        ]
+      });
+      myPopup.then(function() {
+        // setTimeout(function(){
+        //   console.log($(".expanding").parent().parent().find(".list .item.item-accordion").length);
+        //   $(".expanding").parent().parent().find(".list .item.item-accordion").css({"display":"block !important","line-height":"38px !important"})
+        // }, 3000);
+      });
+      $timeout(function() {
+        myPopup.close(); //close the popup after 3 seconds for some reason
+      }, 100000);     
+    }
+
+
 
     $scope.editNotePopup = function(key) {
       //console.log("Key for edit Slope : "+refJobsRec);
       $scope.editNoteData = {};
       var myPopup = $ionicPopup.show({
         templateUrl: 'editNotePopup.html',
-        title: 'Add Note',
+        title: 'บันทึกช่วยจำ',
         //subTitle:'',
-        value:$scope.editNoteData.noteInTxt=objRec.note[key],
+        value:$scope.editNoteData.noteInTxt=$scope.objRec.note[key],
         scope: $scope,
         buttons: [
-          { text: 'Cancel' },
+          { text: 'ยกเลิก' },
           {
-            text: '<b>Save</b>',
+            text: '<b>บันทึก</b>',
             type: 'button-positive',
             onTap: function(e) {
               var objNewNote=$scope.editNoteData.noteInTxt;

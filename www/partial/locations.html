@@ -1,3 +1,6 @@
+<style>
+input[type="text"]{margin-bottom: 3px;}
+</style>
 <ion-view ng-controller="manageLocationsCtrl">
 
 <style>
@@ -6,25 +9,29 @@
 </style>
 
   <ion-header-bar class="bar-positive">
+    <img src="images/icon-bar.png" class="icon-bar">
     <h1 class="title">จัดการพื้นที่สำรวจ</h1>
-    <button id="logoutbt" ng-click="signOut()" class="button button-dark">
-      Sign out
+    <button id="logoutbt" ng-click="signOut()" class="button">
+      <i class="icon ion-close-round"></i>
     </button>
-  </ion-header-bar>
+  </ion-header-bar>  
 
 <ion-content class="has-footer has-header" on-swipe-left="goNext('/managejobs')">
 
   <ion-list ng-repeat="(key, value) in data | groupBy: 'province'">
     
     <ion-item>
-      {{ key }}  
-        <button class="button button-small" ng-click="showEditProvPopup(key);">
+
+    <div style="padding: 0 0 1em 0.75em;">
+      <span style="font-size: 1.2em; color: deeppink;">{{ key }}</span>  
+        <button class="button button-small button-positive button-right" ng-click="showEditProvPopup(key);" style="margin-right: 1.2em;    margin-top: -0.5em;">
           <i class="icon ion-edit"></i>
         </button>
+    </div>    
 
-      <ion-item ng-repeat="(key, group) in value | groupBy: 'area'" class="item-stable" ng-click="toggleGroup(key, group)" ng-class="{active: isGroupShown(group)}" item="group" class="item-remove-animate" style="padding: 0px;">
+      <ion-item ng-repeat="(key, group) in value | groupBy: 'area'" ng-click="toggleGroup(key, group)" ng-class="{active: isGroupShown(group)}" item="group" class="item-remove-animate" style="padding: 0px;">
         <span style="display: inline-block;padding: 1em;">{{ key }}</span>
-          <button class="button button-small" ng-click="showEditAreaPopup(group[0].province, key);$event.stopPropagation();" style="margin: 0.5em;">
+          <button class="button button-small button-positive button-right" ng-click="showEditAreaPopup(group[0].province, key);$event.stopPropagation();" style="margin: 0.75em 0;">
             <i class="icon ion-edit"></i>
           </button>
         <ion-item ng-repeat="item in group | orderBy:'pin'" class="item-accordion" ng-show="isGroupShown(group)||onEditGroup(key)" ng-click="$event.stopPropagation();">
@@ -32,10 +39,10 @@
         <div style="width:100%;">
           <div style="width:25%; display:inline-block; margin-right: 5%;">
             {{ item.pin }}       
-              <button class="button button-small" ng-click="showEditPinPopup(group[$index].province, group[$index].area, item.pin)">
+              <button class="button button-small button-positive" ng-click="showEditPinPopup(group[$index].province, group[$index].area, item.pin)">
                 <i class="icon ion-edit"></i>
               </button>
-          </div><div style="width:70%; display:inline-block;"><span style="display:inline-block;width:78%;overflow: hidden;text-overflow: ellipsis;line-height: 1.5em;direction:rtl;text-align:left;">Lat : {{item.lat}}</span><button class="button button-small" ng-click="showEditLatPopup(group[$index].province, group[$index].area, item.pin, item.lat)" style="margin: 0 0.25em;">
+          </div><div style="width:70%; display:inline-block;"><span style="display:inline-block;width:78%;overflow: hidden;text-overflow: ellipsis;line-height: 1.5em;direction:rtl;text-align:left;">Lat : {{item.lat}}</span><button class="button button-small button-positive button-right" ng-click="showEditLatPopup(group[$index].province, group[$index].area, item.pin, item.lat)">
                   <i class="icon ion-edit"></i>
               </button>
           </div>
@@ -44,7 +51,7 @@
         <div style="width:100%;">
           <div style="width:30%; display:inline-block;"></div><div style="width:70%; display:inline-block;">
             <span style="display:inline-block;width:78%;overflow: hidden;text-overflow: ellipsis;line-height: 1.5em;direction:rtl;text-align:left;">Lng : {{item.lng}}</span>
-              <button class="button button-small" ng-click="showEditLngPopup(group[$index].province, group[$index].area, item.pin, item.lng)" style="margin: 0 0.25em;">
+              <button class="button button-small button-positive button-right" ng-click="showEditLngPopup(group[$index].province, group[$index].area, item.pin, item.lng)">
                 <i class="icon ion-edit"></i>
               </button>            
           </div>
@@ -59,48 +66,47 @@
 
 <ion-footer-bar align-title="left" class="bar-positive">
   <button class="button button-full button-positive" ng-click="showAddProvPopup()" style="z-index: 2;">
-    <i class="material-icons">add_circle</i> เพิ่มข้อมูล
+    <i class="icon ion-ios-plus-outline"></i> เพิ่มข้อมูล
   </button>
 </ion-footer-bar>
 
 
 <script id="AddProvPopup.html" type="text/ng-template">
-	<!-- <input ng-model="AddProvData.provInTxt" type="text" placeholder="Add Province"> -->
-  <select style="width: 100%; padding: 0.5em;" ng-model="AddProvData.provInTxt" ng-change="filterArea()">
-    <option value="" disabled selected>เลือกจังหวัด</option>
+  <input ng-model="AddProvData.provInTxt" type="text" placeholder="เพิ่มจังหวัด" style="width:86%; display: inline-block;">
+  <select style="width: 10%; padding: 0.25em;" ng-model="AddProvData.provInTxt" ng-change="filterArea()">
+    <!-- <option value="" disabled selected>เลือกจังหวัด</option> -->
     <option ng-repeat="prov in queryProv | orderBy">{{prov}}</option>
   </select>
-  <!-- <input ng-model="AddProvData.areaInTxt" type="text" placeholder="Add Area"> -->
-  <select style="width: 100%; padding: 0.5em;" ng-model="AddProvData.areaInTxt">
-    <option value="" disabled selected>เลือกพื้นที่</option>
+  <input ng-model="AddProvData.areaInTxt" type="text" placeholder="เพิ่มพื้นที่" style="width:86%; display: inline-block;">
+  <select style="width: 10%; padding: 0.25em;" ng-model="AddProvData.areaInTxt">
+    <!-- <option value="" disabled selected>เลือกพื้นที่</option> -->
     <option ng-repeat="area in queryArea | orderBy">{{area}}</option>
   </select>
-  <input ng-model="AddProvData.pinInTxt" type="text" placeholder="Add Pin">
-  <input ng-model="AddProvData.latInTxt" type="text" placeholder="Add Latitude">
-  <input ng-model="AddProvData.lngInTxt" type="text" placeholder="Add Longtitude">
+  <input ng-model="AddProvData.pinInTxt" type="text" placeholder="เพิ่มจุดสำรวจ">
+  <input ng-model="AddProvData.latInTxt" type="text" placeholder="เพิ่ม Latitude">
+  <input ng-model="AddProvData.lngInTxt" type="text" placeholder="เพิ่ม Longtitude">
 </script>
 
 
-
-
-
-
+<!-- <script id="AddNewProvPopup.html" type="text/ng-template">
+  <input ng-model="AddNewProvData.provInTxt" type="text" placeholder="เพิ่มจังหวัดใหม่">
+</script> -->
 
 
 <script id="EditProvPopup.html" type="text/ng-template">
-	<input ng-model="EditProvData.provInTxt" type="text" placeholder="Edit Province">
+	<input ng-model="EditProvData.provInTxt" type="text" placeholder="ชื่อจังหวัด">
 </script>
 <script id="EditAreaPopup.html" type="text/ng-template">
-	<input ng-model="EditAreaData.provInTxt" type="text" placeholder="Edit Area">
+	<input ng-model="EditAreaData.provInTxt" type="text" placeholder="ชื่อพื้นที่">
 </script>
 <script id="EditPinPopup.html" type="text/ng-template">
-	<input ng-model="EditPinData.pinInTxt" type="text" placeholder="Edit Pin">
+	<input ng-model="EditPinData.pinInTxt" type="text" placeholder="จุดสำรวจ">
 </script>
 <script id="EditLatPopup.html" type="text/ng-template">
-	<input ng-model="EditLatData.pinInTxt" type="text" placeholder="Edit Latitute">
+	<input ng-model="EditLatData.pinInTxt" type="text" placeholder="Latitute">
 </script>
 <script id="EditLngPopup.html" type="text/ng-template">
-	<input ng-model="EditLngData.pinInTxt" type="text" placeholder="Edit Longtitute">
+	<input ng-model="EditLngData.pinInTxt" type="text" placeholder="Longtitute">
 </script>  
   
 

@@ -1,3 +1,37 @@
+@font-face {
+    font-family: 'Kanit';
+    src: url('fonts/Kanit-ExtraLight.ttf');
+    font-weight: 100;
+    font-style: normal;
+}
+@font-face {
+    font-family: 'Kanit';
+    src: url('fonts/Kanit-Light.ttf');
+    font-weight: 200;
+    font-style: normal;
+}
+@font-face {
+    font-family: 'Kanit';
+    src: url('fonts/Kanit-Regular.ttf');
+    font-weight: 400;
+    font-style: normal;
+}
+@font-face {
+    font-family: 'Kanit';
+    src: url('fonts/Kanit-SemiBold.ttf');
+    font-weight: 600;
+    font-style: normal;
+}
+html, body, textarea, input[type="text"], input[type="password"], button, h1, h2, h3, span, div {
+  font-family: 'Kanit' !important;
+  font-weight: 200;
+  font-size: 16px;
+}
+input, button, select, textarea {
+    font-family: 'Kanit';
+}
+.popup-title {font-size: 1.2em;}
+i {font-size: 1.5em; vertical-align: middle;}
 .material-icons {line-height: 1.5em;}
 .provWrapper, .areaWrapper, .pinWrapper {display:block; padding:0.5em; border:solid 1px #ccc;}
 .modal {
@@ -14,9 +48,9 @@
                 no-repeat;
 }
 .button-right {right: 1em;position: absolute !important;}
-.button-small {font-size: 17px !important;}
+.button-small {margin-top: 0.25em;}
 
-.boxInSlide{height: 100%; padding-top:44px; box-sizing:border-box;}
+.boxInSlide{height: 100%; box-sizing:border-box; margin-top: 64px;}
 ion-slide{height: 100vh !important;}
 .material-icons {vertical-align: top;}
 .list .item.item-accordion {
@@ -32,9 +66,9 @@ ion-slide{height: 100vh !important;}
 .list .item.item-accordion.ng-hide-remove {
   display: block !important;
 }
-.bar .button .icon:before, .bar .button.button-icon:before, .bar .button.icon-left:before, .bar .button.icon-right:before, .bar .button.icon:before, .bar button .icon:before, .bar button.button-icon:before, .bar button.icon-left:before, .bar button.icon-right:before, .bar button.icon:before {
+/*.bar .button .icon:before, .bar .button.button-icon:before, .bar .button.icon-left:before, .bar .button.icon-right:before, .bar .button.icon:before, .bar button .icon:before, .bar button.button-icon:before, .bar button.icon-left:before, .bar button.icon-right:before, .bar button.icon:before {
     line-height: 1.25em !important;
-}
+}*/
 .button-left {
     float: left;
     margin-right: 1em !important;
@@ -42,6 +76,7 @@ ion-slide{height: 100vh !important;}
 .button.button-block, .button.button-full {
     margin-top: 0 !important;
     margin-bottom: 0 !important;
+    font-size: 1em;
 }
 .item-input {height:2em;}
 ._720kb-datepicker-calendar {position: fixed !important; top: -50% !important;left: 0%;margin-top: 5% !important;}
@@ -53,3 +88,18 @@ ion-slide{height: 100vh !important;}
 text.highcharts-credits {
     display: none;
 }
+/*.popup-container {
+    top: 15px;
+    -webkit-box-align: flex-start;
+    -ms-flex-align: flex-start;
+    -webkit-align-items: flex-start;
+    -moz-align-items: flex-start;
+    align-items: flex-start;
+}*/
+.button .icon:before, .button.icon:before, .button.icon-left:before, .button.icon-right:before {
+    padding: 2px 0 1px 0;
+}
+.ion-error.ion-android-warning:before {font-size: 2.5em; color:red;}
+.ion-ios-camera-outline:before {vertical-align: baseline;}
+.icon-bar {width: auto; height: 34px;}
+.popup-sub-title {font-family: 'Kanit' !important;}

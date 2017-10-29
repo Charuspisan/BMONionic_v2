@@ -1,6 +1,6 @@
 angular.module('BMON')
 
-.controller('leaderCtrl', function($scope, $firebaseObject, $firebaseArray, $ionicPopup, $timeout, sharedProp, $location) {
+.controller('leaderCtrl', function($scope, $firebaseObject, $firebaseArray, $ionicPopup, $timeout, sharedProp, $location, $ionicLoading) {
 
 	console.log("user is : "+sharedProp.getEmail());
 
@@ -36,53 +36,75 @@ angular.module('BMON')
   });
 
 
-
+    $scope.hideLoading = function(){
+      $ionicLoading.hide().then(function(){
+         console.log("The loading indicator is now hidden");
+      });
+    };
+      $scope.hideLoading();
 
 
   $scope.signOut = function() {
-    if (firebase.auth().currentUser) {
-      firebase.auth().signOut();
-      console.log("Now loged out");
-      $location.path('/login');
-      $scope.userEmail = '';
-      $scope.userPass = '';
 
-    }else{
-      console.log("Not login login page");
-      $location.path('/login');
-    }
+     var confirmPopup = $ionicPopup.confirm({
+       title: "ออกจากระบบ",
+       template: "<center>คุณต้องการออกจากระบบหรือไม่</center>",
+       cancelText: 'ยกเลิก',
+       okText: 'ยืนยัน'
+     });
+     confirmPopup.then(function(res) {
+
+       if(res) {
+
+        if (firebase.auth().currentUser) {
+            firebase.auth().signOut();
+            console.log("Now loged out");
+            $location.path('/login');
+            $scope.userEmail = '';
+            $scope.userPass = '';
+
+          }else{
+            console.log("Not login login page");
+            // $location.path('/login');
+          }
+
+       } else {
+
+       }
+     });
+
   };
 
-  $scope.deleteJob = function(jobIdRef) {
-    console.log("Key for delete : "+jobIdRef);
-    //query form jobIdRef
-    refJobsRec.orderByChild("jobIdRef").equalTo(jobIdRef).once("value", function(snapshot){
-      console.log("snapshot : ",snapshot.val());
-      //var s=snapshot.val();
-        snapshot.forEach(function(childSnapshot) {           
-            // key will be "ada" the first time and "alan" the second time
-            var key = childSnapshot.key();
-            // data will be the actual contents of the child
-            var data = childSnapshot.val();
-            console.log("jobIdKey : ",key);
-            refJobsRec.child(key).remove();
-        });
-    });
-    refJobsID.child(jobIdRef).remove();
-  }
+  // $scope.deleteJob = function(jobIdRef) {
+  //   console.log("Key for delete : "+jobIdRef);
+  //   //query form jobIdRef
+  //   refJobsRec.orderByChild("jobIdRef").equalTo(jobIdRef).once("value", function(snapshot){
+  //     console.log("snapshot : ",snapshot.val());
+  //     //var s=snapshot.val();
+  //       snapshot.forEach(function(childSnapshot) {           
+  //           // key will be "ada" the first time and "alan" the second time
+  //           var key = childSnapshot.key();
+  //           // data will be the actual contents of the child
+  //           var data = childSnapshot.val();
+  //           console.log("jobIdKey : ",key);
+  //           refJobsRec.child(key).remove();
+  //       });
+  //   });
+  //   refJobsID.child(jobIdRef).remove();
+  // }
 
     $scope.editOperDatePopup = function(jobIdRef) {
       console.log("Key for edit date : "+jobIdRef);
       $scope.editOperDateData = {};
       var myPopup = $ionicPopup.show({
         templateUrl: 'editOperDatePopup.html',
-        title: 'Edit Operation Date',
+        title: 'แก้ไขวันที่',
         subTitle: '',
         scope: $scope,
         buttons: [
-          { text: 'Cancel' },
+          { text: 'ยกเลิก' },
           {
-            text: '<b>Save</b>',
+            text: '<b>บันทึก</b>',
             type: 'button-positive',
             onTap: function(e) {
                 var newDate=$scope.editOperDateData.operateDateInTxt;
@@ -109,13 +131,13 @@ angular.module('BMON')
       $scope.selectedUser = {};
       var myPopup = $ionicPopup.show({
         templateUrl: 'editUserPopup.html',
-        title: 'Edit Recorder',
+        title: 'แก้ไขผู้ปฎิบัติงาน',
         subTitle: '',
         scope: $scope,
         buttons: [
-          { text: 'Cancel' },
+          { text: 'ยกเลิก' },
           {
-            text: '<b>Save</b>',
+            text: '<b>บันทึก</b>',
             type: 'button-positive',
             onTap: function(e) {
                 var newUser=$scope.selectedUser.userDD;
@@ -137,19 +159,18 @@ angular.module('BMON')
     }
 
     
-    
     $scope.editToolPopup = function(jobIdRef, pinIdRef) {
       console.log("Key for edit tool : "+pinIdRef);
       $scope.editToolData = {};
       var myPopup = $ionicPopup.show({
         templateUrl: 'editToolPopup.html',
-        title: 'Edit Tool type',
+        title: 'แก้ไขชนิดของอุปกรณ์การวัด',
         subTitle: '',
         scope: $scope,
         buttons: [
-          { text: 'Cancel' },
+          { text: 'ยกเลิก' },
           {
-            text: '<b>Save</b>',
+            text: '<b>บันทึก</b>',
             type: 'button-positive',
             onTap: function(e) {
                 var newTool=$scope.editToolData.toolInTxt;
@@ -170,93 +191,6 @@ angular.module('BMON')
       }, 100000);     
     }
     
-
-   $scope.showCreateJobPopup = function() {
-    $scope.createJobData = {};
-
-    // An elaborate, custom popup
-    var myPopup = $ionicPopup.show({
-      templateUrl: 'createJobPopup.html',
-      title: 'Create Job',
-      subTitle: '',
-      scope: $scope,
-      buttons: [
-        { text: 'Cancel' },
-        {
-          text: '<b>Save</b>',
-          type: 'button-positive',
-          onTap: function(e) {
-              var selectedProv=$scope.createJobData.provInTxt;
-              var selectedArea=$scope.createJobData.areaInTxt;
-              var selectedDate=$scope.createJobData.operateDateInTxt;
-              refLocations.orderByChild("province").equalTo(selectedProv).once("value", function(snapshot) {
-                var data=snapshot.val();
-                var matchID = [];
-                //console.log(data);
-                if (!$scope.createJobData.provInTxt||!$scope.createJobData.areaInTxt) {
-                  //don't allow the user to close unless he enters data
-                  alert("ไม่พบพื้นที่ที่กำหนด กรุณาตรวจสอบหรือแจ้งผู้ดูแลเพื่อเพิ่มพื้นที่สำรวจ");
-                  e.preventDefault();
-                } else {
-                  $.each( data, function( key, value ) {
-                    console.log("key  ",key,"value  ",value);
-                      if(value.province==selectedProv&&value.area==selectedArea){
-                        //var lacateID = key;
-                        matchID.push({"id":key,"pin":value.pin});
-                        //console.log("Selected lacateID ",lacateID);
-                      }else{
-                        console.log("Not match");
-                      }
-                    });
-                }
-                console.log(matchID);
-                if(matchID.length>0){
-                  console.log("Found Matching");
-                  var newJob = refJobsID.push({"operate_date":selectedDate,"province":selectedProv,"area":selectedArea,"status":"active"});
-                  var newJobID = newJob.key();
-                  console.log(newJobID);
-                  $.each(matchID, function(key, value){
-                    //console.log(value.pin);
-                    var newRec = refJobsID.child(newJobID).push({"pin":value.pin, "user":"", "tool":"","locatRef":value.id});
-                    var newRecID = newRec.key();
-                    var time = Firebase.ServerValue.TIMESTAMP;
-                    var newSet = {};
-                    var graph = [];
-                    var note = [];
-                    var metaJobRec = selectedProv+'_'+selectedArea+'_'+value.pin;
-                    for(i=0; i<100; i++){newSet[i]=""; graph.push(""); note.push("");}
-                    // newSet.timeStamp=time;
-                    // console.log("timeStamp : ",time);
-                    newSet.slope="";
-                    newSet.jobIdRef=newJobID;
-                    //var graphTxt = graph.toString();
-                    console.log("newSet : ",newSet);
-                    console.log("metaJobRec : "+metaJobRec);
-                    //console.log("graph : ",graph);
-                    //refJobsRec.child(newRecID).update({"timeStamp":time, "slope":"", "jobIdRef":newJobID});
-                    refJobsRec.child(newRecID).update(newSet);
-                    refJobsRec.child(newRecID).update({"timeStamp":time});
-                    refJobsRec.child(newRecID).update({"graph":graph});
-                    refJobsRec.child(newRecID).update({"note":note});
-                    refJobsRec.child(newRecID).update({"meta":metaJobRec});
-                  })
-                  //createRec(newJobID)
-                }
-              })
-          }
-        }
-      ]
-    });
-
-    // myPopup.then(function(res) {
-    //   console.log('Tapped!', res);
-    // });
-
-    $timeout(function() {
-      myPopup.close(); //close the popup after 3 seconds for some reason
-    }, 100000);
-  };
-  
   
   $scope.toggleGroup = function(key, group) {
     if ($scope.isGroupShown(group)||$scope.onEditGroup(key)) {

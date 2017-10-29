@@ -1,25 +1,21 @@
 <ion-view ng-controller="leaderCtrl">
 
 
-	<ion-header-bar class="bar-positive">
-	    <div class="buttons">
-	    	<button class="button button-icon icon ion-ios-minus-outline"
-	          ng-click="data.showDelete = !data.showDelete"></button>
-	    </div>
-  		<h1 class="title">Manage Jobs</h1>
-  		<button id="logoutbt" ng-click="signOut()" class="button button-dark">
-    		Sign out
-  	  	</button>
-	</ion-header-bar>
+  <ion-header-bar class="bar-positive">
+    <img src="images/icon-bar.png" class="icon-bar">
+    <h1 class="title">มอบหมายงาน</h1>
+    <button id="logoutbt" ng-click="signOut()" class="button">
+      <i class="icon ion-close-round"></i>
+    </button>
+  </ion-header-bar>
 
-    <ion-content class="has-footer">
+
+    <ion-content class="has-footer" style="padding:1em;">
 
       <ion-list ng-repeat="(key, group) in jobListData" show-delete="data.showDelete">
 
-          <ion-item class="item-stable" ng-click="toggleGroup(key, group)" ng-class="{active: isGroupShown(group)}" item="group">
-            &nbsp;
+          <ion-item ng-click="toggleGroup(key, group)" ng-class="{active: isGroupShown(group)}" item="group">
             {{group.province}} : {{group.area}} : {{group.operate_date}}
-
           </ion-item>
 
           <ion-item class="item-accordion" ng-show="isGroupShown(group)||onEditGroup(key)">
@@ -38,24 +34,10 @@
 
     </ion-content>
 
-<!--     <ion-footer-bar align-title="left" class="bar-positive" style="height:auto;">
- 
-        <button class="button button-full button-positive" ng-click="showCreateJobPopup()">
-          <i class="icon ion-ios-plus-outline"></i> <span style="font-size:1.2em;">Create Job</span>
-        </button> 
-
-    </ion-footer-bar> -->
-    
-<!-- 		<script id="createJobPopup.html" type="text/ng-template">
-			<input ng-model="createJobData.provInTxt" type="text" placeholder="Select Province">
-		  	<input ng-model="createJobData.areaInTxt" type="text" placeholder="Select Area">
-		  	<input ng-model="createJobData.operateDateInTxt" type="text" placeholder="Operating Date">
-		</script> -->
-
 		<script id="editOperDatePopup.html" type="text/ng-template">
 		  	<!-- <input ng-model="editOperDateData.operateDateInTxt" type="text" placeholder="Operating Date"> -->
         <datepicker date-format="dd-MM-yyyy">
-          <input ng-model="editOperDateData.operateDateInTxt" type="text" placeholder="Operating Date"/>
+          <input ng-model="editOperDateData.operateDateInTxt" type="text" placeholder="วันที่ปฎิบัติงาน"/>
         </datepicker>
 		</script>
     

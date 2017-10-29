@@ -14,37 +14,13 @@ angular.module('BMON')
   var objRec = $firebaseObject(refJobsRec);
   var objUsers = $firebaseObject(refUsers);
 
+  var shareData = sharedProp.getLocateData();
 
+    $scope.data = shareData.all;
+    $scope.queryProv = shareData.filterProv;
+    $scope.queryArea = shareData.filterArea;
 
-    $scope.queryProv=[];
-    $scope.queryArea=[];
-
-    var obj = $firebaseObject(refLocations);
-     // to take an action after the data loads, use the $loaded() promise
-     obj.$loaded().then(function() {
-         // To iterate the key/value pairs of the object, use angular.forEach()
-         console.log("obj is : ",obj);
-         $scope.data = obj;
-
-         angular.forEach(obj, function(value, key) {
-            //console.log("key ", key, "val ", value);
-            if($scope.queryProv.indexOf(value.province) == -1) {
-               $scope.queryProv.push(value.province);
-            }
-            if($scope.queryArea.indexOf(value.area) == -1) {
-               $scope.queryArea.push(value.area);
-            }
-         });
-
-         console.log("$scope.queryProv : ",$scope.queryProv);
-
-         // To make the data available in the DOM, assign it to $scope
-         //$scope.data = obj;
-        
-         // For three-way data bindings, bind it to the scope instead
-         //obj.$bindTo($scope, "data");  
-       
-      });
+    console.log("shareData : ",shareData);
 
       $scope.filterArea = function(){
         console.log("prov : "+$scope.createJobData.provInTxt);
@@ -92,9 +68,9 @@ angular.module('BMON')
     $location.path(page);
   }
 
-  $scope.goBack = function() {
+  $scope.goBack = function(page) {
     console.log('Going back');
-    $ionicViewService.getBackView().go();
+    $location.path(page);
   }
 
 
@@ -139,7 +115,9 @@ angular.module('BMON')
 
    var confirmPopup = $ionicPopup.confirm({
      title: 'ลบงาน',
-     template: 'คุณต้องการจะลบงานนี้ใช่หรือไม่ การลบจะไม่สามารถเรียกคืนข้อมูลได้'
+     template: '<center>คุณต้องการจะลบงานนี้ใช่หรือไม่<br />การลบจะไม่สามารถเรียกคืนข้อมูลได้</center>',
+      cancelText: 'ยกเลิก',
+      okText: 'ยืนยัน'
    });
 
    confirmPopup.then(function(res, id) {
@@ -153,18 +131,8 @@ angular.module('BMON')
    });
  };
 
-
-
-
-
-
-
-
-
-
-
   $scope.finishedJob = function(jobId) {
-    alert(jobId);
+    //alert(jobId);
     refJobsID.child(jobId).update({"status":"closed"});
   }
 
@@ -177,7 +145,9 @@ angular.module('BMON')
     $event.stopPropagation();
      var confirmPopup = $ionicPopup.confirm({
        title: 'เสร็จสิ้นงาน',
-       template: 'คุณต้องการจะเสร็จสิ้นงานนี้ใช่หรือไม่'
+       template: '<center>คุณต้องการจะเสร็จสิ้นงานนี้<br />ใช่หรือไม่</center>',
+       cancelText: 'ยกเลิก',
+        okText: 'ยืนยัน'
      });
 
      confirmPopup.then(function(res) {
@@ -191,28 +161,18 @@ angular.module('BMON')
    };
 
 
-
-
-
-
-
-
-
-
-
-
     $scope.editOperDatePopup = function(jobIdRef) {
       console.log("Key for edit date : "+jobIdRef);
       $scope.editOperDateData = {};
       var myPopup = $ionicPopup.show({
         templateUrl: 'editOperDatePopup.html',
-        title: 'Edit Operation Date',
+        title: 'แก้ไขวันที่ปฎิฐัติงาน',
         subTitle: '',
         scope: $scope,
         buttons: [
-          { text: 'Cancel' },
+          { text: 'ยกเลิก' },
           {
-            text: '<b>Save</b>',
+            text: '<b>บันทึก</b>',
             type: 'button-positive',
             onTap: function(e) {
                 var newDate=$scope.editOperDateData.operateDateInTxt;
@@ -239,13 +199,13 @@ angular.module('BMON')
       $scope.selectedUser = {};
       var myPopup = $ionicPopup.show({
         templateUrl: 'editUserPopup.html',
-        title: 'Edit Recorder',
+        title: 'แก้ไขผู้ปฎิบัติงาน',
         subTitle: '',
         scope: $scope,
         buttons: [
-          { text: 'Cancel' },
+          { text: 'ยกเลิก' },
           {
-            text: '<b>Save</b>',
+            text: '<b>บันทึก</b>',
             type: 'button-positive',
             onTap: function(e) {
                 var newUser=$scope.selectedUser.userDD;
@@ -273,13 +233,13 @@ angular.module('BMON')
       $scope.editToolData = {};
       var myPopup = $ionicPopup.show({
         templateUrl: 'editToolPopup.html',
-        title: 'Edit Tool type',
+        title: 'แก้ไขเครื่องมือที่ใช้วัด',
         subTitle: '',
         scope: $scope,
         buttons: [
-          { text: 'Cancel' },
+          { text: 'ยกเลิก' },
           {
-            text: '<b>Save</b>',
+            text: '<b>บันทึก</b>',
             type: 'button-positive',
             onTap: function(e) {
                 var newTool=$scope.editToolData.toolInTxt;
@@ -307,13 +267,13 @@ angular.module('BMON')
     // An elaborate, custom popup
     var myPopup = $ionicPopup.show({
       templateUrl: 'createJobPopup.html',
-      title: 'Create Job',
+      title: 'สร้างตารางงานใหม่',
       subTitle: '',
       scope: $scope,
       buttons: [
-        { text: 'Cancel' },
+        { text: 'ยกเลิก' },
         {
-          text: '<b>Save</b>',
+          text: '<b>บันทึก</b>',
           type: 'button-positive',
           onTap: function(e) {
               var selectedProv=$scope.createJobData.provInTxt;
@@ -353,8 +313,9 @@ angular.module('BMON')
                     var newSet = {};
                     var graph = [];
                     var note = [];
+                    var diff = [];
                     var metaJobRec = selectedProv+'_'+selectedArea+'_'+value.pin;
-                    for(i=0; i<300; i++){newSet[i]=""; graph.push(""); note.push("");}
+                    for(i=0; i<300; i++){newSet[i]=""; graph.push(""); note.push(""); diff.push(0);}
                     // newSet.timeStamp=time;
                     // console.log("timeStamp : ",time);
                     newSet.slope="";
@@ -365,8 +326,10 @@ angular.module('BMON')
                     //console.log("graph : ",graph);
                     //refJobsRec.child(newRecID).update({"timeStamp":time, "slope":"", "jobIdRef":newJobID});
                     refJobsRec.child(newRecID).update(newSet);
+                    refJobsRec.child(newRecID).update({"operate_date":selectedDate});
                     refJobsRec.child(newRecID).update({"timeStamp":time});
                     refJobsRec.child(newRecID).update({"graph":graph});
+                    refJobsRec.child(newRecID).update({"diff":diff});
                     refJobsRec.child(newRecID).update({"note":note});
                     refJobsRec.child(newRecID).update({"meta":metaJobRec});
                   })

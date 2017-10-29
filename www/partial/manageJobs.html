@@ -1,26 +1,25 @@
 <ion-view ng-controller="manageJobsCtrl">
 
+  <ion-header-bar class="bar-positive">
+      <div class="buttons">
+        <button class="button button-icon icon ion-ios-minus-outline"
+            ng-click="data.showDelete = !data.showDelete"></button>
+      </div>
+      <h1 class="title">จัดการตารางปฎิบัติงาน</h1>
+      <button id="logoutbt" ng-click="signOut()" class="button">
+        <i class="icon ion-close-round"></i>
+      </button>
+  </ion-header-bar>  
 
-	<ion-header-bar class="bar-positive">
-	    <div class="buttons">
-	    	<button class="button button-icon icon ion-ios-minus-outline"
-	          ng-click="data.showDelete = !data.showDelete"></button>
-	    </div>
-  		<h1 class="title">Manage Jobs</h1>
-  		<button id="logoutbt" ng-click="signOut()" class="button button-dark">
-    		Sign out
-  	  	</button>
-	</ion-header-bar>
-
-    <ion-content class="has-footer" on-swipe-left="goNext('/manageusers')" on-swipe-right="goBack()">
+    <ion-content class="has-footer" on-swipe-left="goNext('/manageusers')" on-swipe-right="goBack('/locations')" style="padding: 1em;">
 
       <ion-list ng-repeat="(key, group) in jobListData" show-delete="data.showDelete">
 
-          <ion-item class="item-stable" ng-click="toggleGroup(key, group)" ng-class="{active: isGroupShown(group)}" item="group" class="item-remove-animate">
+          <ion-item ng-click="toggleGroup(key, group)" ng-class="{active: isGroupShown(group)}" item="group" class="item-remove-animate">
               <i class="icon" ng-class="isGroupShown(group) ? 'ion-ios-minus-outline' : 'ion-ios-plus-outline'"></i>
             &nbsp;
             {{group.province}} : {{group.area}} : {{group.operate_date}}
-            <button class="button button-small button-positive button-right" ng-click="showFinishedJob($event, key);"><i class="icon ion-archive"></i></button>
+            <button class="button button-small button-positive button-right" ng-click="showFinishedJob($event, key);" style="margin-top: -0.25em;"><i class="icon ion-archive"></i></button>
               <ion-delete-button class="ion-minus-circled" 
                 ng-click="showDeleteJob($event, key)">
               </ion-delete-button>
@@ -45,7 +44,7 @@
     <ion-footer-bar align-title="left" class="bar-positive" style="height:auto;">
  
         <button class="button button-full button-positive" ng-click="showCreateJobPopup()">
-          <i class="icon ion-ios-plus-outline"></i> <span style="font-size:1.2em;">Create Job</span>
+          <i class="icon ion-ios-plus-outline"></i> <span style="font-size:1.2em;">สร้างตารางงานใหม่</span>
         </button> 
 
     </ion-footer-bar>
@@ -65,7 +64,7 @@
         </select>
         <!-- <input ng-model="createJobData.operateDateInTxt" type="text" placeholder="Operating Date"> -->
         <datepicker date-format="dd-MM-yyyy">
-          <input ng-model="createJobData.operateDateInTxt" type="text" placeholder="Operating Date"/>
+          <input ng-model="createJobData.operateDateInTxt" type="text" placeholder="วันที่ปฎิบัติงาน"/>
         </datepicker>
 
 		</script>
@@ -83,24 +82,15 @@
     <option value="" disabled selected>เลือกพื้นที่</option>
     <option ng-repeat="area in queryArea | orderBy">{{area}}</option>
   </select>
-  <input ng-model="AddProvData.pinInTxt" type="text" placeholder="Add Pin">
-  <input ng-model="AddProvData.latInTxt" type="text" placeholder="Add Latitude">
-  <input ng-model="AddProvData.lngInTxt" type="text" placeholder="Add Longtitude">
+  <input ng-model="AddProvData.pinInTxt" type="text" placeholder="จุดสำรวจ">
+  <input ng-model="AddProvData.latInTxt" type="text" placeholder="เพิ่ม Latitude">
+  <input ng-model="AddProvData.lngInTxt" type="text" placeholder="เพิ่ม Longtitude">
 </script>
-
-
-
-
-
-
-
-
-
 
 		<script id="editOperDatePopup.html" type="text/ng-template">
 		  	<!-- <input ng-model="editOperDateData.operateDateInTxt" type="text" placeholder="Operating Date"> -->
         <datepicker date-format="dd-MM-yyyy">
-          <input ng-model="editOperDateData.operateDateInTxt" type="text" placeholder="Operating Date"/>
+          <input ng-model="editOperDateData.operateDateInTxt" type="text" placeholder="วันที่ปฎิบัติงาน"/>
         </datepicker>
 		</script>
     
