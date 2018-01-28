@@ -1,0 +1,370 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="57416807-df21-4dd9-9032-ed20f5edf08d" name="Default" comment="">
+      <change type="DELETED" beforePath="D:\Projects\BMONionic\npm-debug.log" afterPath="" />
+      <change type="DELETED" beforePath="D:\Projects\BMONionic\www-bup\css\style.css" afterPath="" />
+      <change type="DELETED" beforePath="D:\Projects\BMONionic\www-bup\img\ionic.png" afterPath="" />
+      <change type="DELETED" beforePath="D:\Projects\BMONionic\www-bup\index.html" afterPath="" />
+      <change type="DELETED" beforePath="D:\Projects\BMONionic\www-bup\js\app.js" afterPath="" />
+      <change type="DELETED" beforePath="D:\Projects\BMONionic\www-bup\js\bup-script.js" afterPath="" />
+      <change type="DELETED" beforePath="D:\Projects\BMONionic\www-bup\js\controllers\cameraControl.js" afterPath="" />
+      <change type="DELETED" beforePath="D:\Projects\BMONionic\www-bup\js\controllers\getjobsCtrl.js" afterPath="" />
+      <change type="DELETED" beforePath="D:\Projects\BMONionic\www-bup\js\controllers\leaderCtrl.js" afterPath="" />
+      <change type="DELETED" beforePath="D:\Projects\BMONionic\www-bup\js\controllers\locationsCtrl.js" afterPath="" />
+      <change type="DELETED" beforePath="D:\Projects\BMONionic\www-bup\js\controllers\loginCtrl.js" afterPath="" />
+      <change type="DELETED" beforePath="D:\Projects\BMONionic\www-bup\js\controllers\manageJobsCtrl.js" afterPath="" />
+      <change type="DELETED" beforePath="D:\Projects\BMONionic\www-bup\js\controllers\manageUsersCtrl.js" afterPath="" />
+      <change type="DELETED" beforePath="D:\Projects\BMONionic\www-bup\js\controllers\operationCtrl-bupGraphWithOutNG.js" afterPath="" />
+      <change type="DELETED" beforePath="D:\Projects\BMONionic\www-bup\js\controllers\operationCtrl.js" afterPath="" />
+      <change type="DELETED" beforePath="D:\Projects\BMONionic\www-bup\js\controllers\otherPhotoCtrl.js" afterPath="" />
+      <change type="DELETED" beforePath="D:\Projects\BMONionic\www-bup\js\firebase.js" afterPath="" />
+      <change type="DELETED" beforePath="D:\Projects\BMONionic\www-bup\lib\Chart.min.js" afterPath="" />
+      <change type="DELETED" beforePath="D:\Projects\BMONionic\www-bup\lib\angular-chart.min.js" afterPath="" />
+      <change type="DELETED" beforePath="D:\Projects\BMONionic\www-bup\lib\chartjs-plugin-zoom.min.js" afterPath="" />
+      <change type="DELETED" beforePath="D:\Projects\BMONionic\www-bup\lib\datePicker\datepicker.css" afterPath="" />
+      <change type="DELETED" beforePath="D:\Projects\BMONionic\www-bup\lib\datePicker\datepicker.js" afterPath="" />
+      <change type="DELETED" beforePath="D:\Projects\BMONionic\www-bup\lib\hammer.min.js" afterPath="" />
+      <change type="DELETED" beforePath="D:\Projects\BMONionic\www-bup\lib\ionic\css\ionic.css" afterPath="" />
+      <change type="DELETED" beforePath="D:\Projects\BMONionic\www-bup\lib\ionic\css\ionic.min.css" afterPath="" />
+      <change type="DELETED" beforePath="D:\Projects\BMONionic\www-bup\lib\ionic\fonts\ionicons.eot" afterPath="" />
+      <change type="DELETED" beforePath="D:\Projects\BMONionic\www-bup\lib\ionic\fonts\ionicons.svg" afterPath="" />
+      <change type="DELETED" beforePath="D:\Projects\BMONionic\www-bup\lib\ionic\fonts\ionicons.ttf" afterPath="" />
+      <change type="DELETED" beforePath="D:\Projects\BMONionic\www-bup\lib\ionic\fonts\ionicons.woff" afterPath="" />
+      <change type="DELETED" beforePath="D:\Projects\BMONionic\www-bup\lib\ionic\js\angular-ui\angular-ui-router.js" afterPath="" />
+      <change type="DELETED" beforePath="D:\Projects\BMONionic\www-bup\lib\ionic\js\angular-ui\angular-ui-router.min.js" afterPath="" />
+      <change type="DELETED" beforePath="D:\Projects\BMONionic\www-bup\lib\ionic\js\angular\angular-animate.js" afterPath="" />
+      <change type="DELETED" beforePath="D:\Projects\BMONionic\www-bup\lib\ionic\js\angular\angular-animate.min.js" afterPath="" />
+      <change type="DELETED" beforePath="D:\Projects\BMONionic\www-bup\lib\ionic\js\angular\angular-resource.js" afterPath="" />
+      <change type="DELETED" beforePath="D:\Projects\BMONionic\www-bup\lib\ionic\js\angular\angular-resource.min.js" afterPath="" />
+      <change type="DELETED" beforePath="D:\Projects\BMONionic\www-bup\lib\ionic\js\angular\angular-sanitize.js" afterPath="" />
+      <change type="DELETED" beforePath="D:\Projects\BMONionic\www-bup\lib\ionic\js\angular\angular-sanitize.min.js" afterPath="" />
+      <change type="DELETED" beforePath="D:\Projects\BMONionic\www-bup\lib\ionic\js\angular\angular.js" afterPath="" />
+      <change type="DELETED" beforePath="D:\Projects\BMONionic\www-bup\lib\ionic\js\angular\angular.min.js" afterPath="" />
+      <change type="DELETED" beforePath="D:\Projects\BMONionic\www-bup\lib\ionic\js\ionic-angular.js" afterPath="" />
+      <change type="DELETED" beforePath="D:\Projects\BMONionic\www-bup\lib\ionic\js\ionic-angular.min.js" afterPath="" />
+      <change type="DELETED" beforePath="D:\Projects\BMONionic\www-bup\lib\ionic\js\ionic.bundle.js" afterPath="" />
+      <change type="DELETED" beforePath="D:\Projects\BMONionic\www-bup\lib\ionic\js\ionic.bundle.min.js" afterPath="" />
+      <change type="DELETED" beforePath="D:\Projects\BMONionic\www-bup\lib\ionic\js\ionic.js" afterPath="" />
+      <change type="DELETED" beforePath="D:\Projects\BMONionic\www-bup\lib\ionic\js\ionic.min.js" afterPath="" />
+      <change type="DELETED" beforePath="D:\Projects\BMONionic\www-bup\lib\ionic\scss\_action-sheet.scss" afterPath="" />
+      <change type="DELETED" beforePath="D:\Projects\BMONionic\www-bup\lib\ionic\scss\_animations.scss" afterPath="" />
+      <change type="DELETED" beforePath="D:\Projects\BMONionic\www-bup\lib\ionic\scss\_backdrop.scss" afterPath="" />
+      <change type="DELETED" beforePath="D:\Projects\BMONionic\www-bup\lib\ionic\scss\_badge.scss" afterPath="" />
+      <change type="DELETED" beforePath="D:\Projects\BMONionic\www-bup\lib\ionic\scss\_bar.scss" afterPath="" />
+      <change type="DELETED" beforePath="D:\Projects\BMONionic\www-bup\lib\ionic\scss\_button-bar.scss" afterPath="" />
+      <change type="DELETED" beforePath="D:\Projects\BMONionic\www-bup\lib\ionic\scss\_button.scss" afterPath="" />
+      <change type="DELETED" beforePath="D:\Projects\BMONionic\www-bup\lib\ionic\scss\_checkbox.scss" afterPath="" />
+      <change type="DELETED" beforePath="D:\Projects\BMONionic\www-bup\lib\ionic\scss\_form.scss" afterPath="" />
+      <change type="DELETED" beforePath="D:\Projects\BMONionic\www-bup\lib\ionic\scss\_grid.scss" afterPath="" />
+      <change type="DELETED" beforePath="D:\Projects\BMONionic\www-bup\lib\ionic\scss\_items.scss" afterPath="" />
+      <change type="DELETED" beforePath="D:\Projects\BMONionic\www-bup\lib\ionic\scss\_list.scss" afterPath="" />
+      <change type="DELETED" beforePath="D:\Projects\BMONionic\www-bup\lib\ionic\scss\_loading.scss" afterPath="" />
+      <change type="DELETED" beforePath="D:\Projects\BMONionic\www-bup\lib\ionic\scss\_menu.scss" afterPath="" />
+      <change type="DELETED" beforePath="D:\Projects\BMONionic\www-bup\lib\ionic\scss\_mixins.scss" afterPath="" />
+      <change type="DELETED" beforePath="D:\Projects\BMONionic\www-bup\lib\ionic\scss\_modal.scss" afterPath="" />
+      <change type="DELETED" beforePath="D:\Projects\BMONionic\www-bup\lib\ionic\scss\_platform.scss" afterPath="" />
+      <change type="DELETED" beforePath="D:\Projects\BMONionic\www-bup\lib\ionic\scss\_popover.scss" afterPath="" />
+      <change type="DELETED" beforePath="D:\Projects\BMONionic\www-bup\lib\ionic\scss\_popup.scss" afterPath="" />
+      <change type="DELETED" beforePath="D:\Projects\BMONionic\www-bup\lib\ionic\scss\_progress.scss" afterPath="" />
+      <change type="DELETED" beforePath="D:\Projects\BMONionic\www-bup\lib\ionic\scss\_radio.scss" afterPath="" />
+      <change type="DELETED" beforePath="D:\Projects\BMONionic\www-bup\lib\ionic\scss\_range.scss" afterPath="" />
+      <change type="DELETED" beforePath="D:\Projects\BMONionic\www-bup\lib\ionic\scss\_refresher.scss" afterPath="" />
+      <change type="DELETED" beforePath="D:\Projects\BMONionic\www-bup\lib\ionic\scss\_reset.scss" afterPath="" />
+      <change type="DELETED" beforePath="D:\Projects\BMONionic\www-bup\lib\ionic\scss\_scaffolding.scss" afterPath="" />
+      <change type="DELETED" beforePath="D:\Projects\BMONionic\www-bup\lib\ionic\scss\_select.scss" afterPath="" />
+      <change type="DELETED" beforePath="D:\Projects\BMONionic\www-bup\lib\ionic\scss\_slide-box.scss" afterPath="" />
+      <change type="DELETED" beforePath="D:\Projects\BMONionic\www-bup\lib\ionic\scss\_slides.scss" afterPath="" />
+      <change type="DELETED" beforePath="D:\Projects\BMONionic\www-bup\lib\ionic\scss\_spinner.scss" afterPath="" />
+      <change type="DELETED" beforePath="D:\Projects\BMONionic\www-bup\lib\ionic\scss\_tabs.scss" afterPath="" />
+      <change type="DELETED" beforePath="D:\Projects\BMONionic\www-bup\lib\ionic\scss\_toggle.scss" afterPath="" />
+      <change type="DELETED" beforePath="D:\Projects\BMONionic\www-bup\lib\ionic\scss\_transitions.scss" afterPath="" />
+      <change type="DELETED" beforePath="D:\Projects\BMONionic\www-bup\lib\ionic\scss\_type.scss" afterPath="" />
+      <change type="DELETED" beforePath="D:\Projects\BMONionic\www-bup\lib\ionic\scss\_util.scss" afterPath="" />
+      <change type="DELETED" beforePath="D:\Projects\BMONionic\www-bup\lib\ionic\scss\_variables.scss" afterPath="" />
+      <change type="DELETED" beforePath="D:\Projects\BMONionic\www-bup\lib\ionic\scss\ionic.scss" afterPath="" />
+      <change type="DELETED" beforePath="D:\Projects\BMONionic\www-bup\lib\ionic\scss\ionicons\_ionicons-font.scss" afterPath="" />
+      <change type="DELETED" beforePath="D:\Projects\BMONionic\www-bup\lib\ionic\scss\ionicons\_ionicons-icons.scss" afterPath="" />
+      <change type="DELETED" beforePath="D:\Projects\BMONionic\www-bup\lib\ionic\scss\ionicons\_ionicons-variables.scss" afterPath="" />
+      <change type="DELETED" beforePath="D:\Projects\BMONionic\www-bup\lib\ionic\scss\ionicons\ionicons.scss" afterPath="" />
+      <change type="DELETED" beforePath="D:\Projects\BMONionic\www-bup\lib\ionic\version.json" afterPath="" />
+      <change type="DELETED" beforePath="D:\Projects\BMONionic\www-bup\lib\ngCordova\dist\ng-cordova-mocks.js" afterPath="" />
+      <change type="DELETED" beforePath="D:\Projects\BMONionic\www-bup\lib\ngCordova\dist\ng-cordova-mocks.min.js" afterPath="" />
+      <change type="DELETED" beforePath="D:\Projects\BMONionic\www-bup\lib\ngCordova\dist\ng-cordova.js" afterPath="" />
+      <change type="DELETED" beforePath="D:\Projects\BMONionic\www-bup\lib\ngCordova\dist\ng-cordova.min.js" afterPath="" />
+      <change type="DELETED" beforePath="D:\Projects\BMONionic\www-bup\manifest.json" afterPath="" />
+      <change type="DELETED" beforePath="D:\Projects\BMONionic\www-bup\partial\camera.html" afterPath="" />
+      <change type="DELETED" beforePath="D:\Projects\BMONionic\www-bup\partial\getjobs.html" afterPath="" />
+      <change type="DELETED" beforePath="D:\Projects\BMONionic\www-bup\partial\leader.html" afterPath="" />
+      <change type="DELETED" beforePath="D:\Projects\BMONionic\www-bup\partial\locations-bup.html" afterPath="" />
+      <change type="DELETED" beforePath="D:\Projects\BMONionic\www-bup\partial\locations.html" afterPath="" />
+      <change type="DELETED" beforePath="D:\Projects\BMONionic\www-bup\partial\login.html" afterPath="" />
+      <change type="DELETED" beforePath="D:\Projects\BMONionic\www-bup\partial\manageJobs.html" afterPath="" />
+      <change type="DELETED" beforePath="D:\Projects\BMONionic\www-bup\partial\manageUsers.html" afterPath="" />
+      <change type="DELETED" beforePath="D:\Projects\BMONionic\www-bup\partial\operation-bup.html" afterPath="" />
+      <change type="DELETED" beforePath="D:\Projects\BMONionic\www-bup\partial\operation-bupGraphWithOutNG.html" afterPath="" />
+      <change type="DELETED" beforePath="D:\Projects\BMONionic\www-bup\partial\operation.html" afterPath="" />
+      <change type="DELETED" beforePath="D:\Projects\BMONionic\www-bup\partial\otherPhoto.html" afterPath="" />
+      <change type="DELETED" beforePath="D:\Projects\BMONionic\www-bup\partial\user.html" afterPath="" />
+      <change type="DELETED" beforePath="D:\Projects\BMONionic\www-bup\service-worker.js" afterPath="" />
+      <change type="DELETED" beforePath="D:\Projects\BMONionic\www\img\ionic.png" afterPath="" />
+      <change type="DELETED" beforePath="D:\Projects\BMONionic\www\js\bup-script.js" afterPath="" />
+      <change type="DELETED" beforePath="D:\Projects\BMONionic\www\js\controllers\operationCtrl-bupGraphWithOutNG.js" afterPath="" />
+      <change type="DELETED" beforePath="D:\Projects\BMONionic\www\js\controllers\otherPhotoCtrl.js" afterPath="" />
+      <change type="DELETED" beforePath="D:\Projects\BMONionic\www\partial\locations-bup.html" afterPath="" />
+      <change type="DELETED" beforePath="D:\Projects\BMONionic\www\partial\operation-bup.html" afterPath="" />
+      <change type="DELETED" beforePath="D:\Projects\BMONionic\www\partial\operation-bupGraphWithOutNG.html" afterPath="" />
+      <change type="DELETED" beforePath="D:\Projects\BMONionic\www\partial\otherPhoto.html" afterPath="" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/resources/android/icon/drawable-hdpi-icon.png" afterPath="$PROJECT_DIR$/resources/android/icon/drawable-hdpi-icon.png" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/resources/android/splash/drawable-land-hdpi-screen.png" afterPath="$PROJECT_DIR$/resources/android/splash/drawable-land-hdpi-screen.png" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/resources/android/splash/drawable-land-ldpi-screen.png" afterPath="$PROJECT_DIR$/resources/android/splash/drawable-land-ldpi-screen.png" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/resources/android/splash/drawable-land-mdpi-screen.png" afterPath="$PROJECT_DIR$/resources/android/splash/drawable-land-mdpi-screen.png" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/resources/android/splash/drawable-land-xhdpi-screen.png" afterPath="$PROJECT_DIR$/resources/android/splash/drawable-land-xhdpi-screen.png" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/resources/android/splash/drawable-land-xxhdpi-screen.png" afterPath="$PROJECT_DIR$/resources/android/splash/drawable-land-xxhdpi-screen.png" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/resources/android/splash/drawable-land-xxxhdpi-screen.png" afterPath="$PROJECT_DIR$/resources/android/splash/drawable-land-xxxhdpi-screen.png" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/resources/android/icon/drawable-ldpi-icon.png" afterPath="$PROJECT_DIR$/resources/android/icon/drawable-ldpi-icon.png" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/resources/android/icon/drawable-mdpi-icon.png" afterPath="$PROJECT_DIR$/resources/android/icon/drawable-mdpi-icon.png" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/resources/android/splash/drawable-port-hdpi-screen.png" afterPath="$PROJECT_DIR$/resources/android/splash/drawable-port-hdpi-screen.png" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/resources/android/splash/drawable-port-ldpi-screen.png" afterPath="$PROJECT_DIR$/resources/android/splash/drawable-port-ldpi-screen.png" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/resources/android/splash/drawable-port-mdpi-screen.png" afterPath="$PROJECT_DIR$/resources/android/splash/drawable-port-mdpi-screen.png" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/resources/android/splash/drawable-port-xhdpi-screen.png" afterPath="$PROJECT_DIR$/resources/android/splash/drawable-port-xhdpi-screen.png" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/resources/android/splash/drawable-port-xxhdpi-screen.png" afterPath="$PROJECT_DIR$/resources/android/splash/drawable-port-xxhdpi-screen.png" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/resources/android/splash/drawable-port-xxxhdpi-screen.png" afterPath="$PROJECT_DIR$/resources/android/splash/drawable-port-xxxhdpi-screen.png" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/resources/android/icon/drawable-xhdpi-icon.png" afterPath="$PROJECT_DIR$/resources/android/icon/drawable-xhdpi-icon.png" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/resources/android/icon/drawable-xxhdpi-icon.png" afterPath="$PROJECT_DIR$/resources/android/icon/drawable-xxhdpi-icon.png" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/resources/android/icon/drawable-xxxhdpi-icon.png" afterPath="$PROJECT_DIR$/resources/android/icon/drawable-xxxhdpi-icon.png" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/res/mipmap-hdpi/icon.png" afterPath="$PROJECT_DIR$/res/mipmap-hdpi/icon.png" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/res/mipmap-ldpi/icon.png" afterPath="$PROJECT_DIR$/res/mipmap-ldpi/icon.png" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/res/mipmap-mdpi/icon.png" afterPath="$PROJECT_DIR$/res/mipmap-mdpi/icon.png" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/res/mipmap-xhdpi/icon.png" afterPath="$PROJECT_DIR$/res/mipmap-xhdpi/icon.png" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/res/mipmap-xxhdpi/icon.png" afterPath="$PROJECT_DIR$/res/mipmap-xxhdpi/icon.png" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/res/mipmap-xxxhdpi/icon.png" afterPath="$PROJECT_DIR$/res/mipmap-xxxhdpi/icon.png" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/resources/icon.png" afterPath="$PROJECT_DIR$/resources/icon.png" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/res/drawable-land-hdpi/screen.png" afterPath="$PROJECT_DIR$/res/drawable-land-hdpi/screen.png" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/res/drawable-land-ldpi/screen.png" afterPath="$PROJECT_DIR$/res/drawable-land-ldpi/screen.png" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/res/drawable-land-mdpi/screen.png" afterPath="$PROJECT_DIR$/res/drawable-land-mdpi/screen.png" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/res/drawable-land-xhdpi/screen.png" afterPath="$PROJECT_DIR$/res/drawable-land-xhdpi/screen.png" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/res/drawable-land-xxhdpi/screen.png" afterPath="$PROJECT_DIR$/res/drawable-land-xxhdpi/screen.png" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/res/drawable-land-xxxhdpi/screen.png" afterPath="$PROJECT_DIR$/res/drawable-land-xxxhdpi/screen.png" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/res/drawable-port-hdpi/screen.png" afterPath="$PROJECT_DIR$/res/drawable-port-hdpi/screen.png" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/res/drawable-port-ldpi/screen.png" afterPath="$PROJECT_DIR$/res/drawable-port-ldpi/screen.png" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/res/drawable-port-mdpi/screen.png" afterPath="$PROJECT_DIR$/res/drawable-port-mdpi/screen.png" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/res/drawable-port-xhdpi/screen.png" afterPath="$PROJECT_DIR$/res/drawable-port-xhdpi/screen.png" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/res/drawable-port-xxhdpi/screen.png" afterPath="$PROJECT_DIR$/res/drawable-port-xxhdpi/screen.png" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/res/drawable-port-xxxhdpi/screen.png" afterPath="$PROJECT_DIR$/res/drawable-port-xxxhdpi/screen.png" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/resources/splash.png" afterPath="$PROJECT_DIR$/resources/splash.png" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/www/js/app.js" afterPath="$PROJECT_DIR$/www/js/app.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/bower.json" afterPath="$PROJECT_DIR$/bower.json" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/www/partial/camera.html" afterPath="$PROJECT_DIR$/www/partial/camera.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/www/js/controllers/cameraControl.js" afterPath="$PROJECT_DIR$/www/js/controllers/cameraControl.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/config.xml" afterPath="$PROJECT_DIR$/config.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/www/partial/getjobs.html" afterPath="$PROJECT_DIR$/www/partial/getjobs.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/www/js/controllers/getjobsCtrl.js" afterPath="$PROJECT_DIR$/www/js/controllers/getjobsCtrl.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/www/index.html" afterPath="$PROJECT_DIR$/www/index.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/ionic.config.json" afterPath="$PROJECT_DIR$/ionic.config.json" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/www/partial/leader.html" afterPath="$PROJECT_DIR$/www/partial/leader.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/www/js/controllers/leaderCtrl.js" afterPath="$PROJECT_DIR$/www/js/controllers/leaderCtrl.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/www/partial/locations.html" afterPath="$PROJECT_DIR$/www/partial/locations.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/www/js/controllers/locationsCtrl.js" afterPath="$PROJECT_DIR$/www/js/controllers/locationsCtrl.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/www/partial/login.html" afterPath="$PROJECT_DIR$/www/partial/login.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/www/js/controllers/loginCtrl.js" afterPath="$PROJECT_DIR$/www/js/controllers/loginCtrl.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/www/partial/manageJobs.html" afterPath="$PROJECT_DIR$/www/partial/manageJobs.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/www/js/controllers/manageJobsCtrl.js" afterPath="$PROJECT_DIR$/www/js/controllers/manageJobsCtrl.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/www/partial/manageUsers.html" afterPath="$PROJECT_DIR$/www/partial/manageUsers.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/www/js/controllers/manageUsersCtrl.js" afterPath="$PROJECT_DIR$/www/js/controllers/manageUsersCtrl.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/www/partial/operation.html" afterPath="$PROJECT_DIR$/www/partial/operation.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/www/js/controllers/operationCtrl.js" afterPath="$PROJECT_DIR$/www/js/controllers/operationCtrl.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/package.json" afterPath="$PROJECT_DIR$/package.json" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/www/css/style.css" afterPath="$PROJECT_DIR$/www/css/style.css" />
+    </list>
+    <ignored path="BMONionic.iws" />
+    <ignored path=".idea/workspace.xml" />
+    <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
+    <option name="TRACKING_ENABLED" value="true" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ChangesViewManager" flattened_view="true" show_ignored="false" />
+  <component name="CreatePatchCommitExecutor">
+    <option name="PATCH_PATH" value="" />
+  </component>
+  <component name="FavoritesManager">
+    <favorites_list name="BMONionic" />
+  </component>
+  <component name="NamedScopeManager">
+    <order />
+  </component>
+  <component name="ProjectFrameBounds">
+    <option name="x" value="-8" />
+    <option name="y" value="-8" />
+    <option name="width" value="1936" />
+    <option name="height" value="1066" />
+  </component>
+  <component name="ProjectLevelVcsManager" settingsEditedManually="false">
+    <OptionsSetting value="true" id="Add" />
+    <OptionsSetting value="true" id="Remove" />
+    <OptionsSetting value="true" id="Checkout" />
+    <OptionsSetting value="true" id="Update" />
+    <OptionsSetting value="true" id="Status" />
+    <OptionsSetting value="true" id="Edit" />
+    <ConfirmationsSetting value="0" id="Add" />
+    <ConfirmationsSetting value="0" id="Remove" />
+  </component>
+  <component name="ProjectView">
+    <navigator currentView="AndroidView" proportions="" version="1">
+      <flattenPackages />
+      <showMembers />
+      <showModules />
+      <showLibraryContents />
+      <hideEmptyPackages />
+      <abbreviatePackageNames />
+      <autoscrollToSource />
+      <autoscrollFromSource />
+      <sortByType />
+    </navigator>
+    <panes>
+      <pane id="Scope" />
+      <pane id="ProjectPane" />
+      <pane id="Scratches" />
+      <pane id="PackagesPane" />
+      <pane id="AndroidView">
+        <subPane />
+      </pane>
+    </panes>
+  </component>
+  <component name="PropertiesComponent">
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+  </component>
+  <component name="RunManager">
+    <configuration default="true" type="Application" factoryName="Application">
+      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
+      <option name="MAIN_CLASS_NAME" />
+      <option name="VM_PARAMETERS" />
+      <option name="PROGRAM_PARAMETERS" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <option name="ENABLE_SWING_INSPECTOR" value="false" />
+      <option name="ENV_VARIABLES" />
+      <option name="PASS_PARENT_ENVS" value="true" />
+      <module name="" />
+      <envs />
+      <method />
+    </configuration>
+    <configuration default="true" type="JUnit" factoryName="JUnit">
+      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
+      <module name="" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <option name="PACKAGE_NAME" />
+      <option name="MAIN_CLASS_NAME" />
+      <option name="METHOD_NAME" />
+      <option name="TEST_OBJECT" value="class" />
+      <option name="VM_PARAMETERS" value="-ea" />
+      <option name="PARAMETERS" />
+      <option name="WORKING_DIRECTORY" value="$MODULE_DIR$" />
+      <option name="ENV_VARIABLES" />
+      <option name="PASS_PARENT_ENVS" value="true" />
+      <option name="TEST_SEARCH_SCOPE">
+        <value defaultName="singleModule" />
+      </option>
+      <envs />
+      <patterns />
+      <method />
+    </configuration>
+    <configuration default="true" type="Remote" factoryName="Remote">
+      <option name="USE_SOCKET_TRANSPORT" value="true" />
+      <option name="SERVER_MODE" value="false" />
+      <option name="SHMEM_ADDRESS" value="javadebug" />
+      <option name="HOST" value="localhost" />
+      <option name="PORT" value="5005" />
+      <method />
+    </configuration>
+    <configuration default="true" type="TestNG" factoryName="TestNG">
+      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
+      <module name="" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <option name="SUITE_NAME" />
+      <option name="PACKAGE_NAME" />
+      <option name="MAIN_CLASS_NAME" />
+      <option name="METHOD_NAME" />
+      <option name="GROUP_NAME" />
+      <option name="TEST_OBJECT" value="CLASS" />
+      <option name="VM_PARAMETERS" value="-ea" />
+      <option name="PARAMETERS" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="OUTPUT_DIRECTORY" />
+      <option name="ANNOTATION_TYPE" />
+      <option name="ENV_VARIABLES" />
+      <option name="PASS_PARENT_ENVS" value="true" />
+      <option name="TEST_SEARCH_SCOPE">
+        <value defaultName="singleModule" />
+      </option>
+      <option name="USE_DEFAULT_REPORTERS" value="false" />
+      <option name="PROPERTIES_FILE" />
+      <envs />
+      <properties />
+      <listeners />
+      <method />
+    </configuration>
+    <configuration name="&lt;template&gt;" type="Applet" default="true" selected="false">
+      <option name="MAIN_CLASS_NAME" />
+      <option name="HTML_FILE_NAME" />
+      <option name="HTML_USED" value="false" />
+      <option name="WIDTH" value="400" />
+      <option name="HEIGHT" value="300" />
+      <option name="POLICY_FILE" value="$APPLICATION_HOME_DIR$/bin/appletviewer.policy" />
+      <option name="VM_PARAMETERS" />
+    </configuration>
+    <configuration name="&lt;template&gt;" type="#org.jetbrains.idea.devkit.run.PluginConfigurationType" default="true" selected="false">
+      <option name="VM_PARAMETERS" value="-Xmx512m -Xms256m -XX:MaxPermSize=250m -ea" />
+    </configuration>
+  </component>
+  <component name="ShelveChangesManager" show_recycled="false" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="57416807-df21-4dd9-9032-ed20f5edf08d" name="Default" comment="" />
+      <created>1509000740579</created>
+      <option name="number" value="Default" />
+      <updated>1509000740579</updated>
+    </task>
+    <servers />
+  </component>
+  <component name="ToolWindowManager">
+    <frame x="-8" y="-8" width="1936" height="1066" extended-state="0" />
+    <editor active="false" />
+    <layout>
+      <window_info id="Designer" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.25" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
+      <window_info id="Palette&#9;" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
+      <window_info id="Capture Analysis" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="-1" side_tool="true" content_ui="tabs" />
+      <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
+      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
+      <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="-1" side_tool="true" content_ui="tabs" />
+      <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
+      <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
+      <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
+      <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+    </layout>
+  </component>
+  <component name="VcsContentAnnotationSettings">
+    <option name="myLimit" value="2678400000" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager />
+    <watches-manager />
+  </component>
+</project>

@@ -188,7 +188,7 @@ angular.module('BMON')
           var max = Math.max(...indexArray);
           console.log("Last data at : ",max);
 
-          lastGraphData = max;
+          lastGraphData = Math.abs(max);
 
             for(i=0;i<=max;i++){
               var data = i.toString()
@@ -349,7 +349,7 @@ function initChart() {
               //console.log("meter keyItem : ",keyItem);
               // console.log("objNewMeter : ",objNewMeter);
               //refJobsRec.child($scope.GetrefJobID).update(objNewMeter);
-              refJobsRec.child(jobInfo.jobId).child(key).set(objNewMeter);   
+              // refJobsRec.child(jobInfo.jobId).child(key).set(objNewMeter);   
               
               //One man tool
               //minus width of tool 1.05m
@@ -363,11 +363,9 @@ function initChart() {
               console.log("checkReEdit : ",checkReEdit);
 
               if(checkReEdit!=""){
-
                 reCalGraphDiffOne(key,objNewMeter)
-
               }else{
-
+              refJobsRec.child(jobInfo.jobId).child(key).set(objNewMeter); 
               refJobsRec.child(jobInfo.jobId).child('diff').child(key).set((objNewMeter/100)-1.05);
               var GraphItem = 1.05;
               var refDiff=refJobsRec.child(jobInfo.jobId).child('diff');
@@ -521,7 +519,7 @@ function initChart() {
         var GraphItem = 0;
         var RunIndex = 0;
         var refDiff=refJobsRec.child(jobInfo.jobId).child('diff');
-        //console.log("key is : "+key);
+        console.log("refDiff key is : "+key);
         refDiff.limitToFirst(parseInt(lastGraphData)+1).on("value",function(snapshot){
           snapshot.forEach(function(childSnapshot) {
             console.log("RunIndex is : "+RunIndex);
