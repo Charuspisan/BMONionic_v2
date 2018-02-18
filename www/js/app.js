@@ -20,7 +20,7 @@ angular.module('BMON', ['ionic','ngCordova','firebase','angular.filter','720kb.d
 
   $ionicPlatform.ready(function() {
 
-    var AppVer = "0.0.4"
+    var AppVer = "0.0.5"
 
     firebase.database().ref('AppCtr').once('value').then(function(snapshot) {
       data = snapshot.val();
@@ -32,11 +32,11 @@ angular.module('BMON', ['ionic','ngCordova','firebase','angular.filter','720kb.d
           window.open('https://play.google.com/store/apps/details?id=com.bmon_ku.bmon', '_system'); 
           ionic.Platform.exitApp();
         }
-      }else if(AppVer>data.ver){
+      }/*else if(AppVer>data.ver){
           alert("ขออภัยแอพพริเคชั่นอยู่ระหว่างการปรับปรุง กรุณารอการแจ้งเตือนการอัพเดทจาก App Store (ios), Play Store (Android) อัพเดทแอพพริเคชั่น และลองเข้าใช้งานอีกครั้ง");
           window.open('https://play.google.com/store/apps/details?id=com.bmon_ku.bmon', '_system'); 
           ionic.Platform.exitApp();
-      }
+      }*/
     });
 
     if(window.cordova && window.cordova.plugins.Keyboard) {

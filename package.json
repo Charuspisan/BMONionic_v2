@@ -22,7 +22,8 @@
     "gulp-sass": "^2.3.2",
     "gulp-util": "^3.0.8",
     "ionic-app-lib": "^2.2.1",
-    "ionic-plugin-keyboard": "~2.2.1"
+    "ionic-plugin-keyboard": "~2.2.1",
+    "cordova-ios": "~4.5.4"
   },
   "devDependencies": {
     "@ionic/cli-plugin-gulp": "1.1.1",
@@ -55,7 +56,8 @@
       "cordova-plugin-compat": {}
     },
     "platforms": [
-      "android"
+      "android",
+      "ios"
     ]
   }
 }
