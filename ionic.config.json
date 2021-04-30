@@ -1,9 +1,9 @@
 {
   "name": "BMONionic",
-  "app_id": "1d336778",
-  "type": "ionic1",
-  "watchPatterns": [],
   "integrations": {
     "cordova": {}
-  }
+  },
+  "type": "ionic1",
+  "watchPatterns": [],
+  "id": "1d336778"
 }
