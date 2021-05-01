@@ -17,18 +17,18 @@ angular
       console.log("user is : " + sharedProp.getEmail());
 
       var auth = $firebaseAuth();
-      var ref = new Firebase("https://bmon-v2-default-rtdb.firebaseio.com");
+      var ref = new Firebase('"'+sharedProp.dbUrl()+'"');
       var refLocations = new Firebase(
-        "https://bmon-v2-default-rtdb.firebaseio.com/locations/"
+        '"' + sharedProp.dbUrl() + '/locations/"'
       );
       var refJobsID = new Firebase(
-        "https://bmon-v2-default-rtdb.firebaseio.com/jobsID/"
+        '"' + sharedProp.dbUrl() + '/jobsID/"'
       );
       var refJobsRec = new Firebase(
-        "https://bmon-v2-default-rtdb.firebaseio.com/jobsRec/"
+        '"' + sharedProp.dbUrl() + '/jobsRec/"'
       );
       var refUsers = new Firebase(
-        "https://bmon-v2-default-rtdb.firebaseio.com/users/"
+        '"' + sharedProp.dbUrl() + '/users/"'
       );
 
       $scope.dataUsers;

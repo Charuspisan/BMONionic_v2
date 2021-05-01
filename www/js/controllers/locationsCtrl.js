@@ -14,7 +14,7 @@ angular
       $ionicLoading
     ) {
       var refLocations = new Firebase(
-        "https://bmon-v2-default-rtdb.firebaseio.com/locations/"
+        '"' + sharedProp.dbUrl() + '/locations/"'
       );
 
       $scope.data;

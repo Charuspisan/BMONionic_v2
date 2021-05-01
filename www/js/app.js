@@ -5,10 +5,11 @@
 // the 2nd parameter is an array of 'requires'
 
 // Initialize Firebase
+const dbUrl = "https://bmon-v2-default-rtdb.firebaseio.com";
 var config = {
-  apiKey: "AIzaSyCx-rNzY3vIUrhSCP5WYirhiAss7sFqTuI",
+  apiKey: "AIzaSyBx5RiQzrpyeFN1HJ-hJDS2qWWmhvk-AZA",
   authDomain: "bmon-41086.firebaseapp.com",
-  databaseURL: "https://bmon-v2-default-rtdb.firebaseio.com",
+  databaseURL: dbUrl,
   storageBucket: "bmon-41086.appspot.com",
   messagingSenderId: "170191502662",
 };
@@ -26,7 +27,7 @@ angular
 
   .run(function ($ionicPlatform) {
     $ionicPlatform.ready(function () {
-      var AppVer = "0.0.5";
+      /*var AppVer = "0.0.5";
 
       firebase
         .database()
@@ -35,7 +36,13 @@ angular
         .then(function (snapshot) {
           data = snapshot.val();
           console.log("ver : " + data.ver);
-          console.log("AppVer : " + AppVer);
+          console.log(
+            "AppVer : " + AppVer
+          ); else if(AppVer>data.ver){
+          alert("ขออภัยแอพพริเคชั่นอยู่ระหว่างการปรับปรุง กรุณารอการแจ้งเตือนการอัพเดทจาก App Store (ios), Play Store (Android) อัพเดทแอพพริเคชั่น และลองเข้าใช้งานอีกครั้ง");
+          window.open('https://play.google.com/store/apps/details?id=com.bmon_ku.bmon', '_system'); 
+          ionic.Platform.exitApp();
+      }
           if (AppVer < data.ver) {
             if (data.forceUpdate == true) {
               alert(
@@ -47,23 +54,19 @@ angular
               );
               ionic.Platform.exitApp();
             }
-          } /*else if(AppVer>data.ver){
-          alert("ขออภัยแอพพริเคชั่นอยู่ระหว่างการปรับปรุง กรุณารอการแจ้งเตือนการอัพเดทจาก App Store (ios), Play Store (Android) อัพเดทแอพพริเคชั่น และลองเข้าใช้งานอีกครั้ง");
-          window.open('https://play.google.com/store/apps/details?id=com.bmon_ku.bmon', '_system'); 
-          ionic.Platform.exitApp();
-      }*/
-        });
+          } 
+        });*/
 
-      if (window.cordova && window.cordova.plugins.Keyboard) {
-        // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
-        // for form inputs)
-        cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
+      // if (window.cordova && window.cordova.plugins.Keyboard) {
+      //   // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
+      //   // for form inputs)
+      //   cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
 
-        // Don't remove this line unless you know what you are doing. It stops the viewport
-        // from snapping when text inputs are focused. Ionic handles this internally for
-        // a much nicer keyboard experience.
-        cordova.plugins.Keyboard.disableScroll(true);
-      }
+      //   // Don't remove this line unless you know what you are doing. It stops the viewport
+      //   // from snapping when text inputs are focused. Ionic handles this internally for
+      //   // a much nicer keyboard experience.
+      //   cordova.plugins.Keyboard.disableScroll(true);
+      // }
       if (window.StatusBar) {
         StatusBar.styleDefault();
       }
@@ -88,9 +91,13 @@ angular
         url: "/leader",
         templateUrl: "partial/leader.html",
       })
-      .state("getjobs", {
-        url: "/getjobs",
-        templateUrl: "partial/getjobs.html",
+      // .state("getjobs", {
+      //   url: "/getjobs",
+      //   templateUrl: "partial/getjobs.html",
+      // })
+      .state("openform", {
+        url: "/openform",
+        templateUrl: "partial/openForm.html",
       })
       .state("operation", {
         cache: false,
@@ -122,7 +129,8 @@ angular
         templateUrl: "partial/camera.html",
       });
 
-    $urlRouterProvider.otherwise("/login");
+    // $urlRouterProvider.otherwise("/login");
+    $urlRouterProvider.otherwise("/openform");
   })
 
   .factory("locationDataCon", function ($firebase, $q) {
@@ -133,7 +141,7 @@ angular
 
         if (this.locationData === null) {
           this.locationData = new Firebase(
-            "https://bmon-v2-default-rtdb.firebaseio.com/locations/"
+            '"' + sharedProp.dbUrl() + '/locations/"'
           );
           this.locationData.on("value", function (loadedData) {
             deferred.resolve();
@@ -154,6 +162,9 @@ angular
     };
 
     // this.userData = {yearSetCount: 0};
+    this.dbUrl = function () {
+      return dbUrl;
+    };
 
     this.getEmail = function () {
       return this.sharedUserData.email;

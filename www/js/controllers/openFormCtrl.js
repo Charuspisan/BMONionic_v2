@@ -2,7 +2,7 @@ angular
   .module("BMON")
 
   .controller(
-    "getjobsCtrl",
+    "openFormCtrl",
     function (
       $scope,
       $firebaseObject,
@@ -17,10 +17,127 @@ angular
     ) {
       console.log("user is : " + sharedProp.getEmail());
 
+      $scope.showAlert = function (error) {
+        var alertPopup = $ionicPopup.alert({
+          title:
+            '<center><i class="icon ion-error ion-android-warning"></i></center>',
+          template: "<center>" + error + "</center>",
+          buttons: [
+            {
+              text: "รับทราบ",
+              type: "button-positive",
+            },
+          ],
+        });
+
+        alertPopup.then(function (res) {});
+      };
+
+      $scope.showMessage = function (message) {
+        var alertPopup = $ionicPopup.alert({
+          title: "",
+          template: "<center>" + message + "</center>",
+          buttons: [
+            {
+              text: "รับทราบ",
+              type: "button-positive",
+            },
+          ],
+        });
+
+        alertPopup.then(function (res) {});
+      };
+
+      // -
+      // -
+      // -
+      // -
+      // -
+      // -
+      // -
+
+      const queryString = window.location.href;
+      console.log("queryString : " + queryString);
+      let splitURL = document.URL.split("?");
+      let splitParams = splitURL[1].split("&");
+      const pin = splitParams[0];
+      console.log("pin : " + pin);
+
+      if (checkChrome() && window.location.protocol != "https:") {
+        console.log("not https may be have problem with chorme");
+        // $scope.showAlert(
+        //   "ท่านไม่ได้เปิดหน้าเพจด้วย https กรุณาคลิก <a target='_top' href=''>ลิงก์บน https</a>"
+        // );
+        navigator.geolocation.getCurrentPosition(getPosition, parseError);
+      } else {
+        navigator.geolocation.getCurrentPosition(getPosition, parseError);
+      }
+
+      // Chrome insists on HTTPS for geolocation, hence we need to do a check for Chrome and let the user know
+      function checkChrome() {
+        var isChromium = window.chrome,
+          winNav = window.navigator,
+          vendorName = winNav.vendor,
+          isOpera = winNav.userAgent.indexOf("OPR") > -1,
+          isIEedge = winNav.userAgent.indexOf("Edge") > -1,
+          isIOSChrome = winNav.userAgent.match("CriOS");
+
+        if (isIOSChrome) {
+          return true;
+        } else if (
+          isChromium !== null &&
+          isChromium !== undefined &&
+          vendorName === "Google Inc." &&
+          isOpera == false &&
+          isIEedge == false
+        ) {
+          return true;
+        } else {
+          return false;
+        }
+      }
+
+      function getPosition(position) {
+        var longitude = position.coords.longitude;
+        var latitude = position.coords.latitude;
+        console.log(latitude + " " + longitude);
+
+        latImg = latitude;
+        lngImg = longitude;
+
+        sharedProp.setJobLatLng(latImg, lngImg);
+        console.log("shared lat : " + latImg + " shared long : " + lngImg);
+      }
+
+      function parseError(error) {
+        var msg;
+        switch (error.code) {
+          case error.PERMISSION_DENIED:
+            msg = "User denied the request for geolocation.";
+            break;
+          case error.POSITION_UNAVAILABLE:
+            msg = "Location information is unavailable.";
+            break;
+          case error.TIMEOUT:
+            msg = "The request to get user location timed out.";
+            break;
+          case error.UNKNOWN_ERROR:
+            msg = "An unknown error occurred.";
+            break;
+        }
+        console.log(msg);
+      }
+
+      // -
+      // -
+      // -
+      // -
+      // -
+      // -
+      // -
+
       var refStorage = firebase.storage().ref();
-      var imgDB = new Firebase(
-        '"' + sharedProp.dbUrl() + '/images/"'
-      );
+      var imgDB = new Firebase('"' + sharedProp.dbUrl() + '/images/"');
       var userEmail = sharedProp.getEmail();
       var imgData;
       var imgEtc = "imgEtc/";
@@ -36,55 +153,57 @@ angular
 
       $scope.hideLoading();
 
-      document.addEventListener("deviceready", onDeviceReady, false);
+      // document.addEventListener("deviceready", onDeviceReady, false);
 
-      function onDeviceReady() {
-        console.log("navigator.geolocation works well");
+      // function onDeviceReady() {
+      //   console.log("navigator.geolocation works well");
 
-        var posOptions = { timeout: 10000, enableHighAccuracy: false };
+      //   var posOptions = { timeout: 10000, enableHighAccuracy: false };
 
-        $cordovaGeolocation.getCurrentPosition(posOptions).then(
-          function (position) {
-            var lat = position.coords.latitude;
-            var long = position.coords.longitude;
+      //   $cordovaGeolocation.getCurrentPosition(posOptions).then(
+      //     function (position) {
+      //       var lat = position.coords.latitude;
+      //       var long = position.coords.longitude;
 
-            latImg = lat;
-            lngImg = long;
+      //       latImg = lat;
+      //       lngImg = long;
 
-            sharedProp.setJobLatLng(latImg, lngImg);
-            console.log("shared lat : " + latImg + " shared long : " + lngImg);
-          } /*, function(err) {
+      //       sharedProp.setJobLatLng(latImg, lngImg);
+      //       console.log("shared lat : " + latImg + " shared long : " + lngImg);
+      //     }
+
+      /*, function(err) {
       console.log(err);
       $scope.showAlert("กรุณาเปิด GPS มิฉะนั้นแอพริเคชั่นจะเกิดปัญหา และไม่สามารถบันทึกรูปถ่ายได้ หากเปิด GPS แล้วยังปรากฎข้อความนี้อีก กรุณารีสตาร์ทมือถือของคุณ");
     }*/
-        );
+      // );
 
-        // var watchOptions = {
-        //   timeout : 5000,
-        //   enableHighAccuracy: false // may cause errors if true
-        // };
+      // var watchOptions = {
+      //   timeout : 5000,
+      //   enableHighAccuracy: false // may cause errors if true
+      // };
 
-        // var watch = $cordovaGeolocation.watchPosition(watchOptions);
-        // watch.then(
-        //   null,
-        //   function(err) {
-        //     console.log(err);
-        //     $scope.showAlert("กรุณาเปิด GPS มิฉะนั้นแอพริเคชั่นจะเกิดปัญหา และไม่สามารถบันทึกรูปถ่ายได้ หากเปิด GPS แล้วยังปรากฎข้อความนี้อีก กรุณารีสตาร์ทมือถือของคุณ");
-        //   },
-        //   function(position) {
-        //     var lat  = position.coords.latitude
-        //     var long = position.coords.longitude
+      // var watch = $cordovaGeolocation.watchPosition(watchOptions);
+      // watch.then(
+      //   null,
+      //   function(err) {
+      //     console.log(err);
+      //     $scope.showAlert("กรุณาเปิด GPS มิฉะนั้นแอพริเคชั่นจะเกิดปัญหา และไม่สามารถบันทึกรูปถ่ายได้ หากเปิด GPS แล้วยังปรากฎข้อความนี้อีก กรุณารีสตาร์ทมือถือของคุณ");
+      //   },
+      //   function(position) {
+      //     var lat  = position.coords.latitude
+      //     var long = position.coords.longitude
 
-        //     latImg = lat;
-        //     lngImg = long;
+      //     latImg = lat;
+      //     lngImg = long;
 
-        //     sharedProp.setJobLatLng(latImg,lngImg);
-        //     console.log("shared lat : "+latImg+" shared long : "+lngImg);
+      //     sharedProp.setJobLatLng(latImg,lngImg);
+      //     console.log("shared lat : "+latImg+" shared long : "+lngImg);
 
-        // });
+      // });
 
-        // watch.clearWatch();
-      }
+      // watch.clearWatch();
+      // }
 
       $scope.showLoading = function () {
         $ionicLoading
@@ -112,12 +231,8 @@ angular
       var refLocations = new Firebase(
         '"' + sharedProp.dbUrl() + '/locations/"'
       );
-      var refJobsID = new Firebase(
-        '"' + sharedProp.dbUrl() + '/jobsID/"'
-      );
-      var refJobsRec = new Firebase(
-        '"' + sharedProp.dbUrl() + '/jobsRec/"'
-      );
+      var refJobsID = new Firebase('"' + sharedProp.dbUrl() + '/jobsID/"');
+      var refJobsRec = new Firebase('"' + sharedProp.dbUrl() + '/jobsRec/"');
 
       $scope.assignedEmail = sharedProp.getEmail();
       $scope.objID;
@@ -197,37 +312,6 @@ angular
         });
       };
 
-      $scope.showAlert = function (error) {
-        var alertPopup = $ionicPopup.alert({
-          title:
-            '<center><i class="icon ion-error ion-android-warning"></i></center>',
-          template: "<center>" + error + "</center>",
-          buttons: [
-            {
-              text: "รับทราบ",
-              type: "button-positive",
-            },
-          ],
-        });
-
-        alertPopup.then(function (res) {});
-      };
-
-      $scope.showMessage = function (message) {
-        var alertPopup = $ionicPopup.alert({
-          title: "",
-          template: "<center>" + message + "</center>",
-          buttons: [
-            {
-              text: "รับทราบ",
-              type: "button-positive",
-            },
-          ],
-        });
-
-        alertPopup.then(function (res) {});
-      };
-
       $scope.btnEtcImg = function (bt) {
         console.log("latImg : " + latImg + " : lngImg : " + lngImg);
         if (latImg == undefined || lngImg == undefined) {
@@ -303,18 +387,16 @@ angular
         refBMONimg = refStorage.child(imgEtc + imgName + ".jpg");
         refBMONimg.putString(fileData, "base64").then(function (snapshot) {
           //alert("Uploaded Other Photo");
-          imgDB
-            .child("etc")
-            .push({
-              date: dateRec,
-              lat: latImg,
-              lng: lngImg,
-              user: userEmail,
-              name: imgName,
-              status: "new",
-              type: "etc",
-              note: etcPhotoNote,
-            });
+          imgDB.child("etc").push({
+            date: dateRec,
+            lat: latImg,
+            lng: lngImg,
+            user: userEmail,
+            name: imgName,
+            status: "new",
+            type: "etc",
+            note: etcPhotoNote,
+          });
           setTimeout(function () {
             $scope.hideLoading();
             $scope.showMessage("บันทึกภาพแล้ว");

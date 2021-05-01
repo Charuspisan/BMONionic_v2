@@ -15,27 +15,19 @@ angular
       $location,
       $ionicLoading
     ) {
-      // // Initialize Firebase
-      // var config = {
-      //   apiKey: "AIzaSyCx-rNzY3vIUrhSCP5WYirhiAss7sFqTuI",
-      //   // authDomain: "bmon-41086.firebaseapp.com",
-      //   // databaseURL: "https://bmon-v2-default-rtdb.firebaseio.com",
-      //   storageBucket: "bmon-41086.appspot.com",
-      //   messagingSenderId: "170191502662"
-      // };
-      // firebase.initializeApp(config);
+
       var refJobsRec = new Firebase(
-        "https://bmon-v2-default-rtdb.firebaseio.com/jobsRec/"
+        '"' + sharedProp.dbUrl() + '/jobsRec/"'
       );
       var userEmail = sharedProp.getEmail();
       var jobInfo = sharedProp.getJobInfo();
       var lacateID = jobInfo.jobLocate;
       var refStorage = firebase.storage().ref();
       var imgDB = new Firebase(
-        "https://bmon-v2-default-rtdb.firebaseio.com/images/"
+        '"' + sharedProp.dbUrl() + '/images/"'
       );
       var imgOnLocate = new Firebase(
-        "https://bmon-v2-default-rtdb.firebaseio.com/locations/" +
+        '"' + sharedProp.dbUrl() + '/locations/"' +
           lacateID +
           "/imgs/"
       );
@@ -549,7 +541,7 @@ angular
 
       // console.log("lacateID : "+lacateID);
       var imgLocateData = new Firebase(
-        "https://bmon-v2-default-rtdb.firebaseio.com/locations/" +
+        '"' + sharedProp.dbUrl() + '/locations/"' +
           lacateID +
           "/imgs/"
       );

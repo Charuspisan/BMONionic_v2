@@ -17,13 +17,13 @@ angular
       $ionicScrollDelegate
     ) {
       var refLocations = new Firebase(
-        "https://bmon-v2-default-rtdb.firebaseio.com/locations/"
+        '"' + sharedProp.dbUrl() + '/locations/"'
       );
       var refJobsID = new Firebase(
-        "https://bmon-v2-default-rtdb.firebaseio.com/jobsID/"
+        '"' + sharedProp.dbUrl() + '/jobsID/"'
       );
       var refJobsRec = new Firebase(
-        "https://bmon-v2-default-rtdb.firebaseio.com/jobsRec/"
+        '"' + sharedProp.dbUrl() + '/jobsRec/"'
       );
 
       var jobInfo = sharedProp.getJobInfo();

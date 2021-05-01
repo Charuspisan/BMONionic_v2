@@ -15,7 +15,7 @@ angular
       var auth = $firebaseAuth();
 
       var usersDB = new Firebase(
-        "https://bmon-v2-default-rtdb.firebaseio.com/users/"
+        '"' + sharedProp.dbUrl() + '/users/"'
       );
       var isLogin = sharedProp.getIsLoginPage();
       console.log("isLogin : " + isLogin);
@@ -274,6 +274,7 @@ angular
             usersDB.child(user.uid).once("value", function (snap) {
               var data = snap.val();
 
+
               if (data.role == "admin" && isLogin != false) {
                 $scope.$apply(function () {
                   sharedProp.setEmail(user.email);
@@ -296,9 +297,10 @@ angular
                   $scope.$apply(function () {
                     usersDB.child(user.uid).update({ lastAccess: Date.now() });
                     // $scope.hideLoading();
-                    $location.path("/getjobs");
+                    // $location.path("/getjobs");
+                    $location.path("/openform");
                   });
-                  console.log("getjobs");
+                  console.log("openform");
                 }, 500);
               }
             });
