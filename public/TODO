@@ -1,0 +1,9 @@
+TODO : 
+- separate leader
+- waiting data on manageUsers page same as manageArea
+- when create jobs it crash because firebase take too long time. popup show untill timeout (100000) check and close when firebase finish.
+
+
+FINISHED : 
+- fix oneman graph cal by adap from water-level
+- user select tool

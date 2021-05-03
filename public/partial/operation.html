@@ -1,0 +1,81 @@
+<ion-view ng-controller="operationCtrl" cache-view="false">
+
+
+  <ion-header-bar class="bar-positive">
+    <img src="images/icon-bar.png" class="icon-bar">
+    <h1 class="title">วัดและบันทึกค่า</h1>
+    <button id="logoutbt" ng-click="signOut()" class="button">
+      <i class="icon ion-close-round"></i>
+    </button>
+  </ion-header-bar>
+
+
+
+      <div id="graphContainer" class="has-header" style="height: 100%; margin-top: 65px; box-sizing: border-box;">
+
+          <div style="width: 100%; height: 41vh; margin: 0 auto;">
+            <div class="bar">
+               <h2 class="title">{{GetrefJobPin}} : {{GetrefJobProv}} : {{GetrefJobArea}} : {{GetrefJobDate}}</h2>
+            </div>
+            <div id="container" style="width:100%; height:40vh; margin-top: 44px; padding-top:3em;"></div>
+          </div>  
+      
+      <ion-content scroll="true" style="top:49vh;" on-swipe-right="goBack()" on-swipe-left="goNext('/camera')">
+
+
+              <div style="padding:1em;">
+                เครื่องมือที่ใช้ : {{GetrefJobTool}}
+                <button class="button button-small button-positive button-right" ng-click="editToolPopup(GetrefJobID);"><i class="icon ion-edit"></i></button>
+              </div>
+
+              <div style="padding:1em;">
+                <button class="button button-small button-positive button-right" ng-click="editSlopePopup();" style="margin-top:-10px;"><i class="icon ion-edit"></i></button>       
+                Slope : {{objRec.slope}}        
+              </div>
+
+              <ion-list ng-repeat="(key, PinData) in objRec" ng-show="key!='timeStamp'&&key!='jobIdRef'&&key!='slope'&&key!='graph'&&key!='diff'&&key!='note'" ng-if="toolType()=='even'?$even:true">
+
+
+          <!--       One-man case or not identify -->
+                <ion-item ng-if="GetrefJobTool!='Water-level'"> 
+                    <button class="button button-small button-positive ion-chatbox-working button-left" ng-click="editNotePopup(key);"></button> 
+                    {{key}} : <span>{{PinData}} cm</span>
+
+                    <button class="button button-small button-positive button-right" ng-click="editMeterPopup(key);" style="vertical-align:middle;"><i class="icon ion-edit"></i></button> 
+                       
+                 </ion-item>
+                
+           <!--       Water-level case  -->
+                <ion-item ng-if="GetrefJobTool=='Water-level'&&!$first">
+                    <button class="button button-small button-positive ion-chatbox-working button-left" ng-click="editNotePopup(key);"></button>
+                    {{key-2}} - {{key}} : <span style="text-align: right;display: inline-block;vertical-align: text-top;width: 50%;">ไม้นำ = {{PinData[0]}} cm<br />ไม้ตาม = {{PinData[1]}} cm</span>
+                    <button class="button button-small button-positive button-right" ng-click="edit2MeterPopup(key);" style="vertical-align:middle;"><i class="icon ion-edit"></i></button>   
+                 </ion-item>
+
+              </ion-list>
+
+ 
+
+
+
+      </div>
+
+</ion-content>
+
+<script id="editSlopePopup.html" type="text/ng-template"><input ng-model="editSlopeData.slopeInTxt" type="number" placeholder="ค่าความลาดชัน"></script>
+<script id="editMeterPopup.html" type="text/ng-template"><input ng-model="editMeterData.meterInTxt" type="number" placeholder="ค่าที่วัดได้ (ซ.ม.)"></script>
+<script id="edit2MeterPopup.html" type="text/ng-template"><input ng-model="edit2MeterData.pole1InTxt" type="number" placeholder="ค่าที่วัดได้ไม้ 1 (ซ.ม.)"><input ng-model="edit2MeterData.pole2InTxt" type="number" placeholder="ค่าที่วัดได้ไม้ 2 (ซ.ม.)"></script>
+<script id="editNotePopup.html" type="text/ng-template"><textarea rows="4" ng-model="editNoteData.noteInTxt" type="text" placeholder="บันทึกช่วยจำ"></textarea></script>
+
+<script id="editToolPopup.html" type="text/ng-template">
+    <label class="item item-input item-select">
+      <select ng-model="editToolData.toolInTxt">
+        <option value="" disabled selected>เลือกวิธีวัด</option>
+        <option>One-man</option>
+        <option>Water-level</option>
+      </select>
+    </label>
+</script> 
+
+</ion-view>
+ 
