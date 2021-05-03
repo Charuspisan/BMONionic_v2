@@ -320,17 +320,17 @@ angular
           );
         } else {
           // This iOS/Android only example requires the dialog and the device plugin as well.
-          navigator.camera.getPicture(onSuccess, onFail, {
-            quality: 80,
-            destinationType: Camera.DestinationType.FILE_URI,
-            sourceType: Camera.PictureSourceType.CAMERA,
-            allowEdit: false,
-            encodingType: Camera.EncodingType.JPEG,
-            targetWidth: 800,
-            targetHeight: 800,
-            popoverOptions: CameraPopoverOptions,
-            saveToPhotoAlbum: false,
-          });
+          // navigator.camera.getPicture(onSuccess, onFail, {
+          //   quality: 80,
+          //   destinationType: Camera.DestinationType.FILE_URI,
+          //   sourceType: Camera.PictureSourceType.CAMERA,
+          //   allowEdit: false,
+          //   encodingType: Camera.EncodingType.JPEG,
+          //   targetWidth: 800,
+          //   targetHeight: 800,
+          //   popoverOptions: CameraPopoverOptions,
+          //   saveToPhotoAlbum: false,
+          // });
         }
       };
 

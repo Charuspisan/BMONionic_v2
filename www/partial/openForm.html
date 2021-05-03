@@ -18,6 +18,23 @@
         <!-- locatRef : {{jobitem.locatRef}} , parent key : {{key}} -->  
       </ion-item>
     </div>
+    
+    <div class="container">
+      <h1>Camera API</h1>
+      <section class="main-content">
+          <p>
+              <input type="file" id="take-picture" accept="image/*">
+          </p>
+
+          <h2>Preview:</h2>
+          <p>
+              <img src="about:blank" alt="" id="show-picture">
+          </p>
+
+          <p id="error"></p>
+
+      </section>
+  </div>
 
   </ion-content>
   <ion-footer-bar class="bar-positive" style="height:47px; padding: 0;">
