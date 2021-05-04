@@ -341,33 +341,49 @@ angular
         // Set events
         takePicture.onchange = function (event) {
           // Get a reference to the taken picture or chosen file
-          // var files = event.target.files,
-          //   file;
-          // console.log("files : ", files);
-          // if (files && files.length > 0) {
-          //   file = files[0];
-          //   // console.log("file : ", file);
-          //   // var imgURL = window.URL.createObjectURL(file);
-          //   // console.log("imgURL : ", imgURL);
-          //   var reader = new FileReader();
-          //   reader.readAsDataURL(file);
-          //   reader.onloadend = function () {
-          //     var ImgBase64 = reader.result;
-          //     // console.log(ImgBase64);
-          //     // preview image after take photo
-          //     showPicture.src = ImgBase64;
-          //     if (showPicture.src) {
-          //       // onSuccess(showPicture.src);
-          //     }
-          //   };
-          // }
+          var files = event.target.files,
+            file;
+          console.log("files : ", files);
+          if (files && files.length > 0) {
+            file = files[0];
+            // console.log("file : ", file);
+            // var imgURL = window.URL.createObjectURL(file);
+            // console.log("imgURL : ", imgURL);
+            var reader = new FileReader();
+
+            reader.readAsArrayBuffer(file);
+            reader.onloadend = function () {
+              // var ImgBase64 = reader.result;
+              // console.log(ImgBase64);
+              // preview image after take photo
+              // showPicture.src = ImgBase64;
+
+              var exif = EXIF.readFromBinaryFile(reader.result);
+              console.log(exif);
+
+              // read file again on Blob/Base64 mime type
+              var readerImg = new FileReader();
+              readerImg.readAsDataURL(file);
+              readerImg.onloadend = function () {
+                var ImgBase64 = readerImg.result;
+                console.log(ImgBase64);
+                // preview image after take photo
+                showPicture.src = ImgBase64;
+              };
+
+              // if (showPicture.src) {
+              //   onSuccess(ImgBase64);
+              // }
+            };
+          }
         };
       }
 
       function onSuccess(result) {
-        // alert("onSuccess callback");
-        // alert("btnWhere : "+btnWhere);
-        // convert JSON string to JSON Object
+        alert("onSuccess callback");
+
+        // // alert("btnWhere : " + btnWhere);
+        // // convert JSON string to JSON Object
         // var thisResult = JSON.parse(result);
         // console.log("thisResult : " + thisResult);
         // // convert json_metadata JSON string to JSON Object
