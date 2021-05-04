@@ -312,27 +312,84 @@ angular
         });
       };
 
-      $scope.btnEtcImg = function (bt) {
-        console.log("latImg : " + latImg + " : lngImg : " + lngImg);
-        if (latImg == undefined || lngImg == undefined) {
-          $scope.showAlert(
-            "กรุณาเปิด GPS มิฉะนั้นแอพริเคชั่นจะเกิดปัญหา และไม่สามารถบันทึกรูปถ่ายได้ หากเปิด GPS แล้วยังปรากฎข้อความนี้อีก กรุณารีสตาร์ทมือถือของคุณ"
-          );
-        } else {
-          // This iOS/Android only example requires the dialog and the device plugin as well.
-          // navigator.camera.getPicture(onSuccess, onFail, {
-          //   quality: 80,
-          //   destinationType: Camera.DestinationType.FILE_URI,
-          //   sourceType: Camera.PictureSourceType.CAMERA,
-          //   allowEdit: false,
-          //   encodingType: Camera.EncodingType.JPEG,
-          //   targetWidth: 800,
-          //   targetHeight: 800,
-          //   popoverOptions: CameraPopoverOptions,
-          //   saveToPhotoAlbum: false,
-          // });
-        }
-      };
+      // $scope.btnEtcImg = function (bt) {
+      //   console.log("latImg : " + latImg + " : lngImg : " + lngImg);
+      //   if (latImg == undefined || lngImg == undefined) {
+      //     $scope.showAlert(
+      //       "กรุณาเปิด GPS มิฉะนั้นแอพริเคชั่นจะเกิดปัญหา และไม่สามารถบันทึกรูปถ่ายได้ หากเปิด GPS แล้วยังปรากฎข้อความนี้อีก กรุณารีสตาร์ทมือถือของคุณ"
+      //     );
+      //   } else {
+      //     This iOS/Android only example requires the dialog and the device plugin as well.
+      //     navigator.camera.getPicture(onSuccess, onFail, {
+      //       quality: 80,
+      //       destinationType: Camera.DestinationType.FILE_URI,
+      //       sourceType: Camera.PictureSourceType.CAMERA,
+      //       allowEdit: false,
+      //       encodingType: Camera.EncodingType.JPEG,
+      //       targetWidth: 800,
+      //       targetHeight: 800,
+      //       popoverOptions: CameraPopoverOptions,
+      //       saveToPhotoAlbum: false,
+      //     });
+      //   }
+      // };
+
+      var takePicture = document.querySelector("#take-picture"),
+        showPicture = document.querySelector("#show-picture");
+
+      if (takePicture && showPicture) {
+        // Set events
+        takePicture.onchange = function (event) {
+          // Get a reference to the taken picture or chosen file
+          var files = event.target.files,
+            file;
+          console.log("files : ", files);
+
+          if (files && files.length > 0) {
+            file = files[0];
+            // console.log("file : ", file);
+            // var imgURL = window.URL.createObjectURL(file);
+            // console.log("imgURL : ", imgURL);
+
+            var reader = new FileReader();
+            reader.readAsDataURL(file);
+            reader.onloadend = function () {
+              var ImgBase64 = reader.result;
+              console.log(ImgBase64);
+              showPicture.src = ImgBase64;
+            };
+
+
+
+            // try {
+            //   // Create ObjectURL
+            //   var imgURL = window.URL.createObjectURL(file);
+
+            //   // Set img src to ObjectURL
+            //   showPicture.src = imgURL;
+
+            //   // Revoke ObjectURL
+            //   URL.revokeObjectURL(imgURL);
+            //   } catch (e) {
+            //     try {
+            //       // Fallback if createObjectURL is not supported
+            //       var fileReader = new FileReader();
+            //       fileReader.onload = function (event) {
+            //         showPicture.src = event.target.result;
+            //       };
+            //       fileReader.readAsDataURL(file);
+            //     } catch (e) {
+            //       //
+            //       var error = document.querySelector("#error");
+            //       if (error) {
+            //         error.innerHTML =
+            //           "Neither createObjectURL or FileReader are supported";
+            //       }
+            //     }
+            // }
+          }
+        };
+      }
 
       function onSuccess(result) {
         // alert("onSuccess callback");

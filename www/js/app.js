@@ -5,12 +5,22 @@
 // the 2nd parameter is an array of 'requires'
 
 // Initialize Firebase
+// Production
+// const dbUrl = "https://bmon-41086.firebaseio.com";
+// var config = {
+//   apiKey: "AIzaSyCx-rNzY3vIUrhSCP5WYirhiAss7sFqTuI",
+//   authDomain: "bmon-41086.firebaseapp.com",
+//   databaseURL: dbUrl,
+//   storageBucket: "bmon-41086.firebaseapp.com",
+//   messagingSenderId: "170191502662",
+// };
+// Dev config
 const dbUrl = "https://bmon-v2-default-rtdb.firebaseio.com";
 var config = {
   apiKey: "AIzaSyBx5RiQzrpyeFN1HJ-hJDS2qWWmhvk-AZA",
-  authDomain: "bmon-41086.firebaseapp.com",
+  authDomain: "bmon-v2.firebaseapp.com",
   databaseURL: dbUrl,
-  storageBucket: "bmon-41086.appspot.com",
+  storageBucket: "bmon-v2.firebaseapp.com",
   messagingSenderId: "170191502662",
 };
 firebase.initializeApp(config);

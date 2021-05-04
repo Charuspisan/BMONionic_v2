@@ -312,53 +312,77 @@ angular
         });
       };
 
-      $scope.btnEtcImg = function (bt) {
-        console.log("latImg : " + latImg + " : lngImg : " + lngImg);
-        if (latImg == undefined || lngImg == undefined) {
-          $scope.showAlert(
-            "กรุณาเปิด GPS มิฉะนั้นแอพริเคชั่นจะเกิดปัญหา และไม่สามารถบันทึกรูปถ่ายได้ หากเปิด GPS แล้วยังปรากฎข้อความนี้อีก กรุณารีสตาร์ทมือถือของคุณ"
-          );
-        } else {
-          // This iOS/Android only example requires the dialog and the device plugin as well.
-          // navigator.camera.getPicture(onSuccess, onFail, {
-          //   quality: 80,
-          //   destinationType: Camera.DestinationType.FILE_URI,
-          //   sourceType: Camera.PictureSourceType.CAMERA,
-          //   allowEdit: false,
-          //   encodingType: Camera.EncodingType.JPEG,
-          //   targetWidth: 800,
-          //   targetHeight: 800,
-          //   popoverOptions: CameraPopoverOptions,
-          //   saveToPhotoAlbum: false,
-          // });
-        }
-      };
+      // $scope.btnEtcImg = function (bt) {
+      //   console.log("latImg : " + latImg + " : lngImg : " + lngImg);
+      //   if (latImg == undefined || lngImg == undefined) {
+      //     $scope.showAlert(
+      //       "กรุณาเปิด GPS มิฉะนั้นแอพริเคชั่นจะเกิดปัญหา และไม่สามารถบันทึกรูปถ่ายได้ หากเปิด GPS แล้วยังปรากฎข้อความนี้อีก กรุณารีสตาร์ทมือถือของคุณ"
+      //     );
+      //   } else {
+      //     This iOS/Android only example requires the dialog and the device plugin as well.
+      //     navigator.camera.getPicture(onSuccess, onFail, {
+      //       quality: 80,
+      //       destinationType: Camera.DestinationType.FILE_URI,
+      //       sourceType: Camera.PictureSourceType.CAMERA,
+      //       allowEdit: false,
+      //       encodingType: Camera.EncodingType.JPEG,
+      //       targetWidth: 800,
+      //       targetHeight: 800,
+      //       popoverOptions: CameraPopoverOptions,
+      //       saveToPhotoAlbum: false,
+      //     });
+      //   }
+      // };
+
+      var takePicture = document.querySelector("#take-picture"),
+        showPicture = document.querySelector("#show-picture");
+
+      if (takePicture && showPicture) {
+        // Set events
+        takePicture.onchange = function (event) {
+          // Get a reference to the taken picture or chosen file
+          // var files = event.target.files,
+          //   file;
+          // console.log("files : ", files);
+          // if (files && files.length > 0) {
+          //   file = files[0];
+          //   // console.log("file : ", file);
+          //   // var imgURL = window.URL.createObjectURL(file);
+          //   // console.log("imgURL : ", imgURL);
+          //   var reader = new FileReader();
+          //   reader.readAsDataURL(file);
+          //   reader.onloadend = function () {
+          //     var ImgBase64 = reader.result;
+          //     // console.log(ImgBase64);
+          //     // preview image after take photo
+          //     showPicture.src = ImgBase64;
+          //     if (showPicture.src) {
+          //       // onSuccess(showPicture.src);
+          //     }
+          //   };
+          // }
+        };
+      }
 
       function onSuccess(result) {
         // alert("onSuccess callback");
         // alert("btnWhere : "+btnWhere);
-
         // convert JSON string to JSON Object
-        var thisResult = JSON.parse(result);
-        console.log("thisResult : " + thisResult);
-
-        // convert json_metadata JSON string to JSON Object
-        var metadata = JSON.parse(thisResult.json_metadata);
-
-        upImgData = JSON.stringify(metadata);
-        filePath = thisResult.filename;
-
-        console.log("filePath : " + filePath);
-
-        // Convert image
-        getFileContentAsBase64(filePath, function (base64Image) {
-          //window.open(base64Image);
-          console.log("Convert to Base64 : " + base64Image);
-          // Then you'll be able to handle the myimage.png file as base64
-          imgData = base64Image.split(",")[1];
-        });
-
-        $scope.editNotePopup();
+        // var thisResult = JSON.parse(result);
+        // console.log("thisResult : " + thisResult);
+        // // convert json_metadata JSON string to JSON Object
+        // var metadata = JSON.parse(thisResult.json_metadata);
+        // upImgData = JSON.stringify(metadata);
+        // filePath = thisResult.filename;
+        // console.log("filePath : " + filePath);
+        // // Convert image
+        // getFileContentAsBase64(filePath, function (base64Image) {
+        //   //window.open(base64Image);
+        //   console.log("Convert to Base64 : " + base64Image);
+        //   // Then you'll be able to handle the myimage.png file as base64
+        //   imgData = base64Image.split(",")[1];
+        // });
+        // $scope.editNotePopup();
       }
 
       function onFail(message) {
