@@ -1,0 +1,38 @@
+<div id="areaSlopeSelect" style="width:100%; text-align: center;"> 
+
+  <label class = "item item-select" style="display:inline-block; width:32%;">
+     <div class = "input-label">จังหวัด</div>
+     <select ng-model="selectFilterSlope.prov" ng-change="SelectBarSlope.provChange(selectFilterSlope.prov)" ng-init="selectFilterSlope.prov='blank'">
+        <option value="blank">เลือกจังหวัด</option>
+        <option ng-repeat="Prov in queryProv">{{Prov}}</option>
+     </select>
+  </label>
+
+  <label class = "item item-select" style="display:inline-block; width:32%;">
+     <div class = "input-label">พื้นที่</div>
+     <select id="areaSlope" ng-model="selectFilterSlope.area" ng-change="SelectBarSlope.areaChange(selectFilterSlope.area)" ng-init="selectFilterSlope.area='blank'">
+      <option value="blank">เลือกพื้นที่</option>
+        <option ng-repeat="(key,value) in Areas" ng-show="value.prov==selectFilterSlope.prov">{{value.area}}</option>
+     </select>
+  </label>
+
+  <label class = "item item-select" style="display:inline-block; width:17%;">
+     <div class = "input-label">จาก</div>
+     <select ng-model="selectFilterSlope.pinStart" ng-change="SelectBarSlope.pinStartChange(selectFilterSlope.pinStart);" ng-init="selectFilterSlope.pinStart='blank'">
+      <option value="blank">เลือกจุดสำรวจ</option>
+        <option ng-repeat="(key, value) in data" ng-show="value.area==selectFilterSlope.area">{{value.pin}}</option>
+     </select>
+  </label>
+
+  <label class = "item item-select" style="display:inline-block; width:17%;">
+     <div class = "input-label">ถึง</div>
+     <select ng-model="selectFilterSlope.pinEnd" ng-change="SelectBarSlope.pinEndChange(selectFilterSlope.pinEnd);" ng-init="selectFilterSlope.pinEnd='blank'">
+      <option value="blank">เลือกจุดสำรวจ</option>
+        <option ng-repeat="(key, value) in data" ng-show="value.area==selectFilterSlope.area">{{value.pin}}</option>
+     </select>
+  </label>
+
+</div>
+
+</div>
+<!-- <button ng-click="drawGraph()">สร้างกราฟ</button> -->

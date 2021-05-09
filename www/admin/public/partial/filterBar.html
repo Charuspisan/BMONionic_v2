@@ -1,0 +1,140 @@
+<div id="areaSelect" style="width:100%;"> 
+
+  <label class = "item item-select" style="display:inline-block; width:38.5%;">
+     <div class = "input-label">จังหวัด</div>
+     <select ng-model="selectFilter.prov" ng-change="SelectBar.provChange(selectFilter.prov)">
+        <option ng-repeat="Prov in queryProv">{{Prov}}</option>
+     </select>
+  </label>
+
+  <label class = "item item-select" style="display:inline-block; width:38%;">
+     <div class = "input-label">พื้นที่</div>
+     <select id="area" ng-model="selectFilter.area" ng-change="SelectBar.areaChange(selectFilter.area)">
+      <option value="blank">เลือกพื้นที่</option>
+        <option ng-repeat="(key,value) in Areas" ng-show="value.prov==selectFilter.prov">{{value.area}}</option>
+     </select>
+  </label>
+
+  <label class = "item item-select" style="display:inline-block; width:15%;">
+     <div class = "input-label">จุดสำรวจ</div>
+     <select ng-model="selectFilter.pin" ng-change="SelectBar.pinChange(selectFilter.pin)">
+      <option value="blank">เลือกจุดสำรวจ</option>
+        <option ng-repeat="(key, value) in data" ng-show="value.area==selectFilter.area">{{value.pin}}</option>
+     </select>
+  </label>
+
+</div>
+
+<div id="dateSelect" style="width:100%;"> 
+
+  <label class = "item item-select" style="display:inline-block; width:19%;">
+     <div class = "input-label">วันที่</div>
+     <select ng-model="selectFilter.date1" ng-change="SelectBar.dateChange(1, selectFilter.date1); drawGraph(0)">
+      <option value="blank">เลือกวันที่</option>
+        <option ng-repeat="(key, value) in dates" ng-show="value.prov==selectFilter.prov&&value.area==selectFilter.area">{{value.date}}</option>
+        <!-- <option ng-repeat="(key, value) in dates">{{value.date}}</option> -->
+     </select>
+  </label>
+
+  <label class = "item item-select" style="display:inline-block; width:19%;">
+     <div class = "input-label">วันที่</div>
+     <select ng-model="selectFilter.date2" ng-change="SelectBar.dateChange(2, selectFilter.date2); drawGraph(1)" ng-disabled="!selectFilter.date1||selectFilter.date1=='blank'">
+     <option value="blank">เลือกวันที่</option>
+        <option ng-repeat="(key, value) in dates" ng-show="value.prov==selectFilter.prov&&value.area==selectFilter.area">{{value.date}}</option>
+        <!-- <option ng-repeat="(key, value) in dates">{{value.date}}</option> -->
+     </select>
+  </label>
+
+  <label class = "item item-select" style="display:inline-block; width:19%;">
+     <div class = "input-label">วันที่</div>
+     <select ng-model="selectFilter.date3" ng-change="SelectBar.dateChange(3, selectFilter.date3); drawGraph(2)" ng-disabled="!selectFilter.date2||selectFilter.date2=='blank'">
+     <option value="blank">เลือกวันที่</option>
+        <option ng-repeat="(key, value) in dates" ng-show="value.prov==selectFilter.prov&&value.area==selectFilter.area">{{value.date}}</option>
+        <!-- <option ng-repeat="(key, value) in dates">{{value.date}}</option> -->
+     </select>
+  </label>
+
+  <label class = "item item-select" style="display:inline-block; width:19%;">
+     <div class = "input-label">วันที่</div>
+     <select ng-model="selectFilter.date4" ng-change="SelectBar.dateChange(4, selectFilter.date4); drawGraph(3)" ng-disabled="!selectFilter.date3||selectFilter.date3=='blank'">
+     <option value="blank">เลือกวันที่</option>
+        <option ng-repeat="(key, value) in dates" ng-show="value.prov==selectFilter.prov&&value.area==selectFilter.area">{{value.date}}</option>
+        <!-- <option ng-repeat="(key, value) in dates">{{value.date}}</option> -->
+     </select>
+  </label>
+
+  <label class = "item item-select" style="display:inline-block; width:19%;">
+     <div class = "input-label">วันที่</div>
+     <select ng-model="selectFilter.date5" ng-change="SelectBar.dateChange(5, selectFilter.date5); drawGraph(4)" ng-disabled="!selectFilter.date4||selectFilter.date4=='blank'">
+     <option value="blank">เลือกวันที่</option>
+        <option ng-repeat="(key, value) in dates" ng-show="value.prov==selectFilter.prov&&value.area==selectFilter.area">{{value.date}}</option>
+        <!-- <option ng-repeat="(key, value) in dates">{{value.date}}</option> -->
+     </select>
+  </label>
+
+  <label class = "item item-select" style="display:inline-block; width:19%;">
+     <div class = "input-label">วันที่</div>
+     <select ng-model="selectFilter.date6" ng-change="SelectBar.dateChange(6, selectFilter.date6); drawGraph(5)" ng-disabled="!selectFilter.date5||selectFilter.date5=='blank'">
+     <option value="blank">เลือกวันที่</option>
+        <option ng-repeat="(key, value) in dates" ng-show="value.prov==selectFilter.prov&&value.area==selectFilter.area">{{value.date}}</option>
+        <!-- <option ng-repeat="(key, value) in dates">{{value.date}}</option> -->
+     </select>
+  </label>
+
+  <label class = "item item-select" style="display:inline-block; width:19%;">
+     <div class = "input-label">วันที่</div>
+     <select ng-model="selectFilter.date7" ng-change="SelectBar.dateChange(7, selectFilter.date7); drawGraph(6)" ng-disabled="!selectFilter.date6||selectFilter.date6=='blank'">
+     <option value="blank">เลือกวันที่</option>
+        <option ng-repeat="(key, value) in dates" ng-show="value.prov==selectFilter.prov&&value.area==selectFilter.area">{{value.date}}</option>
+        <!-- <option ng-repeat="(key, value) in dates">{{value.date}}</option> -->
+     </select>
+  </label>
+
+  <label class = "item item-select" style="display:inline-block; width:19%;">
+     <div class = "input-label">วันที่</div>
+     <select ng-model="selectFilter.date8" ng-change="SelectBar.dateChange(8, selectFilter.date8); drawGraph(7)" ng-disabled="!selectFilter.date7||selectFilter.date7=='blank'">
+     <option value="blank">เลือกวันที่</option>
+        <option ng-repeat="(key, value) in dates" ng-show="value.prov==selectFilter.prov&&value.area==selectFilter.area">{{value.date}}</option>
+        <!-- <option ng-repeat="(key, value) in dates">{{value.date}}</option> -->
+     </select>
+  </label>
+
+  <label class = "item item-select" style="display:inline-block; width:19%;">
+     <div class = "input-label">วันที่</div>
+     <select ng-model="selectFilter.date9" ng-change="SelectBar.dateChange(9, selectFilter.date9); drawGraph(8)" ng-disabled="!selectFilter.date8||selectFilter.date8=='blank'">
+     <option value="blank">เลือกวันที่</option>
+        <option ng-repeat="(key, value) in dates" ng-show="value.prov==selectFilter.prov&&value.area==selectFilter.area">{{value.date}}</option>
+        <!-- <option ng-repeat="(key, value) in dates">{{value.date}}</option> -->
+     </select>
+  </label>
+
+  <label class = "item item-select" style="display:inline-block; width:19%;">
+     <div class = "input-label">วันที่</div>
+     <select ng-model="selectFilter.date10" ng-change="SelectBar.dateChange(10, selectFilter.date10); drawGraph(9)" ng-disabled="!selectFilter.date9||selectFilter.date9=='blank'">
+     <option value="blank">เลือกวันที่</option>
+        <option ng-repeat="(key, value) in dates" ng-show="value.prov==selectFilter.prov&&value.area==selectFilter.area">{{value.date}}</option>
+        <!-- <option ng-repeat="(key, value) in dates">{{value.date}}</option> -->
+     </select>
+  </label>
+
+  <label class = "item item-select" style="display:inline-block; width:19%;">
+     <div class = "input-label">วันที่</div>
+     <select ng-model="selectFilter.date11" ng-change="SelectBar.dateChange(11, selectFilter.date11); drawGraph(10)" ng-disabled="!selectFilter.date10||selectFilter.date10=='blank'">
+     <option value="blank">เลือกวันที่</option>
+        <option ng-repeat="(key, value) in dates" ng-show="value.prov==selectFilter.prov&&value.area==selectFilter.area">{{value.date}}</option>
+        <!-- <option ng-repeat="(key, value) in dates">{{value.date}}</option> -->
+     </select>
+  </label>
+
+  <label class = "item item-select" style="display:inline-block; width:19%;">
+     <div class = "input-label">วันที่</div>
+     <select ng-model="selectFilter.date12" ng-change="SelectBar.dateChange(12, selectFilter.date12); drawGraph(11)" ng-disabled="!selectFilter.date11||selectFilter.date11=='blank'">
+     <option value="blank">เลือกวันที่</option>
+        <option ng-repeat="(key, value) in dates" ng-show="value.prov==selectFilter.prov&&value.area==selectFilter.area">{{value.date}}</option>
+        <!-- <option ng-repeat="(key, value) in dates">{{value.date}}</option> -->
+     </select>
+  </label>
+
+
+</div>
+<!-- <button ng-click="drawGraph()">สร้างกราฟ</button> -->

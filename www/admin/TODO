@@ -1,0 +1,29 @@
+TODO
+
+
+- modify hightchart table and export CSV by ourself. Hide export csv span and hamberger menu.
+- reset data for graph slope when DD box changed
+
+------done just expand to date select see line 54-55
+- Test graph with full data (now we set only graph data)
+- Test graph with One-man data
+- create refresh button for graph
+
+- get jodRecID from before (bring to sharedFilterBar on Service in app.js) and matching with images db, filter by type and limit to last
+
+Done
+- Got ObjGraph line 186 (sorted), convert to graph array
+- Show graph of slope.
+- when change Province reset other select box
+- when change Area reset other select box
+- when change Pin reset date select box
+- Check dup of filter line 109 waiting for finished loop before call next function, * try to use NG for filter
+- Reset each SharedProp index for imgs4d and OtherImg query when change dropbox date. app.js line 185
+- check dropbox date why it not disable when previous box not active.
+- Other photo
+- fix bar disable when switch to other photo then back to graph
+- finish fetch 4dimg line 160-180 Style element for next step.
+- got an image name see line 20-25 it show how to call images from server.
+- add date to 12 fields
+- got jobsRec ID from filter line = 91
+- take this id read graph data on jobsRec DB

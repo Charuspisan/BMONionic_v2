@@ -1,0 +1,45 @@
+<style>
+.bar-footer {display: block;}
+#call2seletBar, .ion-ios-fastforward {display:none !important;} 
+</style>
+<ion-view ng-controller="slopeCtrl" class="has-footer">
+
+
+  <ion-header-bar class="bar-positive">
+    <img src="images/icon-bar.png" class="icon-bar">
+    <h1 class="title">เปรียบเทียบสถิติ-ค่ามุมเอียง</h1>
+    <button id="logoutbt" ng-click="signOut()" class="button">
+      <i class="icon ion-close-round"></i>
+    </button>
+  </ion-header-bar>
+
+
+
+     <div id="" class="has-header" style="height: 100%; margin-top: 65px; box-sizing: border-box; bottom: 44px;">
+	     <ion-content scroll="true" style="top:3em; padding-bottom: 3em;">
+
+
+	    	<div id="showGraphSlopeWrapper" style="width:100%; height:50vh;"></div> 
+
+<!-- 			<div id="graphSlopeDataShow" style="width:100%;">
+			
+					<div ng-repeat="(key, value) in graphDatas" ng-show="key==0" class="colGraphData">
+						<div ng-repeat="data in value track by $index">
+							<div class="colGraphSlopeItem">{{data}}
+								<button class="button button-small button-positive ion-chatbox-working button-right" ng-show="noteDatas[key][$index]" ng-click="viewNotePopup(noteDatas[key][$index])"></button>
+							</div>
+						</div>
+					</div>
+
+			</div> -->
+		    <button ng-click="downloadCSVslope();" class="button button-outline button-positive button-small DWCSV">
+		      <i class="icon ion-ios-download-outline"> ดาวน์โหลดไฟล์ข้อมูลกราฟ</i>
+		    </button>			
+			<pre id="previewSlope"></pre>
+			<pre id="exportSlope"></pre>
+
+		</ion-content>
+	</div>	
+<div class="filterBarSlope" ng-include src="'partial/filterBar-slope.html'"></div>
+</ion-view>
+ 
