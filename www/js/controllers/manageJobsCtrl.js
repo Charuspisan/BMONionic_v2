@@ -5,8 +5,8 @@ angular
     "manageJobsCtrl",
     function (
       $scope,
-      $firebaseObject,
-      $firebaseArray,
+      // $firebaseObject,
+      // $firebaseArray,
       $ionicPopup,
       $timeout,
       sharedProp,
@@ -16,24 +16,24 @@ angular
       console.log("user is : " + sharedProp.getEmail());
 
       var refLocations = new Firebase(
-        '"' + sharedProp.dbUrl() + '/locations/"'
+        sharedProp.dbUrl() + "/locations/"
       );
       var refJobsID = new Firebase(
-        '"' + sharedProp.dbUrl() + '/jobsID/"'
+        sharedProp.dbUrl() + "/jobsID/"
       );
       var refJobsRec = new Firebase(
-        '"' + sharedProp.dbUrl() + '/jobsRec/"'
+        sharedProp.dbUrl() + "/jobsRec/"
       );
       var refUsers = new Firebase(
-        '"' + sharedProp.dbUrl() + '/users/"'
+        sharedProp.dbUrl() + "/users/"
       );
 
-      var objID = $firebaseObject(
-        refJobsID.orderByChild("status").equalTo("active")
-      );
-      var objLocate = $firebaseObject(refLocations);
-      var objRec = $firebaseObject(refJobsRec);
-      var objUsers = $firebaseObject(refUsers);
+      // var objID = $firebaseObject(
+      //   refJobsID.orderByChild("status").equalTo("active")
+      // );
+      // var objLocate = $firebaseObject(refLocations);
+      // var objRec = $firebaseObject(refJobsRec);
+      // var objUsers = $firebaseObject(refUsers);
 
       var shareData = sharedProp.getLocateData();
 
@@ -75,6 +75,7 @@ angular
         .on("value", function (snapshot) {
           $scope.jobListData = snapshot.val();
           //return $scope.jobListData
+          // console.log("$scope.jobListData : ",$scope.jobListData);
         });
 
       $scope.selectUsers = [];

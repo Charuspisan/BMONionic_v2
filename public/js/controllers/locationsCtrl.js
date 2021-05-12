@@ -14,7 +14,7 @@ angular
       $ionicLoading
     ) {
       var refLocations = new Firebase(
-        '"' + sharedProp.dbUrl() + '/locations/"'
+        sharedProp.dbUrl() + "/locations/"
       );
 
       $scope.data;

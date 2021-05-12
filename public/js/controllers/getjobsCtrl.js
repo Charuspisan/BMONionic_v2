@@ -19,7 +19,7 @@ angular
 
       var refStorage = firebase.storage().ref();
       var imgDB = new Firebase(
-        '"' + sharedProp.dbUrl() + '/images/"'
+        sharedProp.dbUrl() + "/images/"
       );
       var userEmail = sharedProp.getEmail();
       var imgData;
@@ -110,13 +110,13 @@ angular
       $scope.showLoading();
 
       var refLocations = new Firebase(
-        '"' + sharedProp.dbUrl() + '/locations/"'
+        sharedProp.dbUrl() + "/locations/"
       );
       var refJobsID = new Firebase(
-        '"' + sharedProp.dbUrl() + '/jobsID/"'
+        sharedProp.dbUrl() + "/jobsID/"
       );
       var refJobsRec = new Firebase(
-        '"' + sharedProp.dbUrl() + '/jobsRec/"'
+        sharedProp.dbUrl() + "/jobsRec/"
       );
 
       $scope.assignedEmail = sharedProp.getEmail();

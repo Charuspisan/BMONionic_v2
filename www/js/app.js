@@ -156,7 +156,7 @@ angular
 
         if (this.locationData === null) {
           this.locationData = new Firebase(
-            '"' + sharedProp.dbUrl() + '/locations/"'
+            sharedProp.dbUrl() + "/locations/"
           );
           this.locationData.on("value", function (loadedData) {
             deferred.resolve();

@@ -16,9 +16,9 @@ angular
       $ionicLoading,
       $ionicScrollDelegate
     ) {
-      var refLocations = new Firebase('"' + sharedProp.dbUrl() + '/locations/"');
+      var refLocations = new Firebase(sharedProp.dbUrl() + "/locations/");
       var refJobsID = new Firebase(sharedProp.dbUrl() + "/jobsID/");
-      var refJobsRec = new Firebase('"' + sharedProp.dbUrl() + "/jobsRec/");
+      var refJobsRec = new Firebase(sharedProp.dbUrl() + "/jobsRec/");
 
       console.log("refJobsID : " + refJobsID);
       console.log("refJobsRec : " + refJobsRec);

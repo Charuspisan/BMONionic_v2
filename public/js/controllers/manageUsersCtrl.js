@@ -19,16 +19,16 @@ angular
       var auth = $firebaseAuth();
       var ref = new Firebase('"'+sharedProp.dbUrl()+'"');
       var refLocations = new Firebase(
-        '"' + sharedProp.dbUrl() + '/locations/"'
+        sharedProp.dbUrl() + "/locations/"
       );
       var refJobsID = new Firebase(
-        '"' + sharedProp.dbUrl() + '/jobsID/"'
+        sharedProp.dbUrl() + "/jobsID/"
       );
       var refJobsRec = new Firebase(
-        '"' + sharedProp.dbUrl() + '/jobsRec/"'
+        sharedProp.dbUrl() + "/jobsRec/"
       );
       var refUsers = new Firebase(
-        '"' + sharedProp.dbUrl() + '/users/"'
+        sharedProp.dbUrl() + "/users/"
       );
 
       $scope.dataUsers;

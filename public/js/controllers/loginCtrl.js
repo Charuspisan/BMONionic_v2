@@ -15,7 +15,7 @@ angular
       var auth = $firebaseAuth();
 
       var usersDB = new Firebase(
-        '"' + sharedProp.dbUrl() + '/users/"'
+        sharedProp.dbUrl() + "/users/"
       );
       var isLogin = sharedProp.getIsLoginPage();
       console.log("isLogin : " + isLogin);

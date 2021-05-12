@@ -15,7 +15,7 @@ angular
       var auth = $firebaseAuth();
 
       var usersDB = new Firebase(
-        '"' + sharedProp.dbUrl() + '/users/"'
+        sharedProp.dbUrl() + "/users/"
       );
       var isLogin = sharedProp.getIsLoginPage();
       console.log("isLogin : " + isLogin);
@@ -296,11 +296,11 @@ angular
                 setTimeout(function () {
                   $scope.$apply(function () {
                     usersDB.child(user.uid).update({ lastAccess: Date.now() });
-                    // $scope.hideLoading();
+                    $scope.hideLoading();
                     // $location.path("/getjobs");
                     $location.path("/openform");
                   });
-                  console.log("openform");
+                  // console.log("openform");
                 }, 500);
               }
             });

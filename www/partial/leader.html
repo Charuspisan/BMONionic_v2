@@ -40,7 +40,12 @@
           <input ng-model="editOperDateData.operateDateInTxt" type="text" placeholder="วันที่ปฎิบัติงาน"/>
         </datepicker>
 		</script>
+
+
     
+
+
+    <!-- modify to sharable url -->
     <script id="editUserPopup.html" type="text/ng-template">
         <input type="text" id="queryUser" ng-model="queryUser" placeholder="ใส่อีเมล์เพื่อค้นหาอาสาสมัคร"/>
         <select style="width: 100%; padding: 0.5em;" ng-model="selectedUser.userDD">
@@ -48,6 +53,11 @@
           <option ng-repeat="user in selectUsers | filter:queryUser" >{{user}}</option>
         </select>
     </script>
+
+
+
+
+
 
 		<script id="editToolPopup.html" type="text/ng-template">
 		  	<!-- <input ng-model="editToolData.toolInTxt" type="text" placeholder="Tool type"> -->

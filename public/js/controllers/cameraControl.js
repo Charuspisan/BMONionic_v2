@@ -17,17 +17,17 @@ angular
     ) {
 
       var refJobsRec = new Firebase(
-        '"' + sharedProp.dbUrl() + '/jobsRec/"'
+        sharedProp.dbUrl() + "/jobsRec/"
       );
       var userEmail = sharedProp.getEmail();
       var jobInfo = sharedProp.getJobInfo();
       var lacateID = jobInfo.jobLocate;
       var refStorage = firebase.storage().ref();
       var imgDB = new Firebase(
-        '"' + sharedProp.dbUrl() + '/images/"'
+        sharedProp.dbUrl() + "/images/"
       );
       var imgOnLocate = new Firebase(
-        '"' + sharedProp.dbUrl() + '/locations/"' +
+        sharedProp.dbUrl() + "/locations/" +
           lacateID +
           "/imgs/"
       );
@@ -541,7 +541,7 @@ angular
 
       // console.log("lacateID : "+lacateID);
       var imgLocateData = new Firebase(
-        '"' + sharedProp.dbUrl() + '/locations/"' +
+        sharedProp.dbUrl() + "/locations/" +
           lacateID +
           "/imgs/"
       );
