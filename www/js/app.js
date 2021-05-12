@@ -37,6 +37,10 @@ angular
 
   .run(function ($ionicPlatform) {
     $ionicPlatform.ready(function () {
+      firebase.database().ref("AppCtr").once("value").then(function (snapshot) {
+        data = snapshot.val();
+        console.log("ver : " + data.ver);
+      })
       /*var AppVer = "0.0.5";
 
       firebase
@@ -77,9 +81,9 @@ angular
       //   // a much nicer keyboard experience.
       //   cordova.plugins.Keyboard.disableScroll(true);
       // }
-      if (window.StatusBar) {
-        StatusBar.styleDefault();
-      }
+      // if (window.StatusBar) {
+      //   StatusBar.styleDefault();
+      // }
     });
   })
 
@@ -101,10 +105,10 @@ angular
         url: "/leader",
         templateUrl: "partial/leader.html",
       })
-      // .state("getjobs", {
-      //   url: "/getjobs",
-      //   templateUrl: "partial/getjobs.html",
-      // })
+      .state("getjobs", {
+        url: "/getjobs",
+        templateUrl: "partial/getjobs.html",
+      })
       .state("openform", {
         url: "/openform",
         templateUrl: "partial/openForm.html",
@@ -139,8 +143,9 @@ angular
         templateUrl: "partial/camera.html",
       });
 
-    // $urlRouterProvider.otherwise("/login");
-    $urlRouterProvider.otherwise("/openform");
+    $urlRouterProvider.otherwise("/login");
+    // $urlRouterProvider.otherwise("/operation");
+    // $urlRouterProvider.otherwise("/managejobs");
   })
 
   .factory("locationDataCon", function ($firebase, $q) {

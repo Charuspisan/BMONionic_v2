@@ -16,20 +16,17 @@ angular
       $ionicLoading,
       $ionicScrollDelegate
     ) {
-      var refLocations = new Firebase(
-        '"' + sharedProp.dbUrl() + '/locations/"'
-      );
-      var refJobsID = new Firebase(
-        '"' + sharedProp.dbUrl() + '/jobsID/"'
-      );
-      var refJobsRec = new Firebase(
-        '"' + sharedProp.dbUrl() + '/jobsRec/"'
-      );
+      var refLocations = new Firebase('"' + sharedProp.dbUrl() + '/locations/"');
+      var refJobsID = new Firebase(sharedProp.dbUrl() + "/jobsID/");
+      var refJobsRec = new Firebase('"' + sharedProp.dbUrl() + "/jobsRec/");
 
-      var jobInfo = sharedProp.getJobInfo();
+      console.log("refJobsID : " + refJobsID);
+      console.log("refJobsRec : " + refJobsRec);
 
-      console.log("Pass value : ", sharedProp.getJobInfo());
-      console.log("jobInfo.jobId : " + jobInfo.jobId);
+      // var jobInfo = sharedProp.getJobInfo();
+
+      // console.log("Pass value : ", sharedProp.getJobInfo());
+      // console.log("jobInfo.jobId : " + jobInfo.jobId);
 
       $scope.showLoading = function () {
         $ionicLoading
@@ -93,17 +90,58 @@ angular
       //$scope.GetrefJobID = "-K_TaUNGfsnHpQdKs42B";
 
       //////////this for testing only //////
-      // jobInfo.jobId = "-K_xGNfYq-zbVOGY4zPD";
-      // $scope.GetrefJobID = "-K_xGNfYq-zbVOGY4zPD";
+
+
+
+
+
+
+
+
+
+      var jobInfo = {};
+
+      jobInfo.parentID = "-MQV5s3Mmw36vuwQzCGD";
+      jobInfo.jobId = "-MQV5s5U7osjM02Y8HJq"; // jobInfo.jobId is id of pin in jobsID DB
+      jobInfo.jobTool = "Water-level";
+
+      // refJobsID
+      // .orderByChild("status")
+      // .equalTo("active")
+      // .on("value", function (snapshot) {
+      //   $scope.objID = snapshot.val();
+      //   $scope.hideLoading();
+      //   console.log("$scope.objID : ",$scope.objID);
+      // });
+
+      refJobsID.child(jobInfo.parentID).child(jobInfo.jobId).on("value", function (snapshot) {
+        // console.log("value : ", value);
+        $scope.objID = snapshot.val();
+        $scope.hideLoading();
+        console.log("$scope.objID : ", $scope.objID);
+      }); 
+
+      refJobsRec.child(jobInfo.jobId).on("value", function (snapshot) {
+        // console.log("value : ", value);
+        $scope.objRec = snapshot.val();
+        $scope.hideLoading();
+        console.log("$scope.objRec : ", $scope.objRec);
+      }); 
+
+
+      // $scope.GetrefJobID = "-MQV5s5F4ED9sI524QE2";
       // $scope.GetrefJobPin = "B1";
       // $scope.GetrefJobProv = "Songkhla";
       // $scope.GetrefJobArea = "phagan";
       // $scope.GetrefJobDate = "06/01/2017";
       // $scope.GetrefJobTool = "Water-level";
-      // console.log("GetrefJobID : "+$scope.GetrefJobID);
-      // console.log("Tool : "+$scope.GetrefJobTool);
+      // console.log("jobInfo.jobId : " + jobInfo.jobId);
+      // console.log("GetrefJobID : " + $scope.GetrefJobID);
+      // console.log("GetrefJobPin : " + $scope.GetrefJobPin);
+      // console.log("Tool : " + $scope.GetrefJobTool);
       //////////////////////////////////////////////////
 
+      
       $scope.GetrefJobParentID = jobInfo.parentID;
       $scope.GetrefJobID = jobInfo.jobId;
       $scope.GetrefJobPin = jobInfo.jobPin;
@@ -117,34 +155,23 @@ angular
 
       $scope.objRec;
 
+
       refJobsRec.child(jobInfo.jobId).on("value", function (snapshot) {
-        // console.log("value : ",value);
+        // console.log("value : ", value);
         $scope.objRec = snapshot.val();
         $scope.hideLoading();
-      });
+      });        
 
-      //alert($scope.GetrefJobParentID);
 
-      // var objRec = $firebaseObject(refJobsRec.child(jobInfo.jobId));
-      // var objGraphData = [];
-      // var objGraphLabels = [];
+      
+      // refJobsRec.child("-MQV5s5F4ED9sI524QE2").on("value", function (snapshot) {
+      //   // console.log("value : ", value);
+      //   $scope.objRec = snapshot.val();
+      //   $scope.hideLoading();
+      //   console.log("$scope.objRec : ", $scope.objRec);
+      // });        
 
-      // // to take an action after the data loads, use the $loaded() promise
-      // objRec.$loaded().then(function() {
-      //     // To iterate the key/value pairs of the object, use angular.forEach()
-      //     $scope.objRec = objRec;
-      //     $scope.hideLoading();
-      //     angular.forEach(objRec, function(value, key) {
-      //        //console.log("key ", key, "val ", value);
-      //        // angular.forEach(value, function(val2, key2){
-      //        //   if(key2!==''){
-      //        //   console.log("key2 ", key2, "val2 ", val2);
-      //        //   }
-      //        // })
-      //        // objGraphData.push(value);
-      //     });
-      // // console.log("objGraphData : ",objGraphData);
-      //  });
+
 
       //Start graph
       var dataArray = [];
