@@ -13,7 +13,27 @@ angular
       $location,
       $ionicViewService
     ) {
-      console.log("user is : " + sharedProp.getEmail());
+
+      $scope.hideLoading = function () {
+        $ionicLoading.hide().then(function () {
+          console.log("The loading indicator is now hidden");
+        });
+      };
+      
+      var loginStatus = sharedProp.getEmail();
+      console.log("user is : " + loginStatus);
+
+      $scope.goNext = function (page) {
+        console.log("Going to : " + page);
+        $location.path(page);
+      };
+
+      // if(loginStatus==true){
+      //   $scope.hideLoading();
+      // }else{
+      //   sharedProp.setIsLoginPage(false);
+      //   $scope.goNext("/login");
+      // }
 
       var refLocations = new Firebase(
         sharedProp.dbUrl() + "/locations/"
@@ -78,22 +98,30 @@ angular
           // console.log("$scope.jobListData : ",$scope.jobListData);
         });
 
-      $scope.selectUsers = [];
-      refUsers.orderByChild("email").on("value", function (snapshot) {
-        snapshot.forEach(function (childSnapshot) {
-          // key will be "ada" the first time and "alan" the second time
-          var key = childSnapshot.key;
-          // childData will be the actual contents of the child
-          var childData = childSnapshot.val();
-          $scope.selectUsers.push(childData.email);
-        });
-        console.log("$scope.selectUsers", $scope.selectUsers);
-      });
+      $scope.shareRootURL = sharedProp.rootUrl();
 
-      $scope.goNext = function (page) {
-        console.log("Going to : " + page);
-        $location.path(page);
+
+      $scope.copy = (txt)=>{
+        var cb = document.getElementById("cb");
+        cb.value = txt;
+        cb.style.display='block';
+        cb.select();
+        document.execCommand('copy');
+        cb.style.display='none';
       };
+
+      // $scope.selectUsers = [];
+      // refUsers.orderByChild("email").on("value", function (snapshot) {
+      //   snapshot.forEach(function (childSnapshot) {
+      //     // key will be "ada" the first time and "alan" the second time
+      //     var key = childSnapshot.key;
+      //     // childData will be the actual contents of the child
+      //     var childData = childSnapshot.val();
+      //     $scope.selectUsers.push(childData.email);
+      //   });
+      //   console.log("$scope.selectUsers", $scope.selectUsers);
+      // });
+
 
       $scope.goBack = function (page) {
         console.log("Going back");

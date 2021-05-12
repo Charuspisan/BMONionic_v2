@@ -3,7 +3,8 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width">
-    <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-inline' 'unsafe-eval' *; style-src 'self' 'unsafe-inline' *; worker-src blob:; child-src blob: gap:; img-src 'self' blob: data:; default-src * 'self' 'unsafe-inline' 'unsafe-eval' data: gap: content:">
+    <!-- <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-inline' 'unsafe-eval' *; style-src 'self' 'unsafe-inline' *; worker-src blob:; child-src blob: gap:; img-src 'self' blob: data:; default-src * 'self' 'unsafe-inline' 'unsafe-eval' data: gap: content:"> -->
+    <meta http-equiv="Content-Security-Policy" content="default-src * gap://ready file://* * data: blob: 'unsafe-inline' 'unsafe-eval' ws: wss:;img-src * ionic://* 'self' data: content:;script-src 'self' 'unsafe-inline' 'unsafe-eval' *;style-src  'self' 'unsafe-inline' *;worker-src 'self' data: blob: *;media-src *;">
     <title></title>
 
     <link rel="manifest" href="manifest.json">
@@ -24,6 +25,7 @@
     <link href="css/ionic.app.css" rel="stylesheet">
     -->
     <link href="lib/datePicker/datepicker.css" rel="stylesheet" type="text/css" />
+    <script src="https://www.line-website.com/social-plugins/js/thirdparty/loader.min.js" async="async" defer="defer"></script>
   </head>
   <body ng-app="BMON">
 
@@ -76,5 +78,6 @@
     <!-- <script src="https://cdn.firebase.com/libs/angularfire/1.1.2/angularfire.min.js"></script> -->
     <!-- <script src="src/js/angular-datepicker.js"></script>  -->
     <script src="js/exif-js.js"></script>
+    <script src="https://unpkg.com/ionicons@5.4.0/dist/ionicons.js"></script>
   </body>
 </html>

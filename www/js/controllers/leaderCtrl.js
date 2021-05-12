@@ -11,7 +11,21 @@ angular
       $location,
       $ionicLoading
     ) {
-      console.log("user is : " + sharedProp.getEmail());
+
+
+      var loginStatus = sharedProp.getEmail();
+      console.log("user is : " + loginStatus);
+
+      $scope.goNext = function (page) {
+        console.log("Going to : " + page);
+        $location.path(page);
+      };
+
+      if(loginStatus=="Not loged in user or leader/admin"){
+        sharedProp.setIsLoginPage(false);
+        $scope.goNext("/login");
+      }
+
 
       var refJobsID = new Firebase(sharedProp.dbUrl() + "/jobsID/");
       var refUsers = new Firebase(
@@ -36,6 +50,20 @@ angular
           //return $scope.jobListData
           console.log("$scope.jobListData : ",snapshot.val());
         });
+
+      $scope.shareRootURL = sharedProp.rootUrl();
+
+
+      $scope.copy = (txt)=>{
+        var cb = document.getElementById("cb");
+        cb.value = txt;
+        cb.style.display='block';
+        cb.select();
+        document.execCommand('copy');
+        cb.style.display='none';
+      };
+
+    
 
 
       // $scope.selectUsers = [];
@@ -132,55 +160,50 @@ angular
       };
 
 
-
+      
 
     // modify to shareable URL
-      $scope.editUserPopup = function (jobIdRef, pinIdRef) {
-        console.log("Key for edit user : " + pinIdRef);
-        $scope.selectedUser = {};
-        var myPopup = $ionicPopup.show({
-          templateUrl: "editUserPopup.html",
-          title: "แก้ไขผู้ปฎิบัติงาน",
-          subTitle: "",
-          scope: $scope,
-          buttons: [
-            { text: "ยกเลิก" },
-            {
-              text: "<b>บันทึก</b>",
-              type: "button-positive",
-              onTap: function (e) {
-                var newUser = $scope.selectedUser.userDD;
-                refJobsID
-                  .child(jobIdRef)
-                  .child(pinIdRef)
-                  .update({ user: newUser });
-                console.log(
-                  "jobIdRef : ",
-                  jobIdRef,
-                  "pinIdRef : ",
-                  pinIdRef,
-                  " newUser : ",
-                  newUser
-                );
-              },
-            },
-          ],
-        });
-        myPopup.then(function () {
-          // setTimeout(function(){
-          //   console.log($(".expanding").parent().parent().find(".list .item.item-accordion").length);
-          //   $(".expanding").parent().parent().find(".list .item.item-accordion").css({"display":"block !important","line-height":"38px !important"})
-          // }, 3000);
-        });
-        $timeout(function () {
-          myPopup.close(); //close the popup after 3 seconds for some reason
-        }, 100000);
-      };
-
-
-
-
-
+      // $scope.editUserPopup = function (jobIdRef, pinIdRef) {
+      //   console.log("Key for edit user : " + pinIdRef);
+      //   $scope.selectedUser = {};
+      //   var myPopup = $ionicPopup.show({
+      //     templateUrl: "editUserPopup.html",
+      //     title: "แก้ไขผู้ปฎิบัติงาน",
+      //     subTitle: "",
+      //     scope: $scope,
+      //     buttons: [
+      //       { text: "ยกเลิก" },
+      //       {
+      //         text: "<b>บันทึก</b>",
+      //         type: "button-positive",
+      //         onTap: function (e) {
+      //           var newUser = $scope.selectedUser.userDD;
+      //           refJobsID
+      //             .child(jobIdRef)
+      //             .child(pinIdRef)
+      //             .update({ user: newUser });
+      //           console.log(
+      //             "jobIdRef : ",
+      //             jobIdRef,
+      //             "pinIdRef : ",
+      //             pinIdRef,
+      //             " newUser : ",
+      //             newUser
+      //           );
+      //         },
+      //       },
+      //     ],
+      //   });
+      //   myPopup.then(function () {
+      //     // setTimeout(function(){
+      //     //   console.log($(".expanding").parent().parent().find(".list .item.item-accordion").length);
+      //     //   $(".expanding").parent().parent().find(".list .item.item-accordion").css({"display":"block !important","line-height":"38px !important"})
+      //     // }, 3000);
+      //   });
+      //   $timeout(function () {
+      //     myPopup.close(); //close the popup after 3 seconds for some reason
+      //   }, 100000);
+      // };
 
 
       $scope.editToolPopup = function (jobIdRef, pinIdRef) {

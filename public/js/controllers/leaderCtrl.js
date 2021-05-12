@@ -5,8 +5,6 @@ angular
     "leaderCtrl",
     function (
       $scope,
-      $firebaseObject,
-      $firebaseArray,
       $ionicPopup,
       $timeout,
       sharedProp,
@@ -15,25 +13,17 @@ angular
     ) {
       console.log("user is : " + sharedProp.getEmail());
 
-      var refLocations = new Firebase(
-        sharedProp.dbUrl() + "/locations/"
-      );
-      var refJobsID = new Firebase(
-        sharedProp.dbUrl() + "/jobsID/"
-      );
-      var refJobsRec = new Firebase(
-        sharedProp.dbUrl() + "/jobsRec/"
-      );
+      var refJobsID = new Firebase(sharedProp.dbUrl() + "/jobsID/");
       var refUsers = new Firebase(
         sharedProp.dbUrl() + "/users/"
       );
 
-      var objID = $firebaseObject(
-        refJobsID.orderByChild("status").equalTo("active")
-      );
-      var objLocate = $firebaseObject(refLocations);
-      var objRec = $firebaseObject(refJobsRec);
-      var objUsers = $firebaseObject(refUsers);
+      // var objID = $firebaseObject(
+      //   refJobsID.orderByChild("status").equalTo("active")
+      // );
+      // var objLocate = $firebaseObject(refLocations);
+      // var objRec = $firebaseObject(refJobsRec);
+      // var objUsers = $firebaseObject(refUsers);
 
       //Check login user by email and pass value to variable
       // $scope.assignedEmail = sharedProp.getEmail();
@@ -44,19 +34,35 @@ angular
         .on("value", function (snapshot) {
           $scope.jobListData = snapshot.val();
           //return $scope.jobListData
+          console.log("$scope.jobListData : ",snapshot.val());
         });
 
-      $scope.selectUsers = [];
-      refUsers.orderByChild("email").on("value", function (snapshot) {
-        snapshot.forEach(function (childSnapshot) {
-          // key will be "ada" the first time and "alan" the second time
-          var key = childSnapshot.key;
-          // childData will be the actual contents of the child
-          var childData = childSnapshot.val();
-          $scope.selectUsers.push(childData.email);
-        });
-        console.log("$scope.selectUsers", $scope.selectUsers);
-      });
+      $scope.shareRootURL = sharedProp.rootUrl();
+
+
+      $scope.copy = (txt)=>{
+        var cb = document.getElementById("cb");
+        cb.value = txt;
+        cb.style.display='block';
+        cb.select();
+        document.execCommand('copy');
+        cb.style.display='none';
+      };
+
+    
+
+
+      // $scope.selectUsers = [];
+      // refUsers.orderByChild("email").on("value", function (snapshot) {
+      //   snapshot.forEach(function (childSnapshot) {
+      //     // key will be "ada" the first time and "alan" the second time
+      //     var key = childSnapshot.key;
+      //     // childData will be the actual contents of the child
+      //     var childData = childSnapshot.val();
+      //     $scope.selectUsers.push(childData.email);
+      //   });
+      //   console.log("$scope.selectUsers", $scope.selectUsers);
+      // });
 
       $scope.hideLoading = function () {
         $ionicLoading.hide().then(function () {
@@ -139,47 +145,52 @@ angular
         }, 100000);
       };
 
-      $scope.editUserPopup = function (jobIdRef, pinIdRef) {
-        console.log("Key for edit user : " + pinIdRef);
-        $scope.selectedUser = {};
-        var myPopup = $ionicPopup.show({
-          templateUrl: "editUserPopup.html",
-          title: "แก้ไขผู้ปฎิบัติงาน",
-          subTitle: "",
-          scope: $scope,
-          buttons: [
-            { text: "ยกเลิก" },
-            {
-              text: "<b>บันทึก</b>",
-              type: "button-positive",
-              onTap: function (e) {
-                var newUser = $scope.selectedUser.userDD;
-                refJobsID
-                  .child(jobIdRef)
-                  .child(pinIdRef)
-                  .update({ user: newUser });
-                console.log(
-                  "jobIdRef : ",
-                  jobIdRef,
-                  "pinIdRef : ",
-                  pinIdRef,
-                  " newUser : ",
-                  newUser
-                );
-              },
-            },
-          ],
-        });
-        myPopup.then(function () {
-          // setTimeout(function(){
-          //   console.log($(".expanding").parent().parent().find(".list .item.item-accordion").length);
-          //   $(".expanding").parent().parent().find(".list .item.item-accordion").css({"display":"block !important","line-height":"38px !important"})
-          // }, 3000);
-        });
-        $timeout(function () {
-          myPopup.close(); //close the popup after 3 seconds for some reason
-        }, 100000);
-      };
+
+      
+
+    // modify to shareable URL
+      // $scope.editUserPopup = function (jobIdRef, pinIdRef) {
+      //   console.log("Key for edit user : " + pinIdRef);
+      //   $scope.selectedUser = {};
+      //   var myPopup = $ionicPopup.show({
+      //     templateUrl: "editUserPopup.html",
+      //     title: "แก้ไขผู้ปฎิบัติงาน",
+      //     subTitle: "",
+      //     scope: $scope,
+      //     buttons: [
+      //       { text: "ยกเลิก" },
+      //       {
+      //         text: "<b>บันทึก</b>",
+      //         type: "button-positive",
+      //         onTap: function (e) {
+      //           var newUser = $scope.selectedUser.userDD;
+      //           refJobsID
+      //             .child(jobIdRef)
+      //             .child(pinIdRef)
+      //             .update({ user: newUser });
+      //           console.log(
+      //             "jobIdRef : ",
+      //             jobIdRef,
+      //             "pinIdRef : ",
+      //             pinIdRef,
+      //             " newUser : ",
+      //             newUser
+      //           );
+      //         },
+      //       },
+      //     ],
+      //   });
+      //   myPopup.then(function () {
+      //     // setTimeout(function(){
+      //     //   console.log($(".expanding").parent().parent().find(".list .item.item-accordion").length);
+      //     //   $(".expanding").parent().parent().find(".list .item.item-accordion").css({"display":"block !important","line-height":"38px !important"})
+      //     // }, 3000);
+      //   });
+      //   $timeout(function () {
+      //     myPopup.close(); //close the popup after 3 seconds for some reason
+      //   }, 100000);
+      // };
+
 
       $scope.editToolPopup = function (jobIdRef, pinIdRef) {
         console.log("Key for edit tool : " + pinIdRef);

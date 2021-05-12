@@ -1,0 +1,121 @@
+<style>
+.bar-footer{display:block !important;}
+#call2seletBar {display:inline-block !important;}
+</style>
+<ion-view ng-controller="operationCtrl as oper" cache-view="true" class="has-footer">
+
+
+  <ion-header-bar class="bar-positive">
+    <img src="images/icon-bar.png" class="icon-bar">
+    <h1 class="title">เปรียบเทียบสถิติ-กราฟ</h1>
+    <button id="logoutbt" ng-click="signOut()" class="button">
+      <i class="icon ion-close-round"></i>
+    </button>
+  </ion-header-bar>
+
+
+
+     <div id="" class="has-header" style="height: 100%; margin-top: 65px; box-sizing: border-box; bottom: 44px;">
+	     <ion-content scroll="true" style="top:3em;">
+
+
+	    	<div id="showGraphWrapper" style="width:100%; height:50vh;"></div> 
+	    	<button ng-click="downloadCSV();" class="button button-outline button-positive button-small DWCSV">
+		      <i class="icon ion-ios-download-outline"> ดาวน์โหลดไฟล์ข้อมูลกราฟ</i>
+		    </button>		
+	    	<pre id="preview"></pre>
+	    	<pre id="export"></pre>
+
+<!-- 			<div id="graphDataShow" style="width:100%;">
+					<div ng-repeat="(key, value) in graphDatas" ng-show="key==0" class="colGraphData">
+						<div ng-repeat="data in value track by $index">
+							<div class="colGraphItem date1">{{data}}
+								<button class="button button-small button-positive ion-chatbox-working button-right" ng-show="noteDatas[key][$index]" ng-click="viewNotePopup(noteDatas[key][$index])"></button>
+							</div>
+						</div>
+					</div>
+					<div ng-repeat="(key, value) in graphDatas" ng-show="key==1" class="colGraphData">
+						<div ng-repeat="data in value track by $index">
+							<div class="colGraphItem date2">{{data}}
+								<button class="button button-small button-positive ion-chatbox-working button-right" ng-show="noteDatas[key][$index]" ng-click="viewNotePopup(noteDatas[key][$index])"></button>
+							</div>
+						</div>
+					</div>
+					<div ng-repeat="(key, value) in graphDatas" ng-show="key==2" class="colGraphData">
+						<div ng-repeat="data in value track by $index">
+							<div class="colGraphItem date3">{{data}}
+								<button class="button button-small button-positive ion-chatbox-working button-right" ng-show="noteDatas[key][$index]" ng-click="viewNotePopup(noteDatas[key][$index])"></button>
+							</div>
+						</div>
+					</div>
+					<div ng-repeat="(key, value) in graphDatas" ng-show="key==3" class="colGraphData">
+						<div ng-repeat="data in value track by $index">
+							<div class="colGraphItem date4">{{data}}
+								<button class="button button-small button-positive ion-chatbox-working button-right" ng-show="noteDatas[key][$index]" ng-click="viewNotePopup(noteDatas[key][$index])"></button>
+							</div>
+						</div>
+					</div>
+					<div ng-repeat="(key, value) in graphDatas" ng-show="key==4" class="colGraphData">
+						<div ng-repeat="data in value track by $index">
+							<div class="colGraphItem date5">{{data}}
+								<button class="button button-small button-positive ion-chatbox-working button-right" ng-show="noteDatas[key][$index]" ng-click="viewNotePopup(noteDatas[key][$index])"></button>
+							</div>
+						</div>
+					</div>
+					<div ng-repeat="(key, value) in graphDatas" ng-show="key==5" class="colGraphData">
+						<div ng-repeat="data in value track by $index">
+							<div class="colGraphItem date6">{{data}}
+								<button class="button button-small button-positive ion-chatbox-working button-right" ng-show="noteDatas[key][$index]" ng-click="viewNotePopup(noteDatas[key][$index])"></button>
+							</div>
+						</div>
+					</div>
+					<div ng-repeat="(key, value) in graphDatas" ng-show="key==6" class="colGraphData">
+						<div ng-repeat="data in value track by $index">
+							<div class="colGraphItem date7">{{data}}
+								<button class="button button-small button-positive ion-chatbox-working button-right" ng-show="noteDatas[key][$index]" ng-click="viewNotePopup(noteDatas[key][$index])"></button>
+							</div>
+						</div>
+					</div>
+					<div ng-repeat="(key, value) in graphDatas" ng-show="key==7" class="colGraphData">
+						<div ng-repeat="data in value track by $index">
+							<div class="colGraphItem date8">{{data}}
+								<button class="button button-small button-positive ion-chatbox-working button-right" ng-show="noteDatas[key][$index]" ng-click="viewNotePopup(noteDatas[key][$index])"></button>
+							</div>
+						</div>
+					</div>
+					<div ng-repeat="(key, value) in graphDatas" ng-show="key==8" class="colGraphData">
+						<div ng-repeat="data in value track by $index">
+							<div class="colGraphItem date9">{{data}}
+								<button class="button button-small button-positive ion-chatbox-working button-right" ng-show="noteDatas[key][$index]" ng-click="viewNotePopup(noteDatas[key][$index])"></button>
+							</div>
+						</div>
+					</div>
+					<div ng-repeat="(key, value) in graphDatas" ng-show="key==9" class="colGraphData">
+						<div ng-repeat="data in value track by $index">
+							<div class="colGraphItem date10">{{data}}
+								<button class="button button-small button-positive ion-chatbox-working button-right" ng-show="noteDatas[key][$index]" ng-click="viewNotePopup(noteDatas[key][$index])"></button>
+							</div>
+						</div>
+					</div>
+					<div ng-repeat="(key, value) in graphDatas" ng-show="key==10" class="colGraphData">
+						<div ng-repeat="data in value track by $index">
+							<div class="colGraphItem date11">{{data}}
+								<button class="button button-small button-positive ion-chatbox-working button-right" ng-show="noteDatas[key][$index]" ng-click="viewNotePopup(noteDatas[key][$index])"></button>
+							</div>
+						</div>
+					</div>
+					<div ng-repeat="(key, value) in graphDatas" ng-show="key==11" class="colGraphData">
+						<div ng-repeat="data in value track by $index">
+							<div class="colGraphItem date12">{{data}}
+								<button class="button button-small button-positive ion-chatbox-working button-right" ng-show="noteDatas[key][$index]" ng-click="viewNotePopup(noteDatas[key][$index])"></button>
+							</div>
+						</div>
+					</div>
+
+			</div> -->
+
+		</ion-content>
+	</div>	
+<div class="filterBar" ng-include src="'partial/filterBar.html'"></div>
+</ion-view>
+ 

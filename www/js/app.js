@@ -87,6 +87,15 @@ angular
     });
   })
 
+  .config( [
+      '$compileProvider',
+      function( $compileProvider )
+      {   
+          $compileProvider.aHrefSanitizationWhitelist(/^\s*(https?|ftp|mailto|chrome-extension|line|http):/);
+          // Angular before v1.2 uses $compileProvider.urlSanitizationWhitelist(...)
+      }
+  ])
+
   .config(function ($ionicConfigProvider) {
     $ionicConfigProvider.navBar.alignTitle("center");
   })
@@ -170,6 +179,12 @@ angular
     };
   })
 
+  .filter('nospace', function () {
+      return function (value) {
+          return (!value) ? '' : value.replace(/ /g, '');
+      };
+  })
+
   .service("sharedProp", function () {
     this.sharedUserData = {
       email: "Not loged in user or leader/admin",
@@ -179,6 +194,10 @@ angular
     // this.userData = {yearSetCount: 0};
     this.dbUrl = function () {
       return dbUrl;
+    };
+
+    this.rootUrl = function () {
+      return window.location.origin;
     };
 
     this.getEmail = function () {

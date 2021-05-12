@@ -31,13 +31,15 @@
           </ion-item>
 
           <ion-item class="item-accordion" ng-repeat="(pinkey, item) in group" ng-show="isGroupShown(group)||onEditGroup(key)" ng-if="item.pin!=null">
-            {{item.pin}} ผู้บันทึก : {{item.user}}            
-            <button class="button button-small button-positive button-right" ng-click="editUserPopup(key, pinkey);"><i class="icon ion-edit"></i></button><br />
+            ลิงก์ : {{group.province | nospace}}_{{group.area | nospace}}_{{group.operate_date}}_{{item.pin}}
+            <button class="button button-small button-positive button-right" ng-click="copy('{{shareRootURL}}/#/operation?jodId={{key}}&pinId={{pinkey}}&meta={{group.province | nospace}}_{{group.area | nospace}}_{{group.operate_date}}_{{item.pin}}')"><ion-icon name="copy" style="font-size: 1.5em; position: absolute; left: 4px;top: 4px;"></ion-icon></button><br>
+
             เครื่องมือที่ใช้ : {{item.tool}}
             <button class="button button-small button-positive button-right" ng-click="editToolPopup(key, pinkey);"><i class="icon ion-edit"></i></button>
           </ion-item>
 
       </ion-list>
+      <input id="cb" type="text" hidden>
 
     </ion-content>
 

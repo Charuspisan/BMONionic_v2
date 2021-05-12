@@ -288,7 +288,7 @@ angular
                   sharedProp.setEmail(user.email);
                   usersDB.child(user.uid).update({ lastAccess: Date.now() });
                   // $scope.hideLoading();
-                  $location.path("/leader");
+                  $location.path("/managejobs");
                 });
               } else if (data.role == "user" && isLogin != false) {
                 //pass email to next page
@@ -297,10 +297,17 @@ angular
                   $scope.$apply(function () {
                     usersDB.child(user.uid).update({ lastAccess: Date.now() });
                     $scope.hideLoading();
-                    // $location.path("/getjobs");
-                    $location.path("/openform");
+                    $location.path("/getjobs");
+                    // $location.path("/openform");
                   });
                   // console.log("openform");
+                }, 500);
+              }else if (isLogin == false) {
+                $scope.signOut();
+                setTimeout(function () {
+                  $scope.$apply(function () {
+                    $scope.hideLoading();
+                  });
                 }, 500);
               }
             });
