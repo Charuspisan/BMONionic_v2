@@ -17,8 +17,24 @@ angular
       var usersDB = new Firebase(
         sharedProp.dbUrl() + "/users/"
       );
-      var isLogin = sharedProp.getIsLoginPage();
-      console.log("isLogin : " + isLogin);
+
+      $scope.signOut = function () {
+        if (firebase.auth().currentUser) {
+          firebase.auth().signOut();
+          sharedProp.setIsLoginPage(false);
+          console.log("Now loged out");
+          // $location.path("/login");
+          $scope.userEmail = "";
+          $scope.userPass = "";
+        } else {
+          console.log("Not login login page");
+          // $location.path('/login');
+        }
+      };
+
+
+      // var isLogin = sharedProp.getIsLoginPage();
+      // console.log("isLogin : " + isLogin);
 
       $scope.showLoading = function () {
         $ionicLoading
@@ -45,7 +61,79 @@ angular
         $scope.hideLoading();
       });
 
-      $scope.showLoading();
+
+
+      // Listening for auth state changes.
+      // [START authstatelistener]
+      firebase.auth().onAuthStateChanged(function (user) {
+        sharedProp.setPass($scope.userPass);
+
+        $("#userPass").val("");
+
+        $scope.firebaseUser = user;
+
+        // var isLogin = sharedProp.getIsLoginPage();
+        // console.log("isLogin : " + isLogin);
+
+        if (user != null) {
+          if (user.emailVerified) {
+            usersDB.child(user.uid).once("value", function (snap) {
+              var data = snap.val();
+
+
+              if (data.role == "admin") {
+                $scope.$apply(function () {
+                  sharedProp.setEmail(user.email);
+                  usersDB.child(user.uid).update({ lastAccess: Date.now() });
+                  // $scope.hideLoading();
+                  $location.path("/locations");
+                });
+                console.log("admin");
+              } else if (data.role == "leader") {
+                $scope.$apply(function () {
+                  sharedProp.setEmail(user.email);
+                  usersDB.child(user.uid).update({ lastAccess: Date.now() });
+                  // $scope.hideLoading();
+                  $location.path("/managejobs");
+                });
+              } else if (data.role == "user") {
+                //pass email to next page
+                sharedProp.setEmail(user.email);
+                setTimeout(function () {
+                  $scope.$apply(function () {
+                    usersDB.child(user.uid).update({ lastAccess: Date.now() });
+                    $scope.hideLoading();
+                    $location.path("/getjobs");
+                    // $location.path("/openform");
+                  });
+                  // console.log("openform");
+                }, 500);
+              }else{
+                setTimeout(function () {
+                  $scope.$apply(function () {
+                    $scope.hideLoading();
+                  });
+                }, 500);
+              }
+            });
+          } else {
+            console.log("รอการอนุมัติ กรุณาเช็คอีเมล์");
+            $scope.hideLoading();
+            // $('#statusReg').html("รอการอนุมัติ กรุณาเช็คอีเมล์");
+            $scope.showAlert("รอการอนุมัติ กรุณาเช็คอีเมล์");
+            usersDB.child(user.uid).update({ lastAccess: Date.now() });
+          }
+        } else {
+          $scope.hideLoading();
+          // $('#statusReg').html("กรุณาล็อกอิน");
+        }
+      });
+
+
+
+
+
+      // $scope.showLoading();
 
       // An alert dialog
       $scope.showAlert = function (error) {
@@ -133,19 +221,6 @@ angular
         //     alert($scope.error);
         //     $scope.hideLoading();
         // },3000);
-      };
-
-      $scope.signOut = function () {
-        if (firebase.auth().currentUser) {
-          firebase.auth().signOut();
-          console.log("Now loged out");
-          $location.path("/login");
-          $scope.userEmail = "";
-          $scope.userPass = "";
-        } else {
-          console.log("Not login login page");
-          // $location.path('/login');
-        }
       };
 
       $scope.signUpPopup = function () {
@@ -256,72 +331,5 @@ angular
           }
         );
       }
-
-      // Listening for auth state changes.
-      // [START authstatelistener]
-      firebase.auth().onAuthStateChanged(function (user) {
-        sharedProp.setPass($scope.userPass);
-
-        $("#userPass").val("");
-
-        $scope.firebaseUser = user;
-
-        var isLogin = sharedProp.getIsLoginPage();
-        console.log("isLogin : " + isLogin);
-
-        if (user != null) {
-          if (user.emailVerified) {
-            usersDB.child(user.uid).once("value", function (snap) {
-              var data = snap.val();
-
-
-              if (data.role == "admin" && isLogin != false) {
-                $scope.$apply(function () {
-                  sharedProp.setEmail(user.email);
-                  usersDB.child(user.uid).update({ lastAccess: Date.now() });
-                  // $scope.hideLoading();
-                  $location.path("/locations");
-                });
-                console.log("admin");
-              } else if (data.role == "leader" && isLogin != false) {
-                $scope.$apply(function () {
-                  sharedProp.setEmail(user.email);
-                  usersDB.child(user.uid).update({ lastAccess: Date.now() });
-                  // $scope.hideLoading();
-                  $location.path("/managejobs");
-                });
-              } else if (data.role == "user" && isLogin != false) {
-                //pass email to next page
-                sharedProp.setEmail(user.email);
-                setTimeout(function () {
-                  $scope.$apply(function () {
-                    usersDB.child(user.uid).update({ lastAccess: Date.now() });
-                    $scope.hideLoading();
-                    $location.path("/getjobs");
-                    // $location.path("/openform");
-                  });
-                  // console.log("openform");
-                }, 500);
-              }else if (isLogin == false) {
-                $scope.signOut();
-                setTimeout(function () {
-                  $scope.$apply(function () {
-                    $scope.hideLoading();
-                  });
-                }, 500);
-              }
-            });
-          } else {
-            console.log("รอการอนุมัติ กรุณาเช็คอีเมล์");
-            $scope.hideLoading();
-            // $('#statusReg').html("รอการอนุมัติ กรุณาเช็คอีเมล์");
-            $scope.showAlert("รอการอนุมัติ กรุณาเช็คอีเมล์");
-            usersDB.child(user.uid).update({ lastAccess: Date.now() });
-          }
-        } else {
-          $scope.hideLoading();
-          // $('#statusReg').html("กรุณาล็อกอิน");
-        }
-      });
     }
   );

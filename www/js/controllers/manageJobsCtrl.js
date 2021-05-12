@@ -8,6 +8,7 @@ angular
       // $firebaseObject,
       // $firebaseArray,
       $ionicPopup,
+      $ionicLoading,
       $timeout,
       sharedProp,
       $location,
@@ -28,12 +29,19 @@ angular
         $location.path(page);
       };
 
-      // if(loginStatus==true){
-      //   $scope.hideLoading();
-      // }else{
-      //   sharedProp.setIsLoginPage(false);
-      //   $scope.goNext("/login");
-      // }
+
+      var user = firebase.auth().currentUser;
+
+      if (user) {
+        // User is signed in.
+        console.log("Logedin");
+        $scope.hideLoading();
+      } else {
+        // No user is signed in.
+        console.log("No Logedin");
+        $scope.goNext("/login");
+      }
+
 
       var refLocations = new Firebase(
         sharedProp.dbUrl() + "/locations/"
