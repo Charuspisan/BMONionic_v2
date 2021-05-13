@@ -12,7 +12,8 @@ angular
       $timeout,
       sharedProp,
       $location,
-      $ionicViewService
+      $ionicViewService,
+      $window
     ) {
 
       $scope.hideLoading = function () {
@@ -109,27 +110,44 @@ angular
       $scope.shareRootURL = sharedProp.rootUrl();
 
 
-      $scope.copy = (txt)=>{
-        var cb = document.getElementById("cb");
-        cb.value = txt;
+      $scope.copy = (txt, pin)=>{
+        var toolinput = $('#'+pin+'_toolShow').val();
+        var cb = document.getElementById('cb');
         cb.style.display='block';
+        var txt = txt.replace("tool=undefined", "tool="+toolinput);
+        cb.value = txt;
         cb.select();
         document.execCommand('copy');
-        cb.style.display='none';
+        cb.style.display='none';     
+        navigator.clipboard.readText().then(clipText => 
+          console.log("clipText : "+clipText)   
+        );             
+      }
+
+      $scope.openNewTab = (txt, pin)=>{
+        var toolinput = $('#'+pin+'_toolShow').val();
+        var txt = txt.replace("tool=undefined", "tool="+toolinput);
+        $window.open(txt, '_blank');
       };
 
-      // $scope.selectUsers = [];
-      // refUsers.orderByChild("email").on("value", function (snapshot) {
-      //   snapshot.forEach(function (childSnapshot) {
-      //     // key will be "ada" the first time and "alan" the second time
-      //     var key = childSnapshot.key;
-      //     // childData will be the actual contents of the child
-      //     var childData = childSnapshot.val();
-      //     $scope.selectUsers.push(childData.email);
-      //   });
-      //   console.log("$scope.selectUsers", $scope.selectUsers);
-      // });
-
+      // $scope.clearClipboard = ()=>{
+      //   // This should work but does not
+      //   //if (document.selection) document.selection.empty()
+      //   //else window.getSelection().removeAllRanges()
+      
+      //   // Create a dummy input to select
+      //   var tempElement = document.createElement("input");
+      //   tempElement.style.cssText = "width:0!important;padding:0!important;border:0!important;margin:0!important;outline:none!important;boxShadow:none!important;";
+      //   document.body.appendChild(tempElement);
+      //   tempElement.value = ' ' // Empty string won't work!
+      //   tempElement.select();
+      //   document.execCommand("copy");
+      //   document.body.removeChild(tempElement);
+      //   navigator.clipboard.readText().then(clipText => 
+      //     console.log("Clear clipText : "+clipText)   
+      //   );
+      // }
+      
 
       $scope.goBack = function (page) {
         console.log("Going back");

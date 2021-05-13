@@ -45,6 +45,7 @@ angular
             maxWidth: 0,
             showDelay: 0,
             // duration: 3000
+            
           })
           .then(function () {
             console.log("The loading indicator is now displayed");
@@ -86,7 +87,8 @@ angular
                   sharedProp.setEmail(user.email);
                   usersDB.child(user.uid).update({ lastAccess: Date.now() });
                   // $scope.hideLoading();
-                  $location.path("/locations");
+                  // $location.path("/locations");
+                  $location.path("/managejobs");
                 });
                 console.log("admin");
               } else if (data.role == "leader") {
@@ -96,24 +98,25 @@ angular
                   // $scope.hideLoading();
                   $location.path("/managejobs");
                 });
-              } else if (data.role == "user") {
+              }else if (data.role == "user") {
                 //pass email to next page
                 sharedProp.setEmail(user.email);
                 setTimeout(function () {
                   $scope.$apply(function () {
                     usersDB.child(user.uid).update({ lastAccess: Date.now() });
                     $scope.hideLoading();
-                    $location.path("/getjobs");
-                    // $location.path("/openform");
+                    // $location.path("/getjobs");
+                    // $location.path("/operation");
+                    alert("User ถูกยกเลิกการใช่งาน");
                   });
                   // console.log("openform");
                 }, 500);
               }else{
-                setTimeout(function () {
-                  $scope.$apply(function () {
-                    $scope.hideLoading();
-                  });
-                }, 500);
+                // setTimeout(function () {
+                //   $scope.$apply(function () {
+                //     $scope.hideLoading();
+                //   });
+                // }, 500);
               }
             });
           } else {
