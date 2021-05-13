@@ -45,7 +45,7 @@ angular
             maxWidth: 0,
             showDelay: 0,
             // duration: 3000
-            
+
           })
           .then(function () {
             console.log("The loading indicator is now displayed");
@@ -86,7 +86,7 @@ angular
                 $scope.$apply(function () {
                   sharedProp.setEmail(user.email);
                   usersDB.child(user.uid).update({ lastAccess: Date.now() });
-                  // $scope.hideLoading();
+                  $scope.hideLoading();
                   // $location.path("/locations");
                   $location.path("/managejobs");
                 });

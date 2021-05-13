@@ -28,15 +28,16 @@
           </ion-item>
 
           <ion-item class="item-accordion" ng-show="isGroupShown(group)||onEditGroup(key)">
-            {{group.operate_date}}
+            กำหนดการสำรวจ : {{group.operate_date}}
             <button class="button button-small button-positive button-right" ng-click="editOperDatePopup(key);"><i class="icon ion-edit"></i></button>
           </ion-item>
 
           <ion-item class="item-accordion" ng-repeat="(pinkey, item) in group" ng-show="isGroupShown(group)||onEditGroup(key)" ng-if="item.pin!=null">
-            ลิงก์ : ... {{group.province | nospace}}_{{group.area | nospace}}_{{group.operate_date}}_{{item.pin}}
+            พื้นที่สำรวจ : {{group.province}} {{group.area}}
             <button class="button button-small button-positive button-right" ng-click="copy('{{shareRootURL}}/#/operation?jodId={{key}}&pinId={{pinkey}}&tool=undefined&meta={{group.province | nospace}}_{{group.area | nospace}}_{{group.operate_date}}_{{item.pin}}','{{item.pin}}')"><ion-icon name="copy" style="font-size: 1.5em; position: absolute; left: 4px;top: 4px;"></ion-icon></button><br>
-
+            จุดสำรวจ : <span style="color:red; font-weight: 600;">{{item.pin}}</span>
             <button class="button button-small button-positive button-right" ng-click="openNewTab('{{shareRootURL}}/#/operation?jodId={{key}}&pinId={{pinkey}}&tool=undefined&meta={{group.province | nospace}}_{{group.area | nospace}}_{{group.operate_date}}_{{item.pin}}','{{item.pin}}');"><ion-icon name="open" style="font-size: 1.5em; position: absolute; left: 4px;top: 4px;"></ion-icon></button><br>
+            
 
             เครื่องมือที่ใช้ : <input id="{{item.pin}}_toolShow" type="text" value="{{item.tool}}" style="display: inline-block; margin-top: -5px;">
             <button class="button button-small button-positive button-right" ng-click="editToolPopup(key, pinkey);"><i class="icon ion-edit"></i></button>
