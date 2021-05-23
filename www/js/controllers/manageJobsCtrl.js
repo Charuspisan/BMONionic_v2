@@ -63,10 +63,24 @@ angular
       // var objLocate = $firebaseObject(refLocations);
       // var objRec = $firebaseObject(refJobsRec);
       // var objUsers = $firebaseObject(refUsers);
-      
+
       var refLocations = new Firebase(
         sharedProp.dbUrl() + "/locations/"
       );
+
+
+
+
+
+
+
+      sharedProp.checkChrome();
+
+
+
+
+
+
 
       refLocations.on("value", function (snapshot) {
         // console.log("value : ",value);
