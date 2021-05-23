@@ -25,7 +25,7 @@ var config = {
 };
 firebase.initializeApp(config);
 
-const env = "prod";
+const env = "dev";
 
 angular
   .module("BMON", [
@@ -46,6 +46,7 @@ angular
         data = snapshot.val();
         console.log("ver : " + data.ver);
       })
+
       /*var AppVer = "0.0.5";
 
       firebase
@@ -135,14 +136,14 @@ angular
       .state("locations", {
         url: "/locations",
         templateUrl: "partial/locations.html",
-        resolve: {
-          loadContacts: function (locationDataCon) {
-            return locationDataCon.promiseToHaveData();
-          },
-        },
-        controller: function ($scope, locationDataCon) {
-          $scope.data = locationDataCon.locationData;
-        },
+        // resolve: {
+        //   loadContacts: function (locationDataCon) {
+        //     return locationDataCon.promiseToHaveData();
+        //   },
+        // },
+        // controller: function ($scope, locationDataCon) {
+        //   $scope.data = locationDataCon.locationData;
+        // },
       })
       .state("managejobs", {
         url: "/managejobs",

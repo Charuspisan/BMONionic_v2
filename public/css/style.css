@@ -31,7 +31,7 @@ input, button, select, textarea {
     font-family: 'Kanit';
 }
 .popup-title {font-size: 1.2em;}
-i {font-size: 1.5em; vertical-align: middle;}
+i, ion-icon {font-size: 1.5em; vertical-align: middle;}
 .material-icons {line-height: 1.5em;}
 .provWrapper, .areaWrapper, .pinWrapper {display:block; padding:0.5em; border:solid 1px #ccc;}
 .modal {
@@ -103,3 +103,16 @@ text.highcharts-credits {
 .ion-ios-camera-outline:before {vertical-align: baseline;}
 .icon-bar {width: auto; height: 34px;}
 .popup-sub-title {font-family: 'Kanit' !important;}
+.button-bar > .button:before, .button-bar > .button .icon:before {
+  line-height: unset;
+}
+
+input[type="file"] {
+  display: none;
+}
+.custom-file-upload {
+  border: 1px solid #ccc;
+  display: inline-block;
+  padding: 6px 12px;
+  cursor: pointer;
+}

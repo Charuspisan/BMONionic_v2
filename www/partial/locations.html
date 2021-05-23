@@ -1,12 +1,10 @@
 <style>
 input[type="text"]{margin-bottom: 3px;}
-</style>
-<ion-view ng-controller="manageLocationsCtrl">
-
-<style>
 .item {clear:both;}
 .button {float:right;}
 </style>
+
+<ion-view ng-controller="manageLocationsCtrl">
 
   <ion-header-bar class="bar-positive">
     <img src="images/icon-bar.png" class="icon-bar">
@@ -85,16 +83,26 @@ input[type="text"]{margin-bottom: 3px;}
 
 
 <script id="AddProvPopup.html" type="text/ng-template">
+  
+
   <input ng-model="AddProvData.provInTxt" type="text" placeholder="เพิ่มจังหวัด" style="width:86%; display: inline-block;">
-  <select style="width: 10%; padding: 0.25em;" ng-model="AddProvData.provInTxt" ng-change="filterArea()">
-    <!-- <option value="" disabled selected>เลือกจังหวัด</option> -->
-    <option ng-repeat="prov in queryProv | orderBy">{{prov}}</option>
-  </select>
+  <div data-tap-disabled="true" style="width:11%; display: inline-block;">
+    <select style="width: 100%; padding: 0.25em;" ng-model="AddProvData.provInTxt" ng-change="filterArea();">
+      <!-- <option value="" disabled selected>เลือกจังหวัด</option> -->
+      <option ng-repeat="prov in queryProv | orderBy">{{prov}}</option>
+    </select>
+  </div>
+
+
   <input ng-model="AddProvData.areaInTxt" type="text" placeholder="เพิ่มพื้นที่" style="width:86%; display: inline-block;">
-  <select style="width: 10%; padding: 0.25em;" ng-model="AddProvData.areaInTxt">
-    <!-- <option value="" disabled selected>เลือกพื้นที่</option> -->
-    <option ng-repeat="area in queryArea | orderBy">{{area}}</option>
-  </select>
+  <div data-tap-disabled="true" style="width:11%; display: inline-block;">
+    <select style="width: 100%; padding: 0.25em;" ng-model="AddProvData.areaInTxt">
+      <!-- <option value="" disabled selected>เลือกพื้นที่</option> -->
+      <option ng-repeat="area in queryArea | orderBy">{{area}}</option>
+    </select>
+  </div>
+
+
   <input ng-model="AddProvData.pinInTxt" type="text" placeholder="เพิ่มจุดสำรวจ">
   <input ng-model="AddProvData.latInTxt" type="text" placeholder="เพิ่ม Latitude">
   <input ng-model="AddProvData.lngInTxt" type="text" placeholder="เพิ่ม Longtitude">
