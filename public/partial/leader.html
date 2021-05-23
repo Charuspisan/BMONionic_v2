@@ -26,12 +26,9 @@
           <ion-item class="item-accordion" ng-repeat="(pinkey, item) in group" ng-show="isGroupShown(group)||onEditGroup(key)" ng-if="item.pin!=null">
             <!-- {{item.pin}} ผู้บันทึก : {{item.user}}             -->
             <!-- <button class="button button-small button-positive button-right" ng-click="editUserPopup(key, pinkey);"><i class="icon ion-edit"></i></button> -->
-            ลิงก์เพื่อส่งต่อ : {{group.province}}_{{group.area}}_{{group.operate_date}}_{{item.pin}}
-            
-            <!-- <a href="line://msg/text/{{shareRootURL}}/#/operation?jodId={{key}}&pinId={{pinkey}}&meta={{group.province}}_{{group.area}}_{{group.operate_date}}_{{item.pin}}" target="_blank">LINE</a>
-            <a target="_blank" href="http://www.facebook.com/sharer.php?u={{shareRootURL}}/#/operation?jodId={{key}}&pinId={{pinkey}}&meta={{group.province}}_{{group.area}}_{{group.operate_date}}_{{item.pin}}">FB</a> -->
+            ลิงก์ : {{group.province | nospace}}_{{group.area | nospace}}_{{group.operate_date}}_{{item.pin}}
 
-            <button class="button button-small button-positive button-right" ng-click="copy('{{shareRootURL}}/#/operation?jodId={{key}}&pinId={{pinkey}}&meta={{group.province}}_{{group.area}}_{{group.operate_date}}_{{item.pin}}')"><ion-icon name="copy" style="font-size: 1.5em; position: absolute; left: 4px;top: 4px;"></ion-icon></button>
+            <button class="button button-small button-positive button-right" ng-click="copy('{{shareRootURL}}/#/operation?jodId={{key}}&pinId={{pinkey}}&meta={{group.province | nospace}}_{{group.area | nospace}}_{{group.operate_date}}_{{item.pin}}')"><ion-icon name="copy" style="font-size: 1.5em; position: absolute; left: 4px;top: 4px;"></ion-icon></button>
 
             <br />
             เครื่องมือที่ใช้ : {{item.tool}}

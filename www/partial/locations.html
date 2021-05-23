@@ -65,9 +65,22 @@ input[type="text"]{margin-bottom: 3px;}
 </ion-content>
 
 <ion-footer-bar align-title="left" class="bar-positive">
-  <button class="button button-full button-positive" ng-click="showAddProvPopup()" style="z-index: 2;">
-    <i class="icon ion-ios-plus-outline"></i> เพิ่มข้อมูล
-  </button>
+  <div class="button-bar">
+    <a class="button" ng-click="goNext('/managejobs')">
+      <ion-icon name="chevron-back-sharp"></ion-icon> <ion-icon name="calendar-outline"></ion-icon>
+      <!-- <span style="font-size:1.2em;">ตารางงาน</span> -->
+    </a> 
+
+    <label class="custom-file-upload button">
+        <input type="file" id="take-picture" accept="image/*">
+        <ion-icon name="camera-outline"></ion-icon> <ion-icon name="chevron-forward-outline"></ion-icon> <ion-icon name="earth-outline"></ion-icon>
+    </label>
+
+    <a class="button" ng-click="showAddProvPopup()" style="z-index: 2;">
+      <ion-icon name="add-outline"></ion-icon> <ion-icon name="location-outline"></ion-icon>
+      <!-- <span style="font-size:1.2em;">เพิ่มข้อมูล</span> -->
+    </a>
+  </div>
 </ion-footer-bar>
 
 

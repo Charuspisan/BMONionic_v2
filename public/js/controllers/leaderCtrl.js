@@ -11,7 +11,21 @@ angular
       $location,
       $ionicLoading
     ) {
-      console.log("user is : " + sharedProp.getEmail());
+
+
+      var loginStatus = sharedProp.getEmail();
+      console.log("user is : " + loginStatus);
+
+      $scope.goNext = function (page) {
+        console.log("Going to : " + page);
+        $location.path(page);
+      };
+
+      if(loginStatus=="Not loged in user or leader/admin"){
+        sharedProp.setIsLoginPage(false);
+        $scope.goNext("/login");
+      }
+
 
       var refJobsID = new Firebase(sharedProp.dbUrl() + "/jobsID/");
       var refUsers = new Firebase(

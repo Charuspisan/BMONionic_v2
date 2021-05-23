@@ -8,12 +8,41 @@ angular
       // $firebaseObject,
       // $firebaseArray,
       $ionicPopup,
+      $ionicLoading,
       $timeout,
       sharedProp,
       $location,
-      $ionicViewService
+      $ionicViewService,
+      $window
     ) {
-      console.log("user is : " + sharedProp.getEmail());
+
+      $scope.hideLoading = function () {
+        $ionicLoading.hide().then(function () {
+          console.log("The loading indicator is now hidden");
+        });
+      };
+      
+      var loginStatus = sharedProp.getEmail();
+      console.log("user is : " + loginStatus);
+
+      $scope.goNext = function (page) {
+        console.log("Going to : " + page);
+        $location.path(page);
+      };
+
+
+      var user = firebase.auth().currentUser;
+
+      if (user) {
+        // User is signed in.
+        console.log("Logedin");
+        $scope.hideLoading();
+      } else {
+        // No user is signed in.
+        console.log("No Logedin");
+        $scope.goNext("/login");
+      }
+
 
       var refLocations = new Firebase(
         sharedProp.dbUrl() + "/locations/"
@@ -78,22 +107,47 @@ angular
           // console.log("$scope.jobListData : ",$scope.jobListData);
         });
 
-      $scope.selectUsers = [];
-      refUsers.orderByChild("email").on("value", function (snapshot) {
-        snapshot.forEach(function (childSnapshot) {
-          // key will be "ada" the first time and "alan" the second time
-          var key = childSnapshot.key;
-          // childData will be the actual contents of the child
-          var childData = childSnapshot.val();
-          $scope.selectUsers.push(childData.email);
-        });
-        console.log("$scope.selectUsers", $scope.selectUsers);
-      });
+      $scope.shareRootURL = sharedProp.rootUrl();
 
-      $scope.goNext = function (page) {
-        console.log("Going to : " + page);
-        $location.path(page);
+
+      $scope.copy = (txt, pin)=>{
+        var toolinput = $('#'+pin+'_toolShow').val();
+        var cb = document.getElementById('cb');
+        cb.style.display='block';
+        var txt = txt.replace("tool=undefined", "tool="+toolinput);
+        cb.value = txt;
+        cb.select();
+        document.execCommand('copy');
+        cb.style.display='none';     
+        navigator.clipboard.readText().then(clipText => 
+          console.log("clipText : "+clipText)   
+        );             
+      }
+
+      $scope.openNewTab = (txt, pin)=>{
+        var toolinput = $('#'+pin+'_toolShow').val();
+        var txt = txt.replace("tool=undefined", "tool="+toolinput);
+        $window.open(txt, '_blank');
       };
+
+      // $scope.clearClipboard = ()=>{
+      //   // This should work but does not
+      //   //if (document.selection) document.selection.empty()
+      //   //else window.getSelection().removeAllRanges()
+      
+      //   // Create a dummy input to select
+      //   var tempElement = document.createElement("input");
+      //   tempElement.style.cssText = "width:0!important;padding:0!important;border:0!important;margin:0!important;outline:none!important;boxShadow:none!important;";
+      //   document.body.appendChild(tempElement);
+      //   tempElement.value = ' ' // Empty string won't work!
+      //   tempElement.select();
+      //   document.execCommand("copy");
+      //   document.body.removeChild(tempElement);
+      //   navigator.clipboard.readText().then(clipText => 
+      //     console.log("Clear clipText : "+clipText)   
+      //   );
+      // }
+      
 
       $scope.goBack = function (page) {
         console.log("Going back");

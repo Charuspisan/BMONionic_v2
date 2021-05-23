@@ -11,7 +11,8 @@
       </button>
   </ion-header-bar>  
 
-    <ion-content class="has-footer" on-swipe-left="goNext('/manageusers')" on-swipe-right="goBack('/locations')" style="padding: 1em;">
+    <!-- <ion-content class="has-footer" on-swipe-left="goNext('/manageusers')" on-swipe-right="goBack('/locations')" style="padding: 1em;"> -->
+    <ion-content class="has-footer" on-swipe-right="goBack('/locations')" style="padding: 1em;">
 
       <ion-list ng-repeat="(key, group) in jobListData" show-delete="data.showDelete">
 
@@ -33,7 +34,7 @@
           </ion-item>
 
           <ion-item class="item-accordion" ng-repeat="(pinkey, item) in group" ng-show="isGroupShown(group)||onEditGroup(key)" ng-if="item.pin!=null">
-            พื้นที่สำรวจ : {{group.province}} {{group.area}}
+            พื้นที่สำรวจ : {{group.province}} , {{group.area}}
             <button class="button button-small button-positive button-right" ng-click="copy('{{shareRootURL}}/#/operation?jodId={{key}}&pinId={{pinkey}}&tool=undefined&meta={{group.province | nospace}}_{{group.area | nospace}}_{{group.operate_date}}_{{item.pin}}','{{item.pin}}')"><ion-icon name="copy" style="font-size: 1.5em; position: absolute; left: 4px;top: 4px;"></ion-icon></button><br>
             จุดสำรวจ : <span style="color:red; font-weight: 600;">{{item.pin}}</span>
             <button class="button button-small button-positive button-right" ng-click="openNewTab('{{shareRootURL}}/#/operation?jodId={{key}}&pinId={{pinkey}}&tool=undefined&meta={{group.province | nospace}}_{{group.area | nospace}}_{{group.operate_date}}_{{item.pin}}','{{item.pin}}');"><ion-icon name="open" style="font-size: 1.5em; position: absolute; left: 4px;top: 4px;"></ion-icon></button><br>
@@ -51,9 +52,35 @@
 
     <ion-footer-bar align-title="left" class="bar-positive" style="height:auto;">
  
-        <button class="button button-full button-positive" ng-click="showCreateJobPopup()">
+        <!-- <button class="button button-full button-positive" ng-click="showCreateJobPopup()">
           <i class="icon ion-ios-plus-outline"></i> <span style="font-size:1.2em;">สร้างตารางงานใหม่</span>
-        </button> 
+        </button>  -->
+        <div class="button-bar">
+          <a class="button" ng-click="showCreateJobPopup()">
+            <ion-icon name="add-outline"></ion-icon> <ion-icon name="calendar-outline"></ion-icon>
+          </a>
+          <!-- <a class="button">
+            <ion-icon name="camera-outline"></ion-icon> <ion-icon name="chevron-forward-outline"></ion-icon> <ion-icon name="earth-outline"></ion-icon>
+          </a> -->
+
+
+          
+          <label class="custom-file-upload button">
+              <input type="file" id="take-picture" accept="image/*">
+              <ion-icon name="camera-outline"></ion-icon> <ion-icon name="chevron-forward-outline"></ion-icon> <ion-icon name="earth-outline"></ion-icon>
+          </label>
+
+
+          <a class="button" ng-click="goNext('/locations')">
+            <ion-icon name="location-outline"></ion-icon> <ion-icon name="chevron-forward-outline"></ion-icon>
+          </a>
+        </div>
+        <!-- <button class="button button-positive" ng-click="showCreateJobPopup()">
+          <i class="icon ion-ios-plus-outline"></i> <ion-icon name="calendar-outline"></ion-icon>
+        </button>
+        <button class="button button-positive" ng-click="goNext('/locations')">
+          <ion-icon name="location-outline"></ion-icon> <ion-icon name="chevron-forward-outline"></ion-icon>
+        </button>  -->
 
     </ion-footer-bar>
     
@@ -79,21 +106,19 @@
 
 
 
-<script id="AddProvPopup.html" type="text/ng-template">
-  <!-- <input ng-model="AddProvData.provInTxt" type="text" placeholder="Add Province"> -->
-  <select style="width: 100%; padding: 0.5em;" ng-model="AddProvData.provInTxt" ng-change="filterArea()">
-    <option value="" disabled selected>เลือกจังหวัด</option>
-    <option ng-repeat="prov in queryProv | orderBy">{{prov}}</option>
-  </select>
-  <!-- <input ng-model="AddProvData.areaInTxt" type="text" placeholder="Add Area"> -->
-  <select style="width: 100%; padding: 0.5em;" ng-model="AddProvData.areaInTxt">
-    <option value="" disabled selected>เลือกพื้นที่</option>
-    <option ng-repeat="area in queryArea | orderBy">{{area}}</option>
-  </select>
-  <input ng-model="AddProvData.pinInTxt" type="text" placeholder="จุดสำรวจ">
-  <input ng-model="AddProvData.latInTxt" type="text" placeholder="เพิ่ม Latitude">
-  <input ng-model="AddProvData.lngInTxt" type="text" placeholder="เพิ่ม Longtitude">
-</script>
+    <!-- <script id="AddProvPopup.html" type="text/ng-template">
+      <select style="width: 100%; padding: 0.5em;" ng-model="AddProvData.provInTxt" ng-change="filterArea()">
+        <option value="" disabled selected>เลือกจังหวัด</option>
+        <option ng-repeat="prov in queryProv | orderBy">{{prov}}</option>
+      </select>
+      <select style="width: 100%; padding: 0.5em;" ng-model="AddProvData.areaInTxt">
+        <option value="" disabled selected>เลือกพื้นที่</option>
+        <option ng-repeat="area in queryArea | orderBy">{{area}}</option>
+      </select>
+      <input ng-model="AddProvData.pinInTxt" type="text" placeholder="จุดสำรวจ">
+      <input ng-model="AddProvData.latInTxt" type="text" placeholder="เพิ่ม Latitude">
+      <input ng-model="AddProvData.lngInTxt" type="text" placeholder="เพิ่ม Longtitude">
+    </script> -->
 
 		<script id="editOperDatePopup.html" type="text/ng-template">
 		  	<!-- <input ng-model="editOperDateData.operateDateInTxt" type="text" placeholder="Operating Date"> -->
@@ -102,13 +127,13 @@
         </datepicker>
 		</script>
     
-    <script id="editUserPopup.html" type="text/ng-template">
+    <!-- <script id="editUserPopup.html" type="text/ng-template">
         <input type="text" id="queryUser" ng-model="queryUser" placeholder="ใส่อีเมล์เพื่อค้นหาอาสาสมัคร"/>
         <select style="width: 100%; padding: 0.5em;" ng-model="selectedUser.userDD">
           <option value="" disabled selected>อีเมล์สมาชิกที่ตรงกัน</option>
           <option ng-repeat="user in selectUsers | filter:queryUser" >{{user}}</option>
         </select>
-    </script>
+    </script> -->
 
 		<script id="editToolPopup.html" type="text/ng-template">
 		  	<!-- <input ng-model="editToolData.toolInTxt" type="text" placeholder="Tool type"> -->

@@ -91,19 +91,19 @@ angular
 
       //////////this for testing only //////
 
-
-
-
-
-
-
+ 
 
 
       var jobInfo = {};
 
-      jobInfo.parentID = "-MQV5s3Mmw36vuwQzCGD";
-      jobInfo.jobId = "-MQV5s5U7osjM02Y8HJq"; // jobInfo.jobId is id of pin in jobsID DB
-      jobInfo.jobTool = "Water-level";
+      const fullURL = window.location.href;
+      console.log("fullURL : "+fullURL);
+      jobInfo.parentID = /jodId=([^&]+)/.exec(fullURL)[1];
+      jobInfo.jobId = /pinId=([^&]+)/.exec(fullURL)[1];
+      jobInfo.jobTool = /tool=([^&]+)/.exec(fullURL)[1];
+      jobInfo.jobMeta = /meta=([^&]+)/.exec(fullURL)[1];
+
+      console.log("jobInfo : ",jobInfo);
 
       // refJobsID
       // .orderByChild("status")
@@ -144,12 +144,13 @@ angular
       
       $scope.GetrefJobParentID = jobInfo.parentID;
       $scope.GetrefJobID = jobInfo.jobId;
-      $scope.GetrefJobPin = jobInfo.jobPin;
-      $scope.GetrefJobProv = jobInfo.jobProv;
-      $scope.GetrefJobArea = jobInfo.jobArea;
-      $scope.GetrefJobDate = jobInfo.jobDate;
+      // $scope.GetrefJobPin = jobInfo.jobPin;
+      // $scope.GetrefJobProv = jobInfo.jobProv;
+      // $scope.GetrefJobArea = jobInfo.jobArea;
+      // $scope.GetrefJobDate = jobInfo.jobDate;
       $scope.GetrefJobTool = jobInfo.jobTool;
-      $scope.GetrefJobLocate = jobInfo.jobLocate;
+      // $scope.GetrefJobLocate = jobInfo.jobLocate;
+      $scope.GetrefJobMeta = jobInfo.jobMeta;
 
       $scope.showLoading();
 

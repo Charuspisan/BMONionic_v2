@@ -25,6 +25,8 @@ var config = {
 };
 firebase.initializeApp(config);
 
+const env = "prod";
+
 angular
   .module("BMON", [
     "ionic",
@@ -36,6 +38,9 @@ angular
   ])
 
   .run(function ($ionicPlatform) {
+    if(env == 'prod') {
+        console.log = () => {}
+    }
     $ionicPlatform.ready(function () {
       firebase.database().ref("AppCtr").once("value").then(function (snapshot) {
         data = snapshot.val();
@@ -177,6 +182,12 @@ angular
         return deferred.promise;
       },
     };
+  })
+
+  .filter('nospace', function () {
+      return function (value) {
+          return (!value) ? '' : value.replace(/ /g, '');
+      };
   })
 
   .service("sharedProp", function () {

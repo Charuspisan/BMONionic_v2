@@ -25,6 +25,8 @@ var config = {
 };
 firebase.initializeApp(config);
 
+const env = "dev";
+
 angular
   .module("BMON", [
     "ionic",
@@ -36,11 +38,15 @@ angular
   ])
 
   .run(function ($ionicPlatform) {
+    if(env == 'prod') {
+        console.log = () => {}
+    }
     $ionicPlatform.ready(function () {
       firebase.database().ref("AppCtr").once("value").then(function (snapshot) {
         data = snapshot.val();
         console.log("ver : " + data.ver);
       })
+
       /*var AppVer = "0.0.5";
 
       firebase
@@ -130,14 +136,14 @@ angular
       .state("locations", {
         url: "/locations",
         templateUrl: "partial/locations.html",
-        resolve: {
-          loadContacts: function (locationDataCon) {
-            return locationDataCon.promiseToHaveData();
-          },
-        },
-        controller: function ($scope, locationDataCon) {
-          $scope.data = locationDataCon.locationData;
-        },
+        // resolve: {
+        //   loadContacts: function (locationDataCon) {
+        //     return locationDataCon.promiseToHaveData();
+        //   },
+        // },
+        // controller: function ($scope, locationDataCon) {
+        //   $scope.data = locationDataCon.locationData;
+        // },
       })
       .state("managejobs", {
         url: "/managejobs",
