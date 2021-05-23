@@ -63,6 +63,39 @@ angular
       // var objLocate = $firebaseObject(refLocations);
       // var objRec = $firebaseObject(refJobsRec);
       // var objUsers = $firebaseObject(refUsers);
+      
+      var refLocations = new Firebase(
+        sharedProp.dbUrl() + "/locations/"
+      );
+
+      refLocations.on("value", function (snapshot) {
+        // console.log("value : ",value);
+        $scope.data = snapshot.val();
+        var queryData = snapshot.val();
+        var queryProv = [];
+        var queryArea = [];
+        snapshot.forEach(function (childSnapshot) {
+          var key = childSnapshot.key;
+          var childData = childSnapshot.val();
+          if (queryProv.indexOf(childData.province) == -1) {
+            queryProv.push(childData.province);
+            console.log("queryProv : ", queryProv);
+          }
+          if (queryArea.indexOf(childData.area) == -1) {
+            queryArea.push(childData.area);
+            console.log("queryArea : ", queryArea);
+          }
+        });
+
+        $scope.queryProv = queryProv;
+        $scope.queryArea = queryArea;
+
+        console.log("$scope.data : ", $scope.data);
+        console.log("$scope.queryProv : ", $scope.queryProv);
+        console.log("$scope.queryArea : ", $scope.queryArea);
+
+        sharedProp.setLocateData(queryData, queryProv, queryArea);
+      });
 
       var shareData = sharedProp.getLocateData();
 

@@ -88,15 +88,19 @@
 <!-- 			<input ng-model="createJobData.provInTxt" type="text" placeholder="Select Province">
 		  	<input ng-model="createJobData.areaInTxt" type="text" placeholder="Select Area">
 		  	<input ng-model="createJobData.operateDateInTxt" type="text" placeholder="Operating Date"> -->
-        <select style="width: 100%; padding: 0.5em;" ng-model="createJobData.provInTxt" ng-change="filterArea()">
-          <option value="" disabled selected>เลือกจังหวัด</option>
-          <option ng-repeat="prov in queryProv | orderBy">{{prov}}</option>
-        </select>
+        <div data-tap-disabled="true" style="width:100%; display: inline-block;">
+          <select style="width: 100%; padding: 0.5em;" ng-model="createJobData.provInTxt" ng-change="filterArea()">
+            <option value="" disabled selected>เลือกจังหวัด</option>
+            <option ng-repeat="prov in queryProv | orderBy">{{prov}}</option>
+          </select>
+        </div>
         <!-- <input ng-model="AddProvData.areaInTxt" type="text" placeholder="Add Area"> -->
-        <select style="width: 100%; padding: 0.5em;" ng-model="createJobData.areaInTxt">
-          <option value="" disabled selected>เลือกพื้นที่</option>
-          <option ng-repeat="area in queryArea | orderBy">{{area}}</option>
-        </select>
+        <div data-tap-disabled="true" style="width:100%; display: inline-block;">
+          <select style="width: 100%; padding: 0.5em;" ng-model="createJobData.areaInTxt">
+            <option value="" disabled selected>เลือกพื้นที่</option>
+            <option ng-repeat="area in queryArea | orderBy">{{area}}</option>
+          </select>
+        </div>
         <!-- <input ng-model="createJobData.operateDateInTxt" type="text" placeholder="Operating Date"> -->
         <datepicker date-format="dd-MM-yyyy">
           <input ng-model="createJobData.operateDateInTxt" type="text" placeholder="วันที่ปฎิบัติงาน"/>
