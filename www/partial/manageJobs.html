@@ -34,13 +34,16 @@
           </ion-item>
 
           <ion-item class="item-accordion" ng-repeat="(pinkey, item) in group" ng-show="isGroupShown(group)||onEditGroup(key)" ng-if="item.pin!=null">
+
             พื้นที่สำรวจ : {{group.province}} , {{group.area}}
-            <button class="button button-small button-positive button-right" ng-click="copy('{{shareRootURL}}/#/operation?jodId={{key}}&pinId={{pinkey}}&tool=undefined&meta={{group.province | nospace}}_{{group.area | nospace}}_{{group.operate_date}}_{{item.pin}}','{{item.pin}}')"><ion-icon name="copy" style="font-size: 1.5em; position: absolute; left: 4px;top: 4px;"></ion-icon></button><br>
+
+            <button class="button button-small button-positive button-right" ng-click="copy('{{shareRootURL}}/#/operation?jodId={{key}}&pinId={{pinkey}}&tool=undefined&meta={{group.province | nospace}}_{{group.area | nospace}}_{{group.operate_date}}_{{item.pin}}','{{item.pin}}','{{group.operate_date}}')"><ion-icon name="copy" style="font-size: 1.5em; position: absolute; left: 4px;top: 4px;"></ion-icon></button><br>
             จุดสำรวจ : <span style="color:red; font-weight: 600;">{{item.pin}}</span>
-            <button class="button button-small button-positive button-right" ng-click="openNewTab('{{shareRootURL}}/#/operation?jodId={{key}}&pinId={{pinkey}}&tool=undefined&meta={{group.province | nospace}}_{{group.area | nospace}}_{{group.operate_date}}_{{item.pin}}','{{item.pin}}');"><ion-icon name="open" style="font-size: 1.5em; position: absolute; left: 4px;top: 4px;"></ion-icon></button><br>
+            
+            <button class="button button-small button-positive button-right" ng-click="openNewTab('{{shareRootURL}}/#/operation?jodId={{key}}&pinId={{pinkey}}&tool=undefined&meta={{group.province | nospace}}_{{group.area | nospace}}_{{group.operate_date}}_{{item.pin}}','{{item.pin}}','{{group.operate_date}}');"><ion-icon name="open" style="font-size: 1.5em; position: absolute; left: 4px;top: 4px;"></ion-icon></button><br>
             
 
-            เครื่องมือที่ใช้ : <input id="{{item.pin}}_toolShow" type="text" value="{{item.tool}}" style="display: inline-block; margin-top: -5px;">
+            เครื่องมือที่ใช้ : <input id="{{item.pin}}_{{group.operate_date}}" type="text" value="{{item.tool}}" style="display: inline-block; margin-top: -5px;">
             <button class="button button-small button-positive button-right" ng-click="editToolPopup(key, pinkey);"><i class="icon ion-edit"></i></button>
           </ion-item>
 
@@ -83,6 +86,11 @@
         </button>  -->
 
     </ion-footer-bar>
+
+    <script id="editNotePopupEtcImg.html" type="text/ng-template">
+      <img id="previewImg" style="width:100%;">
+      <textarea ng-model="etcImgs.note" rows="4" placeholder="บันทึกช่วยจำ" style="width:100%; padding:2%;"></textarea>
+    </script>
     
 		<script id="createJobPopup.html" type="text/ng-template">
 <!-- 			<input ng-model="createJobData.provInTxt" type="text" placeholder="Select Province">
@@ -141,16 +149,18 @@
 
 		<script id="editToolPopup.html" type="text/ng-template">
 		  	<!-- <input ng-model="editToolData.toolInTxt" type="text" placeholder="Tool type"> -->
-			  <label class="item item-input item-select">
-			    <!-- <div class="input-label">
-			      ประเภทของเครื่องมือที่ใช้
-			    </div> -->
-			    <select ng-model="editToolData.toolInTxt">
-            <option value="" disabled selected>เลือกวิธีวัด</option>
-			      <option>One-man</option>
-			      <option>Water-level</option>
-			    </select>
-			  </label>
+			  <div data-tap-disabled="true" style="width:100%; display: inline-block;">
+          <label class="item item-input item-select">
+            <!-- <div class="input-label">
+              ประเภทของเครื่องมือที่ใช้
+            </div> -->
+            <select ng-model="editToolData.toolInTxt">
+              <option value="" disabled selected>เลือกวิธีวัด</option>
+              <option>One-man</option>
+              <option>Water-level</option>
+            </select>
+          </label>
+        </div>
 		</script>
 
 

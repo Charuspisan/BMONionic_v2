@@ -63,7 +63,7 @@ angular
       const pin = splitParams[0];
       console.log("pin : " + pin);
 
-      if (checkChrome() && window.location.protocol != "https:") {
+      if ($scope.checkChrome() && window.location.protocol != "https:") {
         console.log("not https may be have problem with chorme");
         // $scope.showAlert(
         //   "ท่านไม่ได้เปิดหน้าเพจด้วย https กรุณาคลิก <a target='_top' href=''>ลิงก์บน https</a>"

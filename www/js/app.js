@@ -16,11 +16,13 @@
 // };
 // Dev config
 const dbUrl = "https://bmon-v2-default-rtdb.firebaseio.com";
+const storageUrl = "bmon-v2.firebaseapp.com";
+const authUrl = "bmon-v2.firebaseapp.com";
 var config = {
   apiKey: "AIzaSyBx5RiQzrpyeFN1HJ-hJDS2qWWmhvk-AZA",
-  authDomain: "bmon-v2.firebaseapp.com",
+  authDomain: authUrl,
   databaseURL: dbUrl,
-  storageBucket: "bmon-v2.firebaseapp.com",
+  storageBucket: storageUrl,
   messagingSenderId: "170191502662",
 };
 firebase.initializeApp(config);
@@ -206,6 +208,10 @@ angular
       return window.location.origin;
     };
 
+    this.storageUrl = function () {
+      return storageUrl;
+    };
+
     this.getEmail = function () {
       return this.sharedUserData.email;
     };
@@ -276,17 +282,6 @@ angular
       return this.sharedJobInfo.jobTool;
     };
 
-    this.sharedJobLatLng = { Lat: "1234", Lng: "5678" };
-
-    this.setJobLatLng = function (jobLat, jobLng) {
-      this.sharedJobLatLng.Lat = jobLat;
-      this.sharedJobLatLng.Lng = jobLng;
-    };
-
-    this.getJobLatLng = function () {
-      return this.sharedJobLatLng;
-    };
-
     this.signOut = function () {
       if (firebase.auth().currentUser) {
         firebase.auth().signOut();
@@ -325,6 +320,37 @@ angular
         console.log("This browser is Not supported browser");
         return false;
       }
+    };
+
+    this.sharedJobLatLng = { Lat: "1234", Lng: "5678" };
+
+    this.setJobLatLng = function (jobLat, jobLng) {
+      this.sharedJobLatLng.Lat = jobLat;
+      this.sharedJobLatLng.Lng = jobLng;
+      console.log("shared lat : " + this.sharedJobLatLng.Lat + " shared long : " + this.sharedJobLatLng.Lng);
+    };
+
+    this.getJobLatLng = function () {
+      return this.sharedJobLatLng;
+    };
+        
+    this.parseError = function (error) {
+      var msg;
+      switch (error.code) {
+        case error.PERMISSION_DENIED:
+          msg = "User denied the request for geolocation.";
+          break;
+        case error.POSITION_UNAVAILABLE:
+          msg = "Location information is unavailable.";
+          break;
+        case error.TIMEOUT:
+          msg = "The request to get user location timed out.";
+          break;
+        case error.UNKNOWN_ERROR:
+          msg = "An unknown error occurred.";
+          break;
+      }
+      console.log(msg);
     };
 
   });

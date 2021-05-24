@@ -74,8 +74,214 @@ angular
 
 
 
-      sharedProp.checkChrome();
 
+
+      if (sharedProp.checkChrome() && window.location.protocol != "https:") {
+        console.log("not https may be have problem with chorme");
+        // $scope.showAlert(
+        //   "ท่านไม่ได้เปิดหน้าเพจด้วย https กรุณาคลิก <a target='_top' href=''>ลิงก์บน https</a>"
+        // );
+        navigator.geolocation.getCurrentPosition(getPosition, parseError);
+      } else {
+        navigator.geolocation.getCurrentPosition(getPosition, parseError);
+      }
+
+      function getPosition(position) {
+        var longitude = position.coords.longitude;
+        var latitude = position.coords.latitude;
+        console.log(latitude + " " + longitude);
+        latImg = latitude;
+        lngImg = longitude;
+        sharedProp.setJobLatLng(latImg, lngImg);
+      }
+
+      function parseError(error) {
+        var msg;
+        switch (error.code) {
+          case error.PERMISSION_DENIED:
+            msg = "User denied the request for geolocation.";
+            break;
+          case error.POSITION_UNAVAILABLE:
+            msg = "Location information is unavailable.";
+            break;
+          case error.TIMEOUT:
+            msg = "The request to get user location timed out.";
+            break;
+          case error.UNKNOWN_ERROR:
+            msg = "An unknown error occurred.";
+            break;
+        }
+        console.log(msg);
+      }
+
+
+      var takePicture = document.querySelector("#take-picture");
+
+      // if (takePicture && showPicture) {
+        if (takePicture) {
+        // Set events
+        takePicture.onchange = function (event) {
+          // Get a reference to the taken picture or chosen file
+          var files = event.target.files,
+            file;
+          console.log("files : ", files);
+          if (files && files.length > 0) {
+            file = files[0];
+            // console.log("file : ", file);
+            // var imgURL = window.URL.createObjectURL(file);
+            // console.log("imgURL : ", imgURL);
+            var reader = new FileReader();
+
+            reader.readAsArrayBuffer(file);
+            reader.onloadend = function () {
+              // var ImgBase64 = reader.result;
+              // console.log(ImgBase64);
+              // preview image after take photo
+              // showPicture.src = ImgBase64;
+
+              var exif = EXIF.readFromBinaryFile(reader.result);
+              console.log("exif : ",exif);
+
+              // read file again on Blob/Base64 mime type
+              var readerImg = new FileReader();
+              readerImg.readAsDataURL(file);
+              readerImg.onloadend = function () {
+                var ImgBase64 = readerImg.result;
+                console.log(ImgBase64);
+                // preview image after take photo
+                // showPicture.src = ImgBase64;
+                $scope.editNotePopupEtcImg(ImgBase64);
+              };
+
+              // if (showPicture.src) {
+              //   onSuccess(ImgBase64);
+              // }
+            };
+          }
+          function onSuccess(result) {
+            alert("onSuccess callback");
+    
+            // // alert("btnWhere : " + btnWhere);
+            // // convert JSON string to JSON Object
+            // var thisResult = JSON.parse(result);
+            // console.log("thisResult : " + thisResult);
+            // // convert json_metadata JSON string to JSON Object
+            // var metadata = JSON.parse(thisResult.json_metadata);
+            // upImgData = JSON.stringify(metadata);
+            // filePath = thisResult.filename;
+            // console.log("filePath : " + filePath);
+            // // Convert image
+            // getFileContentAsBase64(filePath, function (base64Image) {
+            //   //window.open(base64Image);
+            //   console.log("Convert to Base64 : " + base64Image);
+            //   // Then you'll be able to handle the myimage.png file as base64
+            //   imgData = base64Image.split(",")[1];
+            // });
+            // $scope.editNotePopup();
+          }
+        };
+      }
+
+      $scope.editNotePopupEtcImg = function (img64data) {
+        //console.log("Key for edit Slope : "+refJobsRec);
+        $scope.etcImgs = {};
+        var myPopup = $ionicPopup.show({
+          templateUrl: "editNotePopupEtcImg.html",
+          title: "บันทึกช่วยจำ",
+          subTitle: "คำอธิบายสำหรับรูปถ่าย",
+          scope: $scope,
+          buttons: [
+            {
+              text: "ไม่บันทึกภาพ",
+              onTap: function (e) {},
+            },
+            {
+              text: "<b>บันทึกภาพ</b>",
+              type: "button-positive",
+              onTap: function (e) {
+                etcPhotoNote = $scope.etcImgs.note;
+                // alert("etcPhotoNote : "+etcPhotoNote);
+                if (
+                  etcPhotoNote == undefined ||
+                  etcPhotoNote == null ||
+                  etcPhotoNote == ""
+                ) {
+                  $scope.showAlert(
+                    "กรุณาใส่บันทึกช่วยจำทุกครั้ง"
+                  );
+                  event.preventDefault();
+                } else {
+                  alert("ready for upload");
+                  // $scope.btnUpload(imgData);
+                }
+              },
+            },
+          ],
+        });
+        myPopup.then(function (img64data) {});
+        setTimeout(()=>{
+          // preview image
+          $("#previewImg").attr("src",img64data);
+          if($("#previewImg").attr("src").length==0){
+            setInterval(()=>{
+              $("#previewImg").attr("src",img64data);
+              console.log("waiting for preview Image");
+            },1000);
+          }
+        },1000)
+        $timeout(function () {
+          myPopup.close(); //close the popup after 3 seconds for some reason
+        }, 100000);
+      };
+
+      $scope.showAlert = function (error) {
+        var alertPopup = $ionicPopup.alert({
+          title:
+            '<center><i class="icon ion-error ion-android-warning"></i></center>',
+          template: "<center>" + error + "</center>",
+          buttons: [
+            {
+              text: "รับทราบ",
+              type: "button-positive",
+            },
+          ],
+        });
+
+        alertPopup.then(function (res) {});
+      };
+
+      // $scope.showMessage = function (message) {
+      //   var alertPopup = $ionicPopup.alert({
+      //     title: "",
+      //     template: "<center>" + message + "</center>",
+      //     buttons: [
+      //       {
+      //         text: "รับทราบ",
+      //         type: "button-positive",
+      //       },
+      //     ],
+      //   });
+
+      //   alertPopup.then(function (res) {});
+      // };
+
+
+
+
+
+
+
+
+
+
+
+      // -
+      // -
+      // -
+      // -
+      // -
+      // -
+      // -
 
 
 
@@ -157,8 +363,8 @@ angular
       $scope.shareRootURL = sharedProp.rootUrl();
 
 
-      $scope.copy = (txt, pin)=>{
-        var toolinput = $('#'+pin+'_toolShow').val();
+      $scope.copy = (txt, pin, date)=>{
+        var toolinput = $('#'+pin+'_'+date).val();
         var cb = document.getElementById('cb');
         cb.style.display='block';
         var txt = txt.replace("tool=undefined", "tool="+toolinput);
@@ -171,8 +377,8 @@ angular
         );             
       }
 
-      $scope.openNewTab = (txt, pin)=>{
-        var toolinput = $('#'+pin+'_toolShow').val();
+      $scope.openNewTab = (txt, pin, date)=>{
+        var toolinput = $('#'+pin+'_'+date).val();
         var txt = txt.replace("tool=undefined", "tool="+toolinput);
         $window.open(txt, '_blank');
       };
