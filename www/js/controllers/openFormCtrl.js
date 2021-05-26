@@ -153,57 +153,69 @@ angular
 
       $scope.hideLoading();
 
-      // document.addEventListener("deviceready", onDeviceReady, false);
+      document.addEventListener("deviceready", onDeviceReady, false);
 
-      // function onDeviceReady() {
-      //   console.log("navigator.geolocation works well");
+      function onDeviceReady() {
+        console.log("navigator.geolocation works well");
 
-      //   var posOptions = { timeout: 10000, enableHighAccuracy: false };
+        var posOptions = { timeout: 10000, enableHighAccuracy: false };
 
-      //   $cordovaGeolocation.getCurrentPosition(posOptions).then(
-      //     function (position) {
-      //       var lat = position.coords.latitude;
-      //       var long = position.coords.longitude;
+        $cordovaGeolocation.getCurrentPosition(posOptions).then(
+          function (position) {
+            var lat = position.coords.latitude;
+            var long = position.coords.longitude;
 
-      //       latImg = lat;
-      //       lngImg = long;
+            latImg = lat;
+            lngImg = long;
 
-      //       sharedProp.setJobLatLng(latImg, lngImg);
-      //       console.log("shared lat : " + latImg + " shared long : " + lngImg);
-      //     }
+            sharedProp.setJobLatLng(latImg, lngImg);
+            console.log("shared lat : " + latImg + " shared long : " + lngImg);
+          }
 
       /*, function(err) {
       console.log(err);
       $scope.showAlert("กรุณาเปิด GPS มิฉะนั้นแอพริเคชั่นจะเกิดปัญหา และไม่สามารถบันทึกรูปถ่ายได้ หากเปิด GPS แล้วยังปรากฎข้อความนี้อีก กรุณารีสตาร์ทมือถือของคุณ");
     }*/
-      // );
+      );
 
-      // var watchOptions = {
-      //   timeout : 5000,
-      //   enableHighAccuracy: false // may cause errors if true
-      // };
+      var watchOptions = {
+        timeout : 5000,
+        enableHighAccuracy: false // may cause errors if true
+      };
 
-      // var watch = $cordovaGeolocation.watchPosition(watchOptions);
-      // watch.then(
-      //   null,
-      //   function(err) {
-      //     console.log(err);
-      //     $scope.showAlert("กรุณาเปิด GPS มิฉะนั้นแอพริเคชั่นจะเกิดปัญหา และไม่สามารถบันทึกรูปถ่ายได้ หากเปิด GPS แล้วยังปรากฎข้อความนี้อีก กรุณารีสตาร์ทมือถือของคุณ");
-      //   },
-      //   function(position) {
-      //     var lat  = position.coords.latitude
-      //     var long = position.coords.longitude
+      var watch = $cordovaGeolocation.watchPosition(watchOptions);
+      watch.then(
+        null,
+        function(err) {
+          console.log(err);
+          $scope.showAlert("กรุณาเปิด GPS มิฉะนั้นแอพริเคชั่นจะเกิดปัญหา และไม่สามารถบันทึกรูปถ่ายได้ หากเปิด GPS แล้วยังปรากฎข้อความนี้อีก กรุณารีสตาร์ทมือถือของคุณ");
+        },
+        function(position) {
+          var lat  = position.coords.latitude
+          var long = position.coords.longitude
 
-      //     latImg = lat;
-      //     lngImg = long;
+          latImg = lat;
+          lngImg = long;
 
-      //     sharedProp.setJobLatLng(latImg,lngImg);
-      //     console.log("shared lat : "+latImg+" shared long : "+lngImg);
+          sharedProp.setJobLatLng(latImg,lngImg);
+          console.log("shared lat : "+latImg+" shared long : "+lngImg);
 
-      // });
+      });
 
-      // watch.clearWatch();
-      // }
+      watch.clearWatch();
+      }
+
+
+
+
+
+
+
+
+
+
+
+
 
       $scope.showLoading = function () {
         $ionicLoading
@@ -382,23 +394,23 @@ angular
       function onSuccess(result) {
         alert("onSuccess callback");
 
-        // // alert("btnWhere : " + btnWhere);
-        // // convert JSON string to JSON Object
-        // var thisResult = JSON.parse(result);
-        // console.log("thisResult : " + thisResult);
-        // // convert json_metadata JSON string to JSON Object
-        // var metadata = JSON.parse(thisResult.json_metadata);
-        // upImgData = JSON.stringify(metadata);
-        // filePath = thisResult.filename;
-        // console.log("filePath : " + filePath);
-        // // Convert image
-        // getFileContentAsBase64(filePath, function (base64Image) {
-        //   //window.open(base64Image);
-        //   console.log("Convert to Base64 : " + base64Image);
-        //   // Then you'll be able to handle the myimage.png file as base64
-        //   imgData = base64Image.split(",")[1];
-        // });
-        // $scope.editNotePopup();
+        // alert("btnWhere : " + btnWhere);
+        // convert JSON string to JSON Object
+        var thisResult = JSON.parse(result);
+        console.log("thisResult : " + thisResult);
+        // convert json_metadata JSON string to JSON Object
+        var metadata = JSON.parse(thisResult.json_metadata);
+        upImgData = JSON.stringify(metadata);
+        filePath = thisResult.filename;
+        console.log("filePath : " + filePath);
+        // Convert image
+        getFileContentAsBase64(filePath, function (base64Image) {
+          //window.open(base64Image);
+          console.log("Convert to Base64 : " + base64Image);
+          // Then you'll be able to handle the myimage.png file as base64
+          imgData = base64Image.split(",")[1];
+        });
+        $scope.editNotePopup();
       }
 
       function onFail(message) {

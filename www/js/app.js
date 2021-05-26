@@ -16,7 +16,7 @@
 // };
 // Dev config
 const dbUrl = "https://bmon-v2-default-rtdb.firebaseio.com";
-const storageUrl = "bmon-v2.firebaseapp.com";
+const storageUrl = "bmon-v2.appspot.com";
 const authUrl = "bmon-v2.firebaseapp.com";
 var config = {
   apiKey: "AIzaSyBx5RiQzrpyeFN1HJ-hJDS2qWWmhvk-AZA",

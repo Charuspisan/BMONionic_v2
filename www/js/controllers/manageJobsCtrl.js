@@ -64,16 +64,16 @@ angular
       // var objRec = $firebaseObject(refJobsRec);
       // var objUsers = $firebaseObject(refUsers);
 
-      var refLocations = new Firebase(
-        sharedProp.dbUrl() + "/locations/"
-      );
+      var refLocations = new Firebase(sharedProp.dbUrl() + "/locations/");
 
-
-
-
-
-
-
+      var refStorage = firebase.storage().ref();
+      var imgDB = new Firebase(sharedProp.dbUrl() + "/images/");
+      // var userEmail = sharedProp.getEmail();
+      var imgData;
+      var imgEtc = "imgEtc/";
+      var etcPhotoNote;
+      var latImg;
+      var lngImg;
 
 
       if (sharedProp.checkChrome() && window.location.protocol != "https:") {
@@ -146,11 +146,24 @@ angular
               var readerImg = new FileReader();
               readerImg.readAsDataURL(file);
               readerImg.onloadend = function () {
-                var ImgBase64 = readerImg.result;
-                console.log(ImgBase64);
-                // preview image after take photo
-                // showPicture.src = ImgBase64;
-                $scope.editNotePopupEtcImg(ImgBase64);
+                var result = readerImg.result;
+                console.log(result);
+                // // convert JSON string to JSON Object
+                // var thisResult = JSON.parse(result);
+                // console.log("thisResult : " + thisResult);
+                // // convert json_metadata JSON string to JSON Object
+                // var metadata = JSON.parse(thisResult.json_metadata);
+                // upImgData = JSON.stringify(metadata);
+                // filePath = thisResult.filename;
+                // console.log("filePath : " + filePath);
+                // // Convert image
+                // getFileContentAsBase64(filePath, function (base64Image) {
+                //   //window.open(base64Image);
+                //   console.log("Convert to Base64 : " + base64Image);
+                //   // Then you'll be able to handle the myimage.png file as base64
+                //   imgData = base64Image.split(",")[1];
+                // });
+                $scope.editNotePopupEtcImg(result);
               };
 
               // if (showPicture.src) {
@@ -158,29 +171,9 @@ angular
               // }
             };
           }
-          function onSuccess(result) {
-            alert("onSuccess callback");
-    
-            // // alert("btnWhere : " + btnWhere);
-            // // convert JSON string to JSON Object
-            // var thisResult = JSON.parse(result);
-            // console.log("thisResult : " + thisResult);
-            // // convert json_metadata JSON string to JSON Object
-            // var metadata = JSON.parse(thisResult.json_metadata);
-            // upImgData = JSON.stringify(metadata);
-            // filePath = thisResult.filename;
-            // console.log("filePath : " + filePath);
-            // // Convert image
-            // getFileContentAsBase64(filePath, function (base64Image) {
-            //   //window.open(base64Image);
-            //   console.log("Convert to Base64 : " + base64Image);
-            //   // Then you'll be able to handle the myimage.png file as base64
-            //   imgData = base64Image.split(",")[1];
-            // });
-            // $scope.editNotePopup();
-          }
         };
       }
+
 
       $scope.editNotePopupEtcImg = function (img64data) {
         //console.log("Key for edit Slope : "+refJobsRec);
@@ -211,14 +204,15 @@ angular
                   );
                   event.preventDefault();
                 } else {
-                  alert("ready for upload");
-                  // $scope.btnUpload(imgData);
+                  // alert("ready for upload");
+                  $scope.btnUpload(imgData);
                 }
               },
             },
           ],
         });
-        myPopup.then(function (img64data) {});
+        myPopup.then(function () {});
+        imgData = img64data.split(",")[1];
         setTimeout(()=>{
           // preview image
           $("#previewImg").attr("src",img64data);
@@ -233,6 +227,55 @@ angular
           myPopup.close(); //close the popup after 3 seconds for some reason
         }, 100000);
       };
+
+
+      ($scope.btnUpload = function (fileData) {
+        // console.log('btnUpload' + fileData);
+        // alert('lat : ' + latImg);
+        $scope.showLoading();
+        //auto gen ID
+        imgName = "etc@" + Date.now();
+
+        var getStamp = new Date();
+        var dd = ("0" + getStamp.getDate()).slice(-2);
+        var mm = ("0" + (getStamp.getMonth() + 1)).slice(-2);
+        var yyyy = getStamp.getFullYear();
+        var dateRec = dd + "-" + mm + "-" + yyyy;
+
+        refBMONimg = refStorage.child(imgEtc + imgName + ".jpg");
+        refBMONimg.putString(fileData, "base64").then(function (snapshot) {
+          //alert("Uploaded Other Photo");
+          imgDB.child("etc").push({
+            date: dateRec,
+            lat: latImg,
+            lng: lngImg,
+            // user: userEmail,
+            name: imgName,
+            status: "new",
+            type: "etc",
+            note: etcPhotoNote,
+          });
+          setTimeout(function () {
+            $scope.hideLoading();
+            $scope.showMessage("บันทึกภาพแล้ว");
+          }, 1000);
+        });
+      }),
+        function (err) {
+          $scope.showAlert(err);
+        };
+
+
+
+
+
+
+
+
+
+
+
+
 
       $scope.showAlert = function (error) {
         var alertPopup = $ionicPopup.alert({
@@ -250,22 +293,41 @@ angular
         alertPopup.then(function (res) {});
       };
 
-      // $scope.showMessage = function (message) {
-      //   var alertPopup = $ionicPopup.alert({
-      //     title: "",
-      //     template: "<center>" + message + "</center>",
-      //     buttons: [
-      //       {
-      //         text: "รับทราบ",
-      //         type: "button-positive",
-      //       },
-      //     ],
-      //   });
+      $scope.showMessage = function (message) {
+        var alertPopup = $ionicPopup.alert({
+          title: "",
+          template: "<center>" + message + "</center>",
+          buttons: [
+            {
+              text: "รับทราบ",
+              type: "button-positive",
+            },
+          ],
+        });
 
-      //   alertPopup.then(function (res) {});
-      // };
+        alertPopup.then(function (res) {});
+      };
 
+      $scope.showLoading = function () {
+        $ionicLoading
+          .show({
+            content: '<div class="ionic-logo"></div>',
+            animation: "fade-in",
+            showBackdrop: true,
+            maxWidth: 0,
+            showDelay: 0,
+            // duration: 3000
+          })
+          .then(function () {
+            console.log("The loading indicator is now displayed");
+          });
+      };
 
+      $scope.hideLoading = function () {
+        $ionicLoading.hide().then(function () {
+          console.log("The loading indicator is now hidden");
+        });
+      };
 
 
 
