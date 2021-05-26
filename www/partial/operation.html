@@ -2,10 +2,10 @@
 
 
   <ion-header-bar class="bar-positive">
-    <img src="images/icon-bar.png" class="icon-bar">
+    <img src="images/icon-bar.png" class="icon-bar" style="border-radius: 1em;">
     <h1 class="title">วัดและบันทึกค่า</h1>
-    <button id="logoutbt" ng-click="signOut()" class="button">
-      <i class="icon ion-close-round"></i>
+    <button id="logoutbt" ng-click="signOut()" class="button button-clear button-primary">
+      <ion-icon name="close-outline"></ion-icon>
     </button>
   </ion-header-bar>
 
@@ -56,14 +56,78 @@
                  </ion-item>
 
               </ion-list>
+      </div>
 
- 
 
+
+      
+
+
+      <div ng-click="modal.show()" style="background-color: #387ef5; color:#fff;position: fixed; bottom: 0.25em; left: calc(50% - 1.25em); font-size: 1.5em; padding: 0.5em; border-radius: 1.25em; opacity: 0.75;">
+        <ion-icon name="camera-outline"></ion-icon>
 
 
       </div>
 
+
+
 </ion-content>
+
+
+<script id="takePhotosModal.html" type="text/ng-template">
+  <ion-modal-view>
+    <ion-header-bar class="bar bar-positive">
+      <h1 class="title">ถ่ายรูป 4 ทิศ</h1>
+      <button class="button button-clear button-primary" ng-click="modal.hide()"><ion-icon name="close-outline"></ion-icon></button>
+    </ion-header-bar>
+    <ion-content class="padding" style="top:0;">
+
+
+
+      <div class="boxInSlide" id="4imgContainer">
+
+        <div id="show4imgs" style="width:100%; height:50vh; text-align:center; background-repeat: no-repeat; background-position: center; background-size: contain; background-color:#000;">
+        </div>
+        <div style="background-color: rgba(256,256,256,0.8);">
+            <i class="ion-camera" style="font-size: 3em; margin-top: -1em; display: block; color: #fff; text-align: center;"  ng-click="btnCamera()"></i>
+        </div>
+
+        <div style="text-align: center; background-color:#fff; padding: 0.25em;">
+          <span style="display: inline-block; width:23%; text-align: center;">
+            <img id="frontImg" src="https://firebasestorage.googleapis.com/v0/b/bmon-v2.appspot.com/o/bmon-img%2Fblank.jpg?alt=media&token=d01c3206-0756-4c56-9db0-3e9cd7a45e5e" style="width:100%; height:auto;" ng-click="btnPreview('front')">
+            หน้า
+          </span>
+          <span style="display: inline-block; width:23%; text-align: center;">
+            <img id="rightImg" src="https://firebasestorage.googleapis.com/v0/b/bmon-v2.appspot.com/o/bmon-img%2Fblank.jpg?alt=media&token=d01c3206-0756-4c56-9db0-3e9cd7a45e5e" style="width:100%; height:auto;" ng-click="btnPreview('right')">
+            ขวา
+          </span>
+          <span style="display: inline-block; width:23%; text-align: center;">
+            <img id="backImg" src="https://firebasestorage.googleapis.com/v0/b/bmon-v2.appspot.com/o/bmon-img%2Fblank.jpg?alt=media&token=d01c3206-0756-4c56-9db0-3e9cd7a45e5e" style="width:100%; height:auto;" ng-click="btnPreview('back')">
+            หลัง
+          </span>
+          <span style="display: inline-block; width:23%; text-align: center;">
+            <img id="leftImg" src="https://firebasestorage.googleapis.com/v0/b/bmon-v2.appspot.com/o/bmon-img%2Fblank.jpg?alt=media&token=d01c3206-0756-4c56-9db0-3e9cd7a45e5e" style="width:100%; height:auto;" ng-click="btnPreview('left')">
+            ซ้าย
+          </span>
+
+        </div><br>
+
+
+        <button class="button button-positive button-full" ng-click="btnOtherImg()"><i class="ion-ios-camera-outline" style="font-size: 2.5em; line-height: 0;"></i> ถ่ายภาพอื่นๆ</button><br /><br />
+
+
+
+
+
+
+
+
+    </ion-content>
+  </ion-modal-view>
+</script>
+
+
+
 
 <script id="editSlopePopup.html" type="text/ng-template"><input ng-model="editSlopeData.slopeInTxt" type="number" placeholder="ค่าความลาดชัน"></script>
 <script id="editMeterPopup.html" type="text/ng-template"><input ng-model="editMeterData.meterInTxt" type="number" placeholder="ค่าที่วัดได้ (ซ.ม.)"></script>

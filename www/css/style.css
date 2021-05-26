@@ -116,3 +116,30 @@ input[type="file"] {
   padding: 6px 12px;
   cursor: pointer;
 }
+.modal {
+  display: block;
+  position: fixed;
+  z-index: 1000;
+  top: 0;
+  left: 0;
+  height: 90%;
+  width: 100%;
+  background: none;
+  background-color: rgba(0, 0, 0, 0.75);
+}
+.button.button-positive {
+  border-radius: 1.5em;
+}
+.popup-body input {
+  border: solid #ccc 1px;
+  margin-bottom: 0.25em;
+  padding: 0.25em;
+  border-radius: 0.25em;
+}
+.popup-container.active .popup {
+  border-radius: 0.5em;
+}
+.popup-container input, .popup-container textarea {
+  border-radius: 0.25em;
+  padding: 0.5em;
+}
