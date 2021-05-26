@@ -44,29 +44,11 @@ angular
       }
 
 
-      var refLocations = new Firebase(
-        sharedProp.dbUrl() + "/locations/"
-      );
-      var refJobsID = new Firebase(
-        sharedProp.dbUrl() + "/jobsID/"
-      );
-      var refJobsRec = new Firebase(
-        sharedProp.dbUrl() + "/jobsRec/"
-      );
-      var refUsers = new Firebase(
-        sharedProp.dbUrl() + "/users/"
-      );
-
-      // var objID = $firebaseObject(
-      //   refJobsID.orderByChild("status").equalTo("active")
-      // );
-      // var objLocate = $firebaseObject(refLocations);
-      // var objRec = $firebaseObject(refJobsRec);
-      // var objUsers = $firebaseObject(refUsers);
-
       var refLocations = new Firebase(sharedProp.dbUrl() + "/locations/");
-
+      var refJobsID = new Firebase(sharedProp.dbUrl() + "/jobsID/");
+      var refJobsRec = new Firebase(sharedProp.dbUrl() + "/jobsRec/");
       var refStorage = firebase.storage().ref();
+
       var imgDB = new Firebase(sharedProp.dbUrl() + "/images/");
       // var userEmail = sharedProp.getEmail();
       var imgData;
@@ -264,17 +246,6 @@ angular
         function (err) {
           $scope.showAlert(err);
         };
-
-
-
-
-
-
-
-
-
-
-
 
 
       $scope.showAlert = function (error) {

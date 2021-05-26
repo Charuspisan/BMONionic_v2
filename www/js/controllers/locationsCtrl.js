@@ -13,9 +13,259 @@ angular
       sharedProp,
       $ionicLoading
     ) {
-      var refLocations = new Firebase(
-        sharedProp.dbUrl() + "/locations/"
-      );
+
+
+
+
+     var refLocations = new Firebase(sharedProp.dbUrl() + "/locations/");
+      var refJobsID = new Firebase(sharedProp.dbUrl() + "/jobsID/");
+      var refJobsRec = new Firebase(sharedProp.dbUrl() + "/jobsRec/");
+      var refStorage = firebase.storage().ref();
+      
+      var imgDB = new Firebase(sharedProp.dbUrl() + "/images/");
+      // var userEmail = sharedProp.getEmail();
+      var imgData;
+      var imgEtc = "imgEtc/";
+      var etcPhotoNote;
+      var latImg;
+      var lngImg;
+
+
+      if (sharedProp.checkChrome() && window.location.protocol != "https:") {
+        console.log("not https may be have problem with chorme");
+        // $scope.showAlert(
+        //   "ท่านไม่ได้เปิดหน้าเพจด้วย https กรุณาคลิก <a target='_top' href=''>ลิงก์บน https</a>"
+        // );
+        navigator.geolocation.getCurrentPosition(getPosition, parseError);
+      } else {
+        navigator.geolocation.getCurrentPosition(getPosition, parseError);
+      }
+
+      function getPosition(position) {
+        var longitude = position.coords.longitude;
+        var latitude = position.coords.latitude;
+        console.log(latitude + " " + longitude);
+        latImg = latitude;
+        lngImg = longitude;
+        sharedProp.setJobLatLng(latImg, lngImg);
+      }
+
+      function parseError(error) {
+        var msg;
+        switch (error.code) {
+          case error.PERMISSION_DENIED:
+            msg = "User denied the request for geolocation.";
+            break;
+          case error.POSITION_UNAVAILABLE:
+            msg = "Location information is unavailable.";
+            break;
+          case error.TIMEOUT:
+            msg = "The request to get user location timed out.";
+            break;
+          case error.UNKNOWN_ERROR:
+            msg = "An unknown error occurred.";
+            break;
+        }
+        console.log(msg);
+      }
+
+      var takePicture = document.querySelector("#take-picture");
+
+      // if (takePicture && showPicture) {
+        if (takePicture) {
+        // Set events
+        takePicture.onchange = function (event) {
+          // Get a reference to the taken picture or chosen file
+          var files = event.target.files,
+            file;
+          console.log("files : ", files);
+          if (files && files.length > 0) {
+            file = files[0];
+            // console.log("file : ", file);
+            // var imgURL = window.URL.createObjectURL(file);
+            // console.log("imgURL : ", imgURL);
+            var reader = new FileReader();
+
+            reader.readAsArrayBuffer(file);
+            reader.onloadend = function () {
+
+              var exif = EXIF.readFromBinaryFile(reader.result);
+              console.log("exif : ",exif);
+
+              // read file again on Blob/Base64 mime type
+              var readerImg = new FileReader();
+              readerImg.readAsDataURL(file);
+              readerImg.onloadend = function () {
+                var result = readerImg.result;
+                console.log(result);
+                $scope.editNotePopupEtcImg(result);
+              };
+            };
+          }
+        };
+      }
+
+
+      $scope.editNotePopupEtcImg = function (img64data) {
+        //console.log("Key for edit Slope : "+refJobsRec);
+        $scope.etcImgs = {};
+        var myPopup = $ionicPopup.show({
+          templateUrl: "editNotePopupEtcImg.html",
+          title: "บันทึกช่วยจำ",
+          subTitle: "คำอธิบายสำหรับรูปถ่าย",
+          scope: $scope,
+          buttons: [
+            {
+              text: "ไม่บันทึกภาพ",
+              onTap: function (e) {},
+            },
+            {
+              text: "<b>บันทึกภาพ</b>",
+              type: "button-positive",
+              onTap: function (e) {
+                etcPhotoNote = $scope.etcImgs.note;
+                // alert("etcPhotoNote : "+etcPhotoNote);
+                if (
+                  etcPhotoNote == undefined ||
+                  etcPhotoNote == null ||
+                  etcPhotoNote == ""
+                ) {
+                  $scope.showAlert(
+                    "กรุณาใส่บันทึกช่วยจำทุกครั้ง"
+                  );
+                  event.preventDefault();
+                } else {
+                  // alert("ready for upload");
+                  $scope.btnUpload(imgData);
+                }
+              },
+            },
+          ],
+        });
+        myPopup.then(function () {});
+        imgData = img64data.split(",")[1];
+        setTimeout(()=>{
+          // preview image
+          $("#previewImg").attr("src",img64data);
+          if($("#previewImg").attr("src").length==0){
+            setInterval(()=>{
+              $("#previewImg").attr("src",img64data);
+              console.log("waiting for preview Image");
+            },1000);
+          }
+        },1000)
+        $timeout(function () {
+          myPopup.close(); //close the popup after 3 seconds for some reason
+        }, 100000);
+      };
+
+
+      ($scope.btnUpload = function (fileData) {
+        // console.log('btnUpload' + fileData);
+        // alert('lat : ' + latImg);
+        $scope.showLoading();
+        //auto gen ID
+        imgName = "etc@" + Date.now();
+
+        var getStamp = new Date();
+        var dd = ("0" + getStamp.getDate()).slice(-2);
+        var mm = ("0" + (getStamp.getMonth() + 1)).slice(-2);
+        var yyyy = getStamp.getFullYear();
+        var dateRec = dd + "-" + mm + "-" + yyyy;
+
+        refBMONimg = refStorage.child(imgEtc + imgName + ".jpg");
+        refBMONimg.putString(fileData, "base64").then(function (snapshot) {
+          //alert("Uploaded Other Photo");
+          imgDB.child("etc").push({
+            date: dateRec,
+            lat: latImg,
+            lng: lngImg,
+            // user: userEmail,
+            name: imgName,
+            status: "new",
+            type: "etc",
+            note: etcPhotoNote,
+          });
+          setTimeout(function () {
+            $scope.hideLoading();
+            $scope.showMessage("บันทึกภาพแล้ว");
+          }, 1000);
+        });
+      }),
+        function (err) {
+          $scope.showAlert(err);
+        };
+
+
+
+
+      $scope.showAlert = function (error) {
+        var alertPopup = $ionicPopup.alert({
+          title:
+            '<center><i class="icon ion-error ion-android-warning"></i></center>',
+          template: "<center>" + error + "</center>",
+          buttons: [
+            {
+              text: "รับทราบ",
+              type: "button-positive",
+            },
+          ],
+        });
+
+        alertPopup.then(function (res) {});
+      };
+
+      $scope.showMessage = function (message) {
+        var alertPopup = $ionicPopup.alert({
+          title: "",
+          template: "<center>" + message + "</center>",
+          buttons: [
+            {
+              text: "รับทราบ",
+              type: "button-positive",
+            },
+          ],
+        });
+
+        alertPopup.then(function (res) {});
+      };
+
+      $scope.showLoading = function () {
+        $ionicLoading
+          .show({
+            content: '<div class="ionic-logo"></div>',
+            animation: "fade-in",
+            showBackdrop: true,
+            maxWidth: 0,
+            showDelay: 0,
+            // duration: 3000
+          })
+          .then(function () {
+            console.log("The loading indicator is now displayed");
+          });
+      };
+
+      $scope.hideLoading = function () {
+        $ionicLoading.hide().then(function () {
+          console.log("The loading indicator is now hidden");
+        });
+      };
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
       $scope.data;
       $scope.queryProv = [];
@@ -50,12 +300,6 @@ angular
         sharedProp.setLocateData(queryData, queryProv, queryArea);
       });
 
-      $scope.hideLoading = function () {
-        $ionicLoading.hide().then(function () {
-          console.log("The loading indicator is now hidden");
-        });
-      };
-
       $scope.hideLoading();
 
       $scope.alertFactory = function (error) {
@@ -67,38 +311,6 @@ angular
             $scope.showAlert("กรุณาตรวจสอบความถูกต้องของอีเมล์");
             break;
         }
-      };
-
-      $scope.showAlert = function (error) {
-        var alertPopup = $ionicPopup.alert({
-          title:
-            '<center><i class="icon ion-error ion-android-warning"></i></center>',
-          template: "<center>" + error + "</center>",
-          buttons: [
-            {
-              text: "รับทราบ",
-              type: "button-positive",
-            },
-          ],
-        });
-
-        alertPopup.then(function (res) {});
-      };
-
-      // An alert dialog
-      $scope.showMessage = function (message) {
-        var alertPopup = $ionicPopup.alert({
-          title: "",
-          template: "<center>" + message + "</center>",
-          buttons: [
-            {
-              text: "รับทราบ",
-              type: "button-positive",
-            },
-          ],
-        });
-
-        alertPopup.then(function (res) {});
       };
 
       $scope.goNext = function (page) {

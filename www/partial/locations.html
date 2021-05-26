@@ -70,8 +70,8 @@ input[type="text"]{margin-bottom: 3px;}
     </a> 
 
     <label class="custom-file-upload button">
-        <input type="file" id="take-picture" accept="image/*">
-        <ion-icon name="camera-outline"></ion-icon> <ion-icon name="chevron-forward-outline"></ion-icon> <ion-icon name="earth-outline"></ion-icon>
+      <input type="file" id="take-picture" accept="image/*">
+      <ion-icon name="camera-outline"></ion-icon> <ion-icon name="chevron-forward-outline"></ion-icon> <ion-icon name="earth-outline"></ion-icon>
     </label>
 
     <a class="button" ng-click="showAddProvPopup()" style="z-index: 2;">
@@ -81,10 +81,12 @@ input[type="text"]{margin-bottom: 3px;}
   </div>
 </ion-footer-bar>
 
+<script id="editNotePopupEtcImg.html" type="text/ng-template">
+  <img id="previewImg" style="width:100%;">
+  <textarea ng-model="etcImgs.note" rows="4" placeholder="บันทึกช่วยจำ" style="width:100%; padding:2%;"></textarea>
+</script>
 
 <script id="AddProvPopup.html" type="text/ng-template">
-  
-
   <input ng-model="AddProvData.provInTxt" type="text" placeholder="เพิ่มจังหวัด" style="width:86%; display: inline-block;">
   <div data-tap-disabled="true" style="width:11%; display: inline-block;">
     <select style="width: 100%; padding: 0.25em;" ng-model="AddProvData.provInTxt" ng-change="filterArea();">
@@ -92,8 +94,6 @@ input[type="text"]{margin-bottom: 3px;}
       <option ng-repeat="prov in queryProv | orderBy">{{prov}}</option>
     </select>
   </div>
-
-
   <input ng-model="AddProvData.areaInTxt" type="text" placeholder="เพิ่มพื้นที่" style="width:86%; display: inline-block;">
   <div data-tap-disabled="true" style="width:11%; display: inline-block;">
     <select style="width: 100%; padding: 0.25em;" ng-model="AddProvData.areaInTxt">
@@ -101,19 +101,10 @@ input[type="text"]{margin-bottom: 3px;}
       <option ng-repeat="area in queryArea | orderBy">{{area}}</option>
     </select>
   </div>
-
-
   <input ng-model="AddProvData.pinInTxt" type="text" placeholder="เพิ่มจุดสำรวจ">
   <input ng-model="AddProvData.latInTxt" type="text" placeholder="เพิ่ม Latitude">
   <input ng-model="AddProvData.lngInTxt" type="text" placeholder="เพิ่ม Longtitude">
 </script>
-
-
-<!-- <script id="AddNewProvPopup.html" type="text/ng-template">
-  <input ng-model="AddNewProvData.provInTxt" type="text" placeholder="เพิ่มจังหวัดใหม่">
-</script> -->
-
-
 <script id="EditProvPopup.html" type="text/ng-template">
 	<input ng-model="EditProvData.provInTxt" type="text" placeholder="ชื่อจังหวัด">
 </script>
