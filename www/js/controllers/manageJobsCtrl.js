@@ -130,24 +130,8 @@ angular
               readerImg.onloadend = function () {
                 var result = readerImg.result;
                 console.log(result);
-                // // convert JSON string to JSON Object
-                // var thisResult = JSON.parse(result);
-                // console.log("thisResult : " + thisResult);
-                // // convert json_metadata JSON string to JSON Object
-                // var metadata = JSON.parse(thisResult.json_metadata);
-                // upImgData = JSON.stringify(metadata);
-                // filePath = thisResult.filename;
-                // console.log("filePath : " + filePath);
-                // // Convert image
-                // getFileContentAsBase64(filePath, function (base64Image) {
-                //   //window.open(base64Image);
-                //   console.log("Convert to Base64 : " + base64Image);
-                //   // Then you'll be able to handle the myimage.png file as base64
-                //   imgData = base64Image.split(",")[1];
-                // });
                 $scope.editNotePopupEtcImg(result);
               };
-
               // if (showPicture.src) {
               //   onSuccess(ImgBase64);
               // }
@@ -301,26 +285,6 @@ angular
       };
 
 
-
-
-
-
-
-
-
-      // -
-      // -
-      // -
-      // -
-      // -
-      // -
-      // -
-
-
-
-
-
-
       refLocations.on("value", function (snapshot) {
         // console.log("value : ",value);
         $scope.data = snapshot.val();
@@ -390,7 +354,7 @@ angular
         .on("value", function (snapshot) {
           $scope.jobListData = snapshot.val();
           //return $scope.jobListData
-          // console.log("$scope.jobListData : ",$scope.jobListData);
+          console.log("$scope.jobListData : ",$scope.jobListData);
         });
 
       $scope.shareRootURL = sharedProp.rootUrl();
@@ -400,7 +364,7 @@ angular
         var toolinput = $('#'+pin+'_'+date).val();
         var cb = document.getElementById('cb');
         cb.style.display='block';
-        var txt = txt.replace("tool=undefined", "tool="+toolinput);
+        var txt = txt.replace("tool=Water-level", "tool="+toolinput);
         cb.value = txt;
         cb.select();
         document.execCommand('copy');
@@ -410,9 +374,54 @@ angular
         );             
       }
 
+      $scope.copyAll = (key)=>{
+        var refJobsIDSeleted = new Firebase(sharedProp.dbUrl() + "/jobsID/" + key);
+        var selectJob
+        var urlsData
+
+        refJobsIDSeleted
+        .on("value", function (snapshot) {
+          selectJob = snapshot.val();
+        });
+        // console.log("selectJob : ",selectJob);
+        
+        for (const [keyPin, valPin] of Object.entries(selectJob)) {
+          // console.log("keyPin : ",keyPin);
+          // console.log("valPin : ",valPin);
+
+          var metaPin = selectJob.province+"_"+selectJob.area+"_"+selectJob.operate_date+"_"+valPin.pin;
+          // console.log("metaPin : "+metaPin);
+
+          urlEach = $scope.shareRootURL+"/#/operation?jodId="+key+"&pinId="+keyPin+"&tool="+valPin.tool+"&meta="+metaPin;
+          urlEach = urlEach.replace(/\s/g, '').trim();
+          // console.log("urlEach : "+urlEach);
+
+          if(!((keyPin == 'area') || (keyPin == 'operate_date') || (keyPin == 'province') || (keyPin == 'status'))){
+            if(urlsData==undefined){
+              urlsData = urlEach;
+              // console.log(urlsData);
+            }else{
+              urlsData = urlsData+"\r\n\r\n"+urlEach;
+            }            
+          }
+        }
+        // console.log("urlsData : "+urlsData);
+
+        var cb = document.getElementById('cb');
+        cb.style.display='block';
+        cb.value = urlsData;
+        cb.select();
+        document.execCommand('copy');
+        cb.style.display='none';     
+        navigator.clipboard.readText().then(clipText => 
+          console.log("clipText : "+clipText)   
+        );   
+
+      }
+
       $scope.openNewTab = (txt, pin, date)=>{
         var toolinput = $('#'+pin+'_'+date).val();
-        var txt = txt.replace("tool=undefined", "tool="+toolinput);
+        var txt = txt.replace("tool=Water-level", "tool="+toolinput);
         $window.open(txt, '_blank');
       };
 
