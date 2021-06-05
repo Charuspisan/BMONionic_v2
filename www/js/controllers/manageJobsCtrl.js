@@ -98,6 +98,7 @@ angular
 
 
       var takePicture = document.querySelector("#take-picture");
+      // var showPicture = document.querySelector("#show-picture");
 
       // if (takePicture && showPicture) {
         if (takePicture) {
@@ -109,37 +110,69 @@ angular
           console.log("files : ", files);
           if (files && files.length > 0) {
             file = files[0];
-            // console.log("file : ", file);
-            // var imgURL = window.URL.createObjectURL(file);
-            // console.log("imgURL : ", imgURL);
-            var reader = new FileReader();
 
+            // this block for read exif 
+            var reader = new FileReader();
             reader.readAsArrayBuffer(file);
             reader.onloadend = function () {
-              // var ImgBase64 = reader.result;
-              // console.log(ImgBase64);
-              // preview image after take photo
-              // showPicture.src = ImgBase64;
 
               var exif = EXIF.readFromBinaryFile(reader.result);
               console.log("exif : ",exif);
 
-              // read file again on Blob/Base64 mime type
-              var readerImg = new FileReader();
-              readerImg.readAsDataURL(file);
-              readerImg.onloadend = function () {
-                var result = readerImg.result;
-                console.log(result);
-                $scope.editNotePopupEtcImg(result);
-              };
-              // if (showPicture.src) {
-              //   onSuccess(ImgBase64);
-              // }
             };
+
+            // this block for read and resize image
+            // Create an image
+            var img = document.createElement("img");
+            var readerImg = new FileReader();
+            readerImg.readAsDataURL(file);
+            readerImg.onloadend = function (e) {
+
+              img.src = e.target.result;
+              // console.log("img.src : ",img.src);
+
+              setTimeout(()=>{
+                var canvas = document.createElement("canvas");
+                //var canvas = $("<canvas>", {"id":"testing"})[0];
+                var ctx = canvas.getContext("2d");
+                ctx.drawImage(img, 0, 0);
+
+                var MAX_WIDTH = 1600;
+                var MAX_HEIGHT = 1600;
+                var width = img.width;
+                var height = img.height;
+
+                if (width > height) {
+                    if (width > MAX_WIDTH) {
+                        height *= MAX_WIDTH / width;
+                        width = MAX_WIDTH;
+                    }
+                } else {
+                    if (height > MAX_HEIGHT) {
+                        width *= MAX_HEIGHT / height;
+                        height = MAX_HEIGHT;
+                    }
+                }
+                canvas.width = width;
+                canvas.height = height;
+                var ctx = canvas.getContext("2d");
+                ctx.drawImage(img, 0, 0, width, height);
+
+                var dataurl = canvas.toDataURL("image/png");
+                // console.log("dataurl : ",dataurl);
+                // document.getElementById('output').src = dataurl;
+                
+                $scope.editNotePopupEtcImg(dataurl);
+
+              },1000);
+
+            };
+            
           }
         };
       }
 
+ 
 
       $scope.editNotePopupEtcImg = function (img64data) {
         //console.log("Key for edit Slope : "+refJobsRec);
@@ -424,25 +457,6 @@ angular
         var txt = txt.replace("tool=Water-level", "tool="+toolinput);
         $window.open(txt, '_blank');
       };
-
-      // $scope.clearClipboard = ()=>{
-      //   // This should work but does not
-      //   //if (document.selection) document.selection.empty()
-      //   //else window.getSelection().removeAllRanges()
-      
-      //   // Create a dummy input to select
-      //   var tempElement = document.createElement("input");
-      //   tempElement.style.cssText = "width:0!important;padding:0!important;border:0!important;margin:0!important;outline:none!important;boxShadow:none!important;";
-      //   document.body.appendChild(tempElement);
-      //   tempElement.value = ' ' // Empty string won't work!
-      //   tempElement.select();
-      //   document.execCommand("copy");
-      //   document.body.removeChild(tempElement);
-      //   navigator.clipboard.readText().then(clipText => 
-      //     console.log("Clear clipText : "+clipText)   
-      //   );
-      // }
-      
 
       $scope.goBack = function (page) {
         console.log("Going back");
