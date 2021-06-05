@@ -98,85 +98,24 @@ angular
 
 
       var takePicture = document.querySelector("#take-picture");
-      // var showPicture = document.querySelector("#show-picture");
 
-      // if (takePicture && showPicture) {
-        if (takePicture) {
-        // Set events
+      if (takePicture) {
         takePicture.onchange = function (event) {
-          // Get a reference to the taken picture or chosen file
-          var files = event.target.files,
-            file;
-          console.log("files : ", files);
-          if (files && files.length > 0) {
-            file = files[0];
-
-            // this block for read exif 
-            var reader = new FileReader();
-            reader.readAsArrayBuffer(file);
-            reader.onloadend = function () {
-
-              var exif = EXIF.readFromBinaryFile(reader.result);
-              console.log("exif : ",exif);
-
-            };
-
-            // this block for read and resize image
-            // Create an image
-            var img = document.createElement("img");
-            var readerImg = new FileReader();
-            readerImg.readAsDataURL(file);
-            readerImg.onloadend = function (e) {
-
-              img.src = e.target.result;
-              // console.log("img.src : ",img.src);
-
-              setTimeout(()=>{
-                var canvas = document.createElement("canvas");
-                //var canvas = $("<canvas>", {"id":"testing"})[0];
-                var ctx = canvas.getContext("2d");
-                ctx.drawImage(img, 0, 0);
-
-                var MAX_WIDTH = 1600;
-                var MAX_HEIGHT = 1600;
-                var width = img.width;
-                var height = img.height;
-
-                if (width > height) {
-                    if (width > MAX_WIDTH) {
-                        height *= MAX_WIDTH / width;
-                        width = MAX_WIDTH;
-                    }
-                } else {
-                    if (height > MAX_HEIGHT) {
-                        width *= MAX_HEIGHT / height;
-                        height = MAX_HEIGHT;
-                    }
-                }
-                canvas.width = width;
-                canvas.height = height;
-                var ctx = canvas.getContext("2d");
-                ctx.drawImage(img, 0, 0, width, height);
-
-                var dataurl = canvas.toDataURL("image/png");
-                // console.log("dataurl : ",dataurl);
-                // document.getElementById('output').src = dataurl;
-                
-                $scope.editNotePopupEtcImg(dataurl);
-
-              },1000);
-
-            };
-            
-          }
+          sharedProp.takePic_fn(event, $scope.editNotePopupEtcImg);
         };
       }
 
- 
+      $scope.etcImgs = {
+        storage:"imgEtc/",
+        dataTarget:"etc",
+        imgName:"etc@"
+      };
 
-      $scope.editNotePopupEtcImg = function (img64data) {
+      $scope.editNotePopupEtcImg = function (img64data, exif) {
         //console.log("Key for edit Slope : "+refJobsRec);
-        $scope.etcImgs = {};
+
+        console.log("exif from editNotePopupEtcImg : ",exif);
+
         var myPopup = $ionicPopup.show({
           templateUrl: "editNotePopupEtcImg.html",
           title: "บันทึกช่วยจำ",
@@ -204,7 +143,7 @@ angular
                   event.preventDefault();
                 } else {
                   // alert("ready for upload");
-                  $scope.btnUpload(imgData);
+                  sharedProp.btnUpload($scope.etcImgs, imgData, exif);
                 }
               },
             },
@@ -228,41 +167,22 @@ angular
       };
 
 
-      ($scope.btnUpload = function (fileData) {
-        // console.log('btnUpload' + fileData);
-        // alert('lat : ' + latImg);
-        $scope.showLoading();
-        //auto gen ID
-        imgName = "etc@" + Date.now();
 
-        var getStamp = new Date();
-        var dd = ("0" + getStamp.getDate()).slice(-2);
-        var mm = ("0" + (getStamp.getMonth() + 1)).slice(-2);
-        var yyyy = getStamp.getFullYear();
-        var dateRec = dd + "-" + mm + "-" + yyyy;
 
-        refBMONimg = refStorage.child(imgEtc + imgName + ".jpg");
-        refBMONimg.putString(fileData, "base64").then(function (snapshot) {
-          //alert("Uploaded Other Photo");
-          imgDB.child("etc").push({
-            date: dateRec,
-            lat: latImg,
-            lng: lngImg,
-            // user: userEmail,
-            name: imgName,
-            status: "new",
-            type: "etc",
-            note: etcPhotoNote,
-          });
-          setTimeout(function () {
-            $scope.hideLoading();
-            $scope.showMessage("บันทึกภาพแล้ว");
-          }, 1000);
-        });
-      }),
-        function (err) {
-          $scope.showAlert(err);
-        };
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
       $scope.showAlert = function (error) {
@@ -281,41 +201,7 @@ angular
         alertPopup.then(function (res) {});
       };
 
-      $scope.showMessage = function (message) {
-        var alertPopup = $ionicPopup.alert({
-          title: "",
-          template: "<center>" + message + "</center>",
-          buttons: [
-            {
-              text: "รับทราบ",
-              type: "button-positive",
-            },
-          ],
-        });
 
-        alertPopup.then(function (res) {});
-      };
-
-      $scope.showLoading = function () {
-        $ionicLoading
-          .show({
-            content: '<div class="ionic-logo"></div>',
-            animation: "fade-in",
-            showBackdrop: true,
-            maxWidth: 0,
-            showDelay: 0,
-            // duration: 3000
-          })
-          .then(function () {
-            console.log("The loading indicator is now displayed");
-          });
-      };
-
-      $scope.hideLoading = function () {
-        $ionicLoading.hide().then(function () {
-          console.log("The loading indicator is now hidden");
-        });
-      };
 
 
       refLocations.on("value", function (snapshot) {

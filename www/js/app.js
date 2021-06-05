@@ -27,6 +27,10 @@ var config = {
 };
 firebase.initializeApp(config);
 
+const refStorage = firebase.storage().ref();
+const imgDB = new Firebase(dbUrl + "/images/");
+const imgEtc = "imgEtc/";
+
 const env = "dev";
 
 angular
@@ -48,50 +52,6 @@ angular
         data = snapshot.val();
         console.log("ver : " + data.ver);
       })
-
-      /*var AppVer = "0.0.5";
-
-      firebase
-        .database()
-        .ref("AppCtr")
-        .once("value")
-        .then(function (snapshot) {
-          data = snapshot.val();
-          console.log("ver : " + data.ver);
-          console.log(
-            "AppVer : " + AppVer
-          ); else if(AppVer>data.ver){
-          alert("ขออภัยแอพพริเคชั่นอยู่ระหว่างการปรับปรุง กรุณารอการแจ้งเตือนการอัพเดทจาก App Store (ios), Play Store (Android) อัพเดทแอพพริเคชั่น และลองเข้าใช้งานอีกครั้ง");
-          window.open('https://play.google.com/store/apps/details?id=com.bmon_ku.bmon', '_system'); 
-          ionic.Platform.exitApp();
-      }
-          if (AppVer < data.ver) {
-            if (data.forceUpdate == true) {
-              alert(
-                "แอพพริเคชั่นนี้มีการอัพเดทรุ่น กรุณาอัพเดทจาก App Store (ios), Play Store (Android) และลองเข้าใช้งานอีกครั้ง"
-              );
-              window.open(
-                "https://play.google.com/store/apps/details?id=com.bmon_ku.bmon",
-                "_system"
-              );
-              ionic.Platform.exitApp();
-            }
-          } 
-        });*/
-
-      // if (window.cordova && window.cordova.plugins.Keyboard) {
-      //   // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
-      //   // for form inputs)
-      //   cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
-
-      //   // Don't remove this line unless you know what you are doing. It stops the viewport
-      //   // from snapping when text inputs are focused. Ionic handles this internally for
-      //   // a much nicer keyboard experience.
-      //   cordova.plugins.Keyboard.disableScroll(true);
-      // }
-      // if (window.StatusBar) {
-      //   StatusBar.styleDefault();
-      // }
     });
   })
 
@@ -193,7 +153,10 @@ angular
       };
   })
 
-  .service("sharedProp", function () {
+  .service("sharedProp", function ($ionicLoading, $ionicPopup) {
+
+    var myService = this;
+
     this.sharedUserData = {
       email: "Not loged in user or leader/admin",
       isLoginPage: true,
@@ -208,7 +171,7 @@ angular
       return window.location.origin;
     };
 
-    this.storageUrl = function () {
+    myService.storageUrl = function () {
       return storageUrl;
     };
 
@@ -352,5 +315,202 @@ angular
       }
       console.log(msg);
     };
+
+
+    myService.getCoords = function (exifFromPhoto) {
+      // we need to turn degree, min, sec format into decimal
+      function DMS2DD(degrees, minutes, seconds, direction) { 
+        var minutes = minutes/60;
+        var seconds = (seconds/1000000)/3600;
+        console.log("minutes : "+minutes);
+        console.log("seconds : "+seconds);
+
+        var dd = degrees + minutes + seconds;
+        if (direction == "S" || direction == "W") {
+          dd = dd * -1; 
+        }
+        
+        console.log("dd : "+dd);
+        return dd;
+      }
+
+      // the image may not have coordinates
+      if (exifFromPhoto.GPSLatitude != null){
+
+        // latitude in decimal
+        var latDeg = exifFromPhoto.GPSLatitude[0].numerator;
+        var latMin = exifFromPhoto.GPSLatitude[1].numerator;
+        var latSec = exifFromPhoto.GPSLatitude[2].numerator;
+        var latDir = exifFromPhoto.GPSLatitudeRef;
+        var lat = DMS2DD(latDeg, latMin, latSec, latDir);
+        console.log("DMS2DD lat :"+lat);
+        // 18.86565
+
+        // longitude in decimal
+        var lngDeg = exifFromPhoto.GPSLongitude[0].numerator;
+        var lngMin = exifFromPhoto.GPSLongitude[1].numerator;
+        var lngSec = exifFromPhoto.GPSLongitude[2].numerator;
+        var lngDir = exifFromPhoto.GPSLongitudeRef;
+        var lng = DMS2DD(lngDeg, lngMin, lngSec, lngDir);
+        console.log("DMS2DD lng :"+lng);
+
+        return {lat:lat, lng:lng};
+      }
+    };
+
+    myService.takePic_fn = (event, callBack)=>{
+      // Get a reference to the taken picture or chosen file
+      var files = event.target.files,
+        file, exif, exifOrigin;
+
+      console.log("files : ", files);
+      if (files && files.length > 0) {
+        file = files[0];
+
+        // this block for read exif 
+        var reader = new FileReader();
+        reader.readAsArrayBuffer(file);
+        reader.onloadend = function () {
+          exifOrigin = EXIF.readFromBinaryFile(reader.result);
+          if(exifOrigin){
+            console.log("exifOrigin : ",exifOrigin);
+            exif = myService.getCoords(exifOrigin);
+            console.log("exif : ",exif);                
+          }else{
+            console.log("Not a photo took from camera");
+          }
+        };
+
+        // this block for read and resize image
+        // Create an image
+        var img = document.createElement("img");
+        var readerImg = new FileReader();
+        readerImg.readAsDataURL(file);
+        readerImg.onloadend = function (e) {
+
+          img.src = e.target.result;
+          // console.log("img.src : ",img.src);
+
+          setTimeout(()=>{
+            var canvas = document.createElement("canvas");
+            //var canvas = $("<canvas>", {"id":"testing"})[0];
+            var ctx = canvas.getContext("2d");
+            ctx.drawImage(img, 0, 0);
+
+            var MAX_WIDTH = 1200;
+            var MAX_HEIGHT = 1200;
+            var width = img.width;
+            var height = img.height;
+
+            if (width > height) {
+                if (width > MAX_WIDTH) {
+                    height *= MAX_WIDTH / width;
+                    width = MAX_WIDTH;
+                }
+            } else {
+                if (height > MAX_HEIGHT) {
+                    width *= MAX_HEIGHT / height;
+                    height = MAX_HEIGHT;
+                }
+            }
+            canvas.width = width;
+            canvas.height = height;
+            var ctx = canvas.getContext("2d");
+            ctx.drawImage(img, 0, 0, width, height);
+
+            var dataurl = canvas.toDataURL("image/png");
+            // console.log("dataurl : ",dataurl);
+            // document.getElementById('output').src = dataurl;
+            
+            // $scope.editNotePopupEtcImg(dataurl);
+            callBack(dataurl, exif);
+
+          },1000);
+        };
+      }        
+    };
+
+    myService.btnUpload = function (type, fileData, exif) {
+      // console.log('btnUpload' + fileData);
+      // alert('lat : ' + latImg);
+
+      console.log("exif from btnUpload : ",exif);
+
+      myService.showLoading();
+      //auto gen ID
+      imgName = type.imgName + Date.now();
+
+      var getStamp = new Date();
+      var dd = ("0" + getStamp.getDate()).slice(-2);
+      var mm = ("0" + (getStamp.getMonth() + 1)).slice(-2);
+      var yyyy = getStamp.getFullYear();
+      var dateRec = dd + "-" + mm + "-" + yyyy;
+      var latUpload
+      var lngUpload
+      if(exif){
+        latUpload = exif.lat;
+        lngUpload = exif.lng;
+      }else{
+        latUpload = latImg;
+        lngUpload = lngImg;
+      }
+
+      refBMONimg = refStorage.child(type.storage + imgName + ".jpg");
+      refBMONimg.putString(fileData, "base64").then(function (snapshot) {
+        //alert("Uploaded Other Photo");
+        imgDB.child(type.dataTarget).push({
+          date: dateRec,
+          lat: latUpload,
+          lng: lngUpload,
+          // user: userEmail,
+          name: imgName,
+          status: "new",
+          type: type.dataTarget,
+          note: type.note,
+        });
+        setTimeout(function () {
+          myService.hideLoading();
+          myService.showMessage("บันทึกภาพแล้ว");
+        }, 1000);
+      });
+    };
+
+
+    myService.showLoading = function () {
+      $ionicLoading
+        .show({
+          content: '<div class="ionic-logo"></div>',
+          animation: "fade-in",
+          showBackdrop: true,
+          maxWidth: 0,
+          showDelay: 0,
+          // duration: 3000
+        })
+        .then(function () {
+          console.log("The loading indicator is now displayed");
+        });
+    };
+
+    myService.showMessage = function (message) {
+      var alertPopup = $ionicPopup.alert({
+        title: "",
+        template: "<center>" + message + "</center>",
+        buttons: [
+          {
+            text: "รับทราบ",
+            type: "button-positive",
+          },
+        ],
+      });
+
+      alertPopup.then(function (res) {});
+    };
+
+    myService.hideLoading = function () {
+      $ionicLoading.hide().then(function () {
+        console.log("The loading indicator is now hidden");
+      });
+    };
+
 
   });
