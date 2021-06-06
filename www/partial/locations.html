@@ -4,7 +4,7 @@ input[type="text"]{margin-bottom: 3px;}
 .button {float:right;}
 </style>
 
-<ion-view ng-controller="manageLocationsCtrl">
+<ion-view ng-controller="locationsCtrl">
 
   <ion-header-bar class="bar-positive">
     <img src="images/icon-bar.png" class="icon-bar" style="border-radius: 1em;">
@@ -21,7 +21,7 @@ input[type="text"]{margin-bottom: 3px;}
     <ion-item>
 
     <div style="padding: 0 0 1em 0.75em;">
-      <span style="font-size: 1.2em; color: deeppink;">{{ key }}</span>  
+      <span style="font-size: 1.2em; color: deeppink;">{{ key }}</span>
         <button class="button button-small button-positive button-right" ng-click="showEditProvPopup(key);" style="margin-right: 1.2em;    margin-top: -0.5em;">
           <i class="icon ion-edit"></i>
         </button>
@@ -32,6 +32,7 @@ input[type="text"]{margin-bottom: 3px;}
           <button class="button button-small button-positive button-right" ng-click="showEditAreaPopup(group[0].province, key);$event.stopPropagation();" style="margin: 0.75em 0;">
             <i class="icon ion-edit"></i>
           </button>
+
         <ion-item ng-repeat="item in group | orderBy:'pin'" class="item-accordion" ng-show="isGroupShown(group)||onEditGroup(key)" ng-click="$event.stopPropagation();">
 
         <div style="width:100%;">
@@ -70,7 +71,7 @@ input[type="text"]{margin-bottom: 3px;}
     </a> 
 
     <label class="custom-file-upload button">
-      <input type="file" id="take-picture" accept="image/*">
+      <input type="file" id="take-picture-on-locate" accept="image/*">
       <ion-icon name="camera-outline"></ion-icon> <ion-icon name="chevron-forward-outline"></ion-icon> <ion-icon name="earth-outline"></ion-icon>
     </label>
 

@@ -25,6 +25,18 @@ angular
         sharedProp.hideLoading();
       });
 
+      var user = firebase.auth().currentUser;
+      
+      if (user) {
+        // User is signed in.
+        console.log("Logedin");
+        $scope.goNext("/managejobs");
+        sharedProp.hideLoading();
+      } else {
+        // No user is signed in.
+        console.log("No Logedin");
+        // $scope.goNext("/login");
+      }
 
 
       // Listening for auth state changes.

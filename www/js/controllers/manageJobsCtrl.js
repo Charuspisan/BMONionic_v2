@@ -42,12 +42,12 @@ angular
 
       sharedProp.getDeviceGPS();
 
-      var takePicture = document.querySelector("#take-picture");
+      var takePicture = $('#take-picture');
 
       if (takePicture) {
-        takePicture.onchange = function (event) {
-          sharedProp.takePic_fn(event, $scope.editNotePopupEtcImg);
-        };
+        takePicture.change((event)=>{
+          sharedProp.takePic_fn(event, $scope.editNotePopupEtcImg);          
+        })
       }
 
       $scope.etcImgs = {
@@ -69,7 +69,9 @@ angular
           buttons: [
             {
               text: "ไม่บันทึกภาพ",
-              onTap: function (e) {},
+              onTap: function (e) {
+                $('#take-picture').val('');
+              },
             },
             {
               text: "<b>บันทึกภาพ</b>",
@@ -479,90 +481,100 @@ angular
                       );
                       e.preventDefault();
                     } else {
-                      $.each(data, function (key, value) {
-                        console.log("key  ", key, "value  ", value);
-                        if (
-                          value.province == selectedProv &&
-                          value.area == selectedArea
-                        ) {
-                          //var lacateID = key;
-                          matchID.push({ id: key, pin: value.pin });
-                          //console.log("Selected lacateID ",lacateID);
-                        } else {
-                          console.log("Not match");
-                        }
-                      });
-                    }
-                    console.log(matchID);
-                    if (matchID.length > 0) {
-                      console.log("Found Matching");
-                      var newJob = refJobsID.push({
-                        operate_date: selectedDate,
-                        province: selectedProv,
-                        area: selectedArea,
-                        status: "active",
-                      });
-                      var newJobID = newJob.key();
-                      console.log(newJobID);
-                      $.each(matchID, function (key, value) {
-                        //console.log(value.pin);
-                        var newRec = refJobsID
-                          .child(newJobID)
-                          .push({
-                            pin: value.pin,
-                            user: "",
-                            tool: "",
-                            locatRef: value.id,
-                          });
-                        var newRecID = newRec.key();
-                        var time = Firebase.ServerValue.TIMESTAMP;
-                        var newSet = {};
-                        var graph = [];
-                        var note = [];
-                        var diff = [];
-                        var metaJobRec =
-                          selectedProv + "_" + selectedArea + "_" + value.pin;
-                        for (i = 0; i < 300; i++) {
-                          newSet[i] = "";
-                          graph.push("");
-                          note.push("");
-                          diff.push(0);
-                        }
-                        // newSet.timeStamp=time;
-                        // console.log("timeStamp : ",time);
-                        newSet.slope = "";
-                        newSet.jobIdRef = newJobID;
-                        //var graphTxt = graph.toString();
-                        console.log("newSet : ", newSet);
-                        console.log("metaJobRec : " + metaJobRec);
-                        //console.log("graph : ",graph);
-                        //refJobsRec.child(newRecID).update({"timeStamp":time, "slope":"", "jobIdRef":newJobID});
-                        refJobsRec.child(newRecID).update(newSet);
-                        refJobsRec
-                          .child(newRecID)
-                          .update({ operate_date: selectedDate });
-                        refJobsRec.child(newRecID).update({ timeStamp: time });
-                        refJobsRec.child(newRecID).update({ graph: graph });
-                        refJobsRec.child(newRecID).update({ diff: diff });
-                        refJobsRec.child(newRecID).update({ note: note });
-                        refJobsRec.child(newRecID).update({ meta: metaJobRec });
-                      });
-                      //createRec(newJobID)
+                      $.when(
+                        $.each(data, function (key, value) {
+                          console.log("key  ", key, "value  ", value);
+                          if (
+                            value.province == selectedProv &&
+                            value.area == selectedArea
+                          ) {
+                            //var lacateID = key;
+                            matchID.push({ id: key, pin: value.pin });
+                            //console.log("Selected lacateID ",lacateID);
+                          } else {
+                            console.log("Not match");
+                          }
+                        })
+                      ).then(
+                        // console.log("Finished matching : ",matchID)
+                        loopRecPin(matchID,selectedDate,selectedProv,selectedArea)
+                      )
                     }
                   });
               },
             },
           ],
         });
-
-        // myPopup.then(function(res) {
-        //   console.log('Tapped!', res);
-        // });
-
         $timeout(function () {
           myPopup.close(); //close the popup after 3 seconds for some reason
         }, 100000);
       };
+
+      var distance2beach = 140;
+      var loopRecPin = (matchData,date,prov,area)=>{
+        if (matchData.length > 0) {
+          console.log("Found Matching");
+          var newJob = refJobsID.push({
+            operate_date: date,
+            province: prov,
+            area: area,
+            status: "active",
+          });
+          var newJobID = newJob.key();
+          console.log(newJobID);
+          sharedProp.showLoading();
+          $.when(
+            $.each(matchData, function (key, value) {
+              //console.log(value.pin);
+              var newRec = refJobsID
+                .child(newJobID)
+                .push({
+                  pin: value.pin,
+                  user: "",
+                  tool: "Water-level",
+                  locatRef: value.id,
+                });
+              var newRecID = newRec.key();
+              var time = Firebase.ServerValue.TIMESTAMP;
+              var newSet = {};
+              var graph = [];
+              var note = [];
+              var diff = [];
+              var metaJobRec =
+              prov + "_" + area + "_" + value.pin;
+              for (i = 0; i < distance2beach; i++) {
+                newSet[i] = "";
+                graph.push("");
+                note.push("");
+                diff.push(0);
+              }
+                // newSet.timeStamp=time;
+                // console.log("timeStamp : ",time);
+                newSet.slope = "";
+                newSet.jobIdRef = newJobID;
+                //var graphTxt = graph.toString();
+                console.log("newSet : ", newSet);
+                console.log("metaJobRec : " + metaJobRec);
+                //console.log("graph : ",graph);
+                //refJobsRec.child(newRecID).update({"timeStamp":time, "slope":"", "jobIdRef":newJobID});
+                refJobsRec.child(newRecID).update(newSet);
+                refJobsRec
+                  .child(newRecID)
+                  .update({ operate_date: date });
+                refJobsRec.child(newRecID).update({ timeStamp: time });
+                refJobsRec.child(newRecID).update({ graph: graph });
+                refJobsRec.child(newRecID).update({ diff: diff });
+                refJobsRec.child(newRecID).update({ note: note });
+                refJobsRec.child(newRecID).update({ meta: metaJobRec });
+              })
+            ).then(
+              sharedProp.hideLoading()
+            )
+          }
+      }
+
+
+
 
       $scope.toggleGroup = function (key, group) {
         if ($scope.isGroupShown(group) || $scope.onEditGroup(key)) {
