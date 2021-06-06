@@ -5,22 +5,12 @@ angular
     "manageJobsCtrl",
     function (
       $scope,
-      // $firebaseObject,
-      // $firebaseArray,
       $ionicPopup,
-      $ionicLoading,
       $timeout,
       sharedProp,
       $location,
-      $ionicViewService,
       $window
     ) {
-
-      $scope.hideLoading = function () {
-        $ionicLoading.hide().then(function () {
-          console.log("The loading indicator is now hidden");
-        });
-      };
       
       var loginStatus = sharedProp.getEmail();
       console.log("user is : " + loginStatus);
@@ -30,72 +20,27 @@ angular
         $location.path(page);
       };
 
+      $scope.goBack = function (page) {
+        console.log("Going back");
+        $location.path(page);
+      };
 
       var user = firebase.auth().currentUser;
 
       if (user) {
         // User is signed in.
         console.log("Logedin");
-        $scope.hideLoading();
+        sharedProp.hideLoading();
       } else {
         // No user is signed in.
         console.log("No Logedin");
         $scope.goNext("/login");
       }
 
-
-      var refLocations = new Firebase(sharedProp.dbUrl() + "/locations/");
-      var refJobsID = new Firebase(sharedProp.dbUrl() + "/jobsID/");
-      var refJobsRec = new Firebase(sharedProp.dbUrl() + "/jobsRec/");
-      var refStorage = firebase.storage().ref();
-
-      var imgDB = new Firebase(sharedProp.dbUrl() + "/images/");
-      // var userEmail = sharedProp.getEmail();
       var imgData;
-      var imgEtc = "imgEtc/";
       var etcPhotoNote;
-      var latImg;
-      var lngImg;
 
-
-      if (sharedProp.checkChrome() && window.location.protocol != "https:") {
-        console.log("not https may be have problem with chorme");
-        // $scope.showAlert(
-        //   "ท่านไม่ได้เปิดหน้าเพจด้วย https กรุณาคลิก <a target='_top' href=''>ลิงก์บน https</a>"
-        // );
-        navigator.geolocation.getCurrentPosition(getPosition, parseError);
-      } else {
-        navigator.geolocation.getCurrentPosition(getPosition, parseError);
-      }
-
-      function getPosition(position) {
-        var longitude = position.coords.longitude;
-        var latitude = position.coords.latitude;
-        console.log(latitude + " " + longitude);
-        latImg = latitude;
-        lngImg = longitude;
-        sharedProp.setJobLatLng(latImg, lngImg);
-      }
-
-      function parseError(error) {
-        var msg;
-        switch (error.code) {
-          case error.PERMISSION_DENIED:
-            msg = "User denied the request for geolocation.";
-            break;
-          case error.POSITION_UNAVAILABLE:
-            msg = "Location information is unavailable.";
-            break;
-          case error.TIMEOUT:
-            msg = "The request to get user location timed out.";
-            break;
-          case error.UNKNOWN_ERROR:
-            msg = "An unknown error occurred.";
-            break;
-        }
-        console.log(msg);
-      }
-
+      sharedProp.getDeviceGPS();
 
       var takePicture = document.querySelector("#take-picture");
 
@@ -137,7 +82,7 @@ angular
                   etcPhotoNote == null ||
                   etcPhotoNote == ""
                 ) {
-                  $scope.showAlert(
+                  sharedProp.showAlert(
                     "กรุณาใส่บันทึกช่วยจำทุกครั้ง"
                   );
                   event.preventDefault();
@@ -165,44 +110,6 @@ angular
           myPopup.close(); //close the popup after 3 seconds for some reason
         }, 100000);
       };
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-      $scope.showAlert = function (error) {
-        var alertPopup = $ionicPopup.alert({
-          title:
-            '<center><i class="icon ion-error ion-android-warning"></i></center>',
-          template: "<center>" + error + "</center>",
-          buttons: [
-            {
-              text: "รับทราบ",
-              type: "button-positive",
-            },
-          ],
-        });
-
-        alertPopup.then(function (res) {});
-      };
-
-
-
 
       refLocations.on("value", function (snapshot) {
         // console.log("value : ",value);
@@ -344,22 +251,8 @@ angular
         $window.open(txt, '_blank');
       };
 
-      $scope.goBack = function (page) {
-        console.log("Going back");
-        $location.path(page);
-      };
-
       $scope.signOut = function () {
-        if (firebase.auth().currentUser) {
-          firebase.auth().signOut();
-          console.log("Now loged out");
-          $location.path("/login");
-          $scope.userEmail = "";
-          $scope.userPass = "";
-        } else {
-          console.log("Not login login page");
-          $location.path("/login");
-        }
+        sharedProp.signOut();      
       };
 
       $scope.deleteJob = function (jobIdRef) {

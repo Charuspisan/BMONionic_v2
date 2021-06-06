@@ -27,11 +27,15 @@ var config = {
 };
 firebase.initializeApp(config);
 
+const refLocations = new Firebase(dbUrl + "/locations/");
+const refJobsID = new Firebase(dbUrl + "/jobsID/");
+const refJobsRec = new Firebase(dbUrl + "/jobsRec/");
 const refStorage = firebase.storage().ref();
 const imgDB = new Firebase(dbUrl + "/images/");
 const imgEtc = "imgEtc/";
 
 const env = "dev";
+let latDevice, lngDevice
 
 angular
   .module("BMON", [
@@ -153,7 +157,7 @@ angular
       };
   })
 
-  .service("sharedProp", function ($ionicLoading, $ionicPopup) {
+  .service("sharedProp", function ($ionicLoading, $ionicPopup, $location, $window) {
 
     var myService = this;
 
@@ -250,15 +254,15 @@ angular
         firebase.auth().signOut();
         console.log("Now loged out");
         $location.path("/login");
-        $scope.userEmail = "";
-        $scope.userPass = "";
+        // $scope.userEmail = "";
+        // $scope.userPass = "";
       } else {
         console.log("Not login login page");
         // $location.path('/login');
       }
     };
 
-    this.checkChrome = function () {
+    myService.checkChrome = function () {
 
       var isChromium = window.chrome,
       winNav = window.navigator,
@@ -285,19 +289,19 @@ angular
       }
     };
 
-    this.sharedJobLatLng = { Lat: "1234", Lng: "5678" };
+    myService.sharedJobLatLng = { Lat: "1234", Lng: "5678" };
 
-    this.setJobLatLng = function (jobLat, jobLng) {
-      this.sharedJobLatLng.Lat = jobLat;
-      this.sharedJobLatLng.Lng = jobLng;
-      console.log("shared lat : " + this.sharedJobLatLng.Lat + " shared long : " + this.sharedJobLatLng.Lng);
+    myService.setJobLatLng = function (jobLat, jobLng) {
+      myService.sharedJobLatLng.Lat = jobLat;
+      myService.sharedJobLatLng.Lng = jobLng;
+      console.log("shared lat : " + myService.sharedJobLatLng.Lat + " shared long : " + myService.sharedJobLatLng.Lng);
     };
 
     this.getJobLatLng = function () {
-      return this.sharedJobLatLng;
+      return myService.sharedJobLatLng;
     };
         
-    this.parseError = function (error) {
+    myService.parseError = function (error) {
       var msg;
       switch (error.code) {
         case error.PERMISSION_DENIED:
@@ -432,7 +436,7 @@ angular
 
     myService.btnUpload = function (type, fileData, exif) {
       // console.log('btnUpload' + fileData);
-      // alert('lat : ' + latImg);
+      // alert('lat : ' + latDevice);
 
       console.log("exif from btnUpload : ",exif);
 
@@ -451,8 +455,8 @@ angular
         latUpload = exif.lat;
         lngUpload = exif.lng;
       }else{
-        latUpload = latImg;
-        lngUpload = lngImg;
+        latUpload = latDevice;
+        lngUpload = lngDevice;
       }
 
       refBMONimg = refStorage.child(type.storage + imgName + ".jpg");
@@ -506,11 +510,52 @@ angular
       alertPopup.then(function (res) {});
     };
 
+    myService.showAlert = function (error) {
+      var alertPopup = $ionicPopup.alert({
+        title:
+          '<center><i class="icon ion-error ion-android-warning"></i></center>',
+        template: "<center>" + error + "</center>",
+        buttons: [
+          {
+            text: "รับทราบ",
+            type: "button-positive",
+          },
+        ],
+      });
+
+      alertPopup.then(function (res) {});
+    };
+
     myService.hideLoading = function () {
       $ionicLoading.hide().then(function () {
         console.log("The loading indicator is now hidden");
       });
     };
+
+    myService.getDeviceGPS = ()=>{
+      if (myService.checkChrome() && window.location.protocol != "https:") {
+        console.log("not https may be have problem with chorme");
+        setTimeout(() => {
+          $window.navigator.geolocation.getCurrentPosition(myService.getPosition, myService.parseError);          
+        }, 1000);
+      } else {
+        setTimeout(() => {
+         $window.navigator.geolocation.getCurrentPosition(myService.getPosition, myService.parseError);         
+        }, 1000);
+      }
+    };
+
+    myService.getPosition = (position)=>{
+      var longitude = position.coords.longitude;
+      var latitude = position.coords.latitude;
+      console.log(latitude + " " + longitude);
+      latDevice = latitude;
+      lngDevice = longitude;
+      myService.setJobLatLng(latDevice, lngDevice);
+    }
+
+
+
 
 
   });

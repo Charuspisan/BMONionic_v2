@@ -10,7 +10,6 @@ angular
       $timeout,
       $location,
       sharedProp,
-      $ionicLoading
     ) {
       var auth = $firebaseAuth();
 
@@ -18,48 +17,12 @@ angular
         sharedProp.dbUrl() + "/users/"
       );
 
-      $scope.signOut = function () {
-        if (firebase.auth().currentUser) {
-          firebase.auth().signOut();
-          sharedProp.setIsLoginPage(false);
-          console.log("Now loged out");
-          // $location.path("/login");
-          $scope.userEmail = "";
-          $scope.userPass = "";
-        } else {
-          console.log("Not login login page");
-          // $location.path('/login');
-        }
-      };
+      $scope.userEmail = "";
+      $scope.userPass = "";
 
-
-      // var isLogin = sharedProp.getIsLoginPage();
-      // console.log("isLogin : " + isLogin);
-
-      $scope.showLoading = function () {
-        $ionicLoading
-          .show({
-            content: '<div class="ionic-logo"></div>',
-            animation: "fade-in",
-            showBackdrop: true,
-            maxWidth: 0,
-            showDelay: 0,
-            // duration: 3000
-
-          })
-          .then(function () {
-            console.log("The loading indicator is now displayed");
-          });
-      };
-
-      $scope.hideLoading = function () {
-        $ionicLoading.hide().then(function () {
-          console.log("The loading indicator is now hidden");
-        });
-      };
 
       $scope.$on("$viewContentLoaded", function () {
-        $scope.hideLoading();
+        sharedProp.hideLoading();
       });
 
 
@@ -86,7 +49,7 @@ angular
                 $scope.$apply(function () {
                   sharedProp.setEmail(user.email);
                   usersDB.child(user.uid).update({ lastAccess: Date.now() });
-                  $scope.hideLoading();
+                  sharedProp.hideLoading();
                   // $location.path("/locations");
                   $location.path("/managejobs");
                 });
@@ -95,7 +58,6 @@ angular
                 $scope.$apply(function () {
                   sharedProp.setEmail(user.email);
                   usersDB.child(user.uid).update({ lastAccess: Date.now() });
-                  // $scope.hideLoading();
                   $location.path("/managejobs");
                 });
               }else if (data.role == "user") {
@@ -104,39 +66,28 @@ angular
                 setTimeout(function () {
                   $scope.$apply(function () {
                     usersDB.child(user.uid).update({ lastAccess: Date.now() });
-                    $scope.hideLoading();
+                    sharedProp.hideLoading();
                     // $location.path("/getjobs");
                     // $location.path("/operation");
                     alert("User ถูกยกเลิกการใช่งาน");
                   });
                   // console.log("openform");
                 }, 500);
-              }else{
-                // setTimeout(function () {
-                //   $scope.$apply(function () {
-                //     $scope.hideLoading();
-                //   });
-                // }, 500);
               }
             });
           } else {
             console.log("รอการอนุมัติ กรุณาเช็คอีเมล์");
-            $scope.hideLoading();
+            sharedProp.hideLoading();
             // $('#statusReg').html("รอการอนุมัติ กรุณาเช็คอีเมล์");
             $scope.showAlert("รอการอนุมัติ กรุณาเช็คอีเมล์");
             usersDB.child(user.uid).update({ lastAccess: Date.now() });
           }
         } else {
-          $scope.hideLoading();
+          sharedProp.hideLoading();
           // $('#statusReg').html("กรุณาล็อกอิน");
         }
       });
 
-
-
-
-
-      // $scope.showLoading();
 
       // An alert dialog
       $scope.showAlert = function (error) {
@@ -199,7 +150,6 @@ angular
         $scope.error = null;
         var userEmail = $scope.userEmail;
         var userPass = $scope.userPass;
-        // $scope.showLoading();
         if (userPass == null) {
           $scope.showAlert("กรุณาระบุรหัสผ่าน");
         }
@@ -210,20 +160,15 @@ angular
         auth
           .$signInWithEmailAndPassword(userEmail, userPass)
           .then(function (user) {
-            $scope.showLoading();
+            sharedProp.showLoading();
           })
           .catch(function (error) {
             $scope.error = error;
-            $scope.hideLoading();
+            sharedProp.hideLoading();
             //alert($scope.error);
             console.log("signin error : ", error);
             $scope.alertFactory(error);
           });
-
-        // setTimeout(function(){
-        //     alert($scope.error);
-        //     $scope.hideLoading();
-        // },3000);
       };
 
       $scope.signUpPopup = function () {
