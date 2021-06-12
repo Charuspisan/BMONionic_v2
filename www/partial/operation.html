@@ -60,8 +60,6 @@
 
 
 
-      
-
 
       <div ng-click="modal.show()" style="background-color: #387ef5; color:#fff;position: fixed; bottom: 0.25em; left: calc(50% - 1.25em); font-size: 1.5em; padding: 0.5em; border-radius: 1.25em; opacity: 0.75;">
         <ion-icon name="camera-outline"></ion-icon>
@@ -84,36 +82,36 @@
 
 
 
-      <div class="boxInSlide" id="4imgContainer">
+      <div class="boxInSlide" id="4imgContainer" style="background-image: url(https://firebasestorage.googleapis.com/v0/b/bmon-v2.appspot.com/o/bmon-img%2Fbeach.png?alt=media&token=25285f3c-5da3-4928-a37f-450ca01cc0fc); background-size: cover; margin-top:2.5em !important;">
 
-        <div id="show4imgs" style="width:100%; height:50vh; text-align:center; background-repeat: no-repeat; background-position: center; background-size: contain; background-color:#000;">
-        </div>
-        <div style="background-color: rgba(256,256,256,0.8);">
+        <!-- <div id="show4imgs" style="width:100%; height:50vh; text-align:center; background-repeat: no-repeat; background-position: center; background-size: contain; background-color:#000;">
+        </div> -->
+        <!-- <div style="background-color: rgba(256,256,256,0.8);">
             <i class="ion-camera" style="font-size: 3em; margin-top: -1em; display: block; color: #fff; text-align: center;"  ng-click="btnCamera()"></i>
+        </div> -->
+
+        <div style="text-align: center; padding: 0.25em;">
+
+          <div id="front_4d_wrapper" style="width:49%; height:28vw; margin:0 auto; background-image: url(https://firebasestorage.googleapis.com/v0/b/bmon-v2.appspot.com/o/bmon-img%2Fcamera_up.png?alt=media&token=ecca49e9-68f8-4f70-a7ec-e29741b62eb7); background-size: 100% 100%;">
+              <input type="file" id="photo-oper-front" accept="image/*" style="display:block; width:100%; height:100%; opacity: 0;" onchange="angular.element(this).scope().fileNameChanged(event, 'front')">
+          </div>
+
+          <div id="right_4d_wrapper" style="width:49%; height:28vw; margin-right:0; display: inline-block; background-image: url(https://firebasestorage.googleapis.com/v0/b/bmon-v2.appspot.com/o/bmon-img%2Fcamera_left.png?alt=media&token=a449d6ed-a6a2-436c-8980-e8c76132c453); background-size: 100% 100%;">
+              <input type="file" id="photo-oper-right" accept="image/*" style="display:block; width:100%; height:100%; opacity: 0;" onchange="angular.element(this).scope().fileNameChanged(event, 'right')">                  
+          </div>
+
+          <div id="back_4d_wrapper" style="width:49%; height:28vw; margin-left:0; display: inline-block; background-image: url(https://firebasestorage.googleapis.com/v0/b/bmon-v2.appspot.com/o/bmon-img%2Fcamera_right.png?alt=media&token=2a2a26f1-99ff-4019-9b58-41c2c11de1ea); background-size: 100% 100%;">                  
+            <input type="file" id="photo-oper-back" accept="image/*" style="display:block; width:100%; height:100%; opacity: 0;" onchange="angular.element(this).scope().fileNameChanged(event, 'back')">
+          </div>
+
+          <div id="left_4d_wrapper" style="width:49%; height:28vw; margin:0 auto; background-image: url(https://firebasestorage.googleapis.com/v0/b/bmon-v2.appspot.com/o/bmon-img%2Fcamera_down.png?alt=media&token=b1576e12-2661-46cd-a82c-3284fd5beae5); background-size: 100% 100%;">                  
+            <input type="file" id="photo-oper-left" accept="image/*" style="display:block; width:100%; height:100%; opacity: 0;" onchange="angular.element(this).scope().fileNameChanged(event, 'left')">
+          </div>
+
         </div>
+      </div>
 
-        <div style="text-align: center; background-color:#fff; padding: 0.25em;">
-          <span style="display: inline-block; width:23%; text-align: center;">
-            <img id="frontImg" src="https://firebasestorage.googleapis.com/v0/b/bmon-v2.appspot.com/o/bmon-img%2Fblank.jpg?alt=media&token=d01c3206-0756-4c56-9db0-3e9cd7a45e5e" style="width:100%; height:auto;" ng-click="btnPreview('front')">
-            หน้า
-          </span>
-          <span style="display: inline-block; width:23%; text-align: center;">
-            <img id="rightImg" src="https://firebasestorage.googleapis.com/v0/b/bmon-v2.appspot.com/o/bmon-img%2Fblank.jpg?alt=media&token=d01c3206-0756-4c56-9db0-3e9cd7a45e5e" style="width:100%; height:auto;" ng-click="btnPreview('right')">
-            ขวา
-          </span>
-          <span style="display: inline-block; width:23%; text-align: center;">
-            <img id="backImg" src="https://firebasestorage.googleapis.com/v0/b/bmon-v2.appspot.com/o/bmon-img%2Fblank.jpg?alt=media&token=d01c3206-0756-4c56-9db0-3e9cd7a45e5e" style="width:100%; height:auto;" ng-click="btnPreview('back')">
-            หลัง
-          </span>
-          <span style="display: inline-block; width:23%; text-align: center;">
-            <img id="leftImg" src="https://firebasestorage.googleapis.com/v0/b/bmon-v2.appspot.com/o/bmon-img%2Fblank.jpg?alt=media&token=d01c3206-0756-4c56-9db0-3e9cd7a45e5e" style="width:100%; height:auto;" ng-click="btnPreview('left')">
-            ซ้าย
-          </span>
-
-        </div><br>
-
-
-        <button class="button button-positive button-full" ng-click="btnOtherImg()"><i class="ion-ios-camera-outline" style="font-size: 2.5em; line-height: 0;"></i> ถ่ายภาพอื่นๆ</button><br /><br />
+        <button class="button button-positive button-full" ng-click="btnOtherImg()" style="margin-top:0.5em !important;"><i class="ion-ios-camera-outline" style="font-size: 2.5em; line-height: 0;"></i> ถ่ายภาพอื่นๆ</button><br /><br />
 
 
 

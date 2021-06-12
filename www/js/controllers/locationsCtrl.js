@@ -45,7 +45,8 @@ angular
       $scope.etcImgs = {
         storage:"imgEtc/",
         dataTarget:"etc",
-        imgName:"etc@"
+        imgName:"etc@",
+        type:"etc"
       };
 
       var takePicture = $('#take-picture-on-locate');
@@ -88,6 +89,7 @@ angular
                   event.preventDefault();
                 } else {
                   // alert("ready for upload");
+                  $scope.etcImgs.imgName = $scope.etcImgs.imgName + Date.now();
                   sharedProp.btnUpload($scope.etcImgs, imgData, exif);
                 }
               },
@@ -252,10 +254,10 @@ angular
                 lng: lng,
                 meta: prov + "_" + area + "_" + pin,
                 imgs: {
-                  front: "blank",
-                  right: "blank",
-                  back: "blank",
-                  left: "blank",
+                  front: "undefined",
+                  right: "undefined",
+                  back: "undefined",
+                  left: "undefined",
                 },
               });
               console.log(

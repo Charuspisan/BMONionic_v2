@@ -434,6 +434,11 @@ angular
       }        
     };
 
+    let currentPinID
+    myService.setPinID = function (jodId) {
+      currentPinID = jodId;
+    };
+
     myService.btnUpload = function (type, fileData, exif) {
       // console.log('btnUpload' + fileData);
       // alert('lat : ' + latDevice);
@@ -442,7 +447,7 @@ angular
 
       myService.showLoading();
       //auto gen ID
-      imgName = type.imgName + Date.now();
+      imgName = type.imgName;
 
       var getStamp = new Date();
       var dd = ("0" + getStamp.getDate()).slice(-2);
@@ -459,24 +464,79 @@ angular
         lngUpload = lngDevice;
       }
 
-      refBMONimg = refStorage.child(type.storage + imgName + ".jpg");
-      refBMONimg.putString(fileData, "base64").then(function (snapshot) {
-        //alert("Uploaded Other Photo");
-        imgDB.child(type.dataTarget).push({
-          date: dateRec,
-          lat: latUpload,
-          lng: lngUpload,
-          // user: userEmail,
-          name: imgName,
-          status: "new",
-          type: type.dataTarget,
-          note: type.note,
+      if(type.dataTarget=="4d"){
+        refBMONimg = refStorage.child(type.storage + imgName + ".jpg");
+        refBMONimg.putString(fileData, "base64").then(function (snapshot) {
+          //alert("Uploaded Other Photo");
+          imgDB.child(type.dataTarget).push({
+            date: dateRec,
+            lat: latUpload,
+            lng: lngUpload,
+            // user: userEmail,
+            name: imgName,
+            status: "new",
+            type: type.type,
+            jobRecId: type.jobRecId,
+            meta:type.meta
+          });
+          setTimeout(function () {
+            myService.hideLoading();
+            myService.showMessage("บันทึกภาพแล้ว");
+            refBMONimg.getDownloadURL().then(function (url) {
+
+
+              if(type.type=="front"){
+                // console.log("update img4d on : "+currentPinID);
+                refJobsRec.child(currentPinID + "/img4d").update({ front: imgName });
+                $("#front_4d_wrapper").css(
+                  "background-image",
+                  "url('" + url + "')"
+                );
+
+              }else if(type.type=="right"){
+                refJobsRec.child(currentPinID + "/img4d").update({ right: imgName });
+                $("#right_4d_wrapper").css(
+                  "background-image",
+                  "url('" + url + "')"
+                );
+              }else if(type.type=="back"){
+                refJobsRec.child(currentPinID + "/img4d").update({ back: imgName });
+                $("#back_4d_wrapper").css(
+                  "background-image",
+                  "url('" + url + "')"
+                );
+              }else if(type.type=="left"){
+                refJobsRec.child(currentPinID + "/img4d").update({ left: imgName });
+                $("#left_4d_wrapper").css(
+                  "background-image",
+                  "url('" + url + "')"
+                );
+              }
+
+
+            });
+          }, 1000);
         });
-        setTimeout(function () {
-          myService.hideLoading();
-          myService.showMessage("บันทึกภาพแล้ว");
-        }, 1000);
-      });
+      }else if(type.dataTarget=="etc"){
+        refBMONimg = refStorage.child(type.storage + imgName + ".jpg");
+        refBMONimg.putString(fileData, "base64").then(function (snapshot) {
+          //alert("Uploaded Other Photo");
+          imgDB.child(type.dataTarget).push({
+            date: dateRec,
+            lat: latUpload,
+            lng: lngUpload,
+            // user: userEmail,
+            name: imgName,
+            status: "new",
+            type: type.type,
+            note: type.note,
+          });
+          setTimeout(function () {
+            myService.hideLoading();
+            myService.showMessage("บันทึกภาพแล้ว");
+          }, 1000);
+        });
+      }
     };
 
 

@@ -53,7 +53,8 @@ angular
       $scope.etcImgs = {
         storage:"imgEtc/",
         dataTarget:"etc",
-        imgName:"etc@"
+        imgName:"etc@",
+        type:"etc"
       };
 
       $scope.editNotePopupEtcImg = function (img64data, exif) {
@@ -90,6 +91,7 @@ angular
                   event.preventDefault();
                 } else {
                   // alert("ready for upload");
+                  $scope.etcImgs.imgName = $scope.etcImgs.imgName + Date.now();
                   sharedProp.btnUpload($scope.etcImgs, imgData, exif);
                 }
               },
