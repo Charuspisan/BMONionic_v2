@@ -517,7 +517,7 @@ angular
             });
           }, 1000);
         });
-      }else{
+      }else if(type.dataTarget=="etc"){
         refBMONimg = refStorage.child(type.storage + imgName + ".jpg");
         refBMONimg.putString(fileData, "base64").then(function (snapshot) {
           //alert("Uploaded Other Photo");
@@ -529,6 +529,27 @@ angular
             name: imgName,
             status: "new",
             type: type.type,
+            note: type.note,
+          });
+          setTimeout(function () {
+            myService.hideLoading();
+            myService.showMessage("บันทึกภาพแล้ว");
+          }, 1000);
+        });
+      }else if(type.dataTarget=="other"){
+        refBMONimg = refStorage.child(type.storage + imgName + ".jpg");
+        refBMONimg.putString(fileData, "base64").then(function (snapshot) {
+          //alert("Uploaded Other Photo");
+          imgDB.child(type.dataTarget).push({
+            date: dateRec,
+            lat: latUpload,
+            lng: lngUpload,
+            // user: userEmail,
+            name: imgName,
+            status: "new",
+            type: type.type,
+            jobRecId: type.jobRecId,
+            meta:type.meta,
             note: type.note,
           });
           setTimeout(function () {

@@ -702,7 +702,7 @@ angular
           $scope.ImgOther.meta=direction + "_" + jobInfo.jobMeta;
           $scope.ImgOther.imgName=direction + "_" + jobInfo.jobMeta + "@" + Date.now();
           $scope.ImgOther.jobRecId=jobInfo.jobId;
-          sharedProp.takePic_fn(event, uploadOtherFn);
+          sharedProp.takePic_fn(event, $scope.editNotePopupOtherImg);
         }else{
           $scope.Imgs4d.type=direction;
           $scope.Imgs4d.meta=direction + "_" + jobInfo.jobMeta;
@@ -733,16 +733,72 @@ angular
         note:""
       };
 
-      function uploadOtherFn (imgData, exif){
-        console.log($scope.ImgOther);
-        img64data = imgData.split(",")[1];
-        console.log(img64data);
-        console.log(exif);
-        sharedProp.btnUpload($scope.ImgOther, img64data, exif);
-      }
+      // function uploadOtherFn (imgData, exif){
+      //   console.log($scope.ImgOther);
+      //   img64data = imgData.split(",")[1];
+      //   console.log(img64data);
+      //   console.log(exif);
+      //   sharedProp.btnUpload($scope.ImgOther, img64data, exif);
+      // }
 
 
+      $scope.editNotePopupOtherImg = function (img64data, exif) {
+        //console.log("Key for edit Slope : "+refJobsRec);
 
+        console.log("exif from editNotePopupOtherImg : ",exif);
+
+        var myPopup = $ionicPopup.show({
+          templateUrl: "editNotePopupOtherImg.html",
+          title: "บันทึกช่วยจำ",
+          subTitle: "คำอธิบายสำหรับรูปถ่าย",
+          scope: $scope,
+          buttons: [
+            {
+              text: "ไม่บันทึกภาพ",
+              onTap: function (e) {
+                $('#take-picture').val('');
+              },
+            },
+            {
+              text: "<b>บันทึกภาพ</b>",
+              type: "button-positive",
+              onTap: function (e) {
+                otherPhotoNote = $scope.ImgOther.note;
+                if (
+                  otherPhotoNote == undefined ||
+                  otherPhotoNote == null ||
+                  otherPhotoNote == ""
+                ) {
+                  sharedProp.showAlert(
+                    "กรุณาใส่บันทึกช่วยจำทุกครั้ง"
+                  );
+                  event.preventDefault();
+                } else {
+                  // alert("ready for upload");
+                  // $scope.ImgOther.imgName = $scope.ImgOther.imgName + Date.now();
+                  console.log("$scope.ImgOther : ",$scope.ImgOther);
+                  sharedProp.btnUpload($scope.ImgOther, imgData, exif);
+                }
+              },
+            },
+          ],
+        });
+        myPopup.then(function () {});
+        imgData = img64data.split(",")[1];
+        setTimeout(()=>{
+          // preview image
+          $("#previewOtherImg").attr("src",img64data);
+          if($("#previewOtherImg").attr("src").length==0){
+            setInterval(()=>{
+              $("#previewOtherImg").attr("src",img64data);
+              console.log("waiting for preview Image");
+            },1000);
+          }
+        },1000)
+        $timeout(function () {
+          myPopup.close(); //close the popup after 3 seconds for some reason
+        }, 100000);
+      };
 
 
 
