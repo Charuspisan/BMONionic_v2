@@ -517,7 +517,7 @@ angular
             });
           }, 1000);
         });
-      }else if(type.dataTarget=="etc"){
+      }else{
         refBMONimg = refStorage.child(type.storage + imgName + ".jpg");
         refBMONimg.putString(fileData, "base64").then(function (snapshot) {
           //alert("Uploaded Other Photo");

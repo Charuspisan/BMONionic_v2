@@ -111,7 +111,12 @@
         </div>
       </div>
 
-        <button class="button button-positive button-full" ng-click="btnOtherImg()" style="margin-top:0.5em !important;"><i class="ion-ios-camera-outline" style="font-size: 2.5em; line-height: 0;"></i> ถ่ายภาพอื่นๆ</button><br /><br />
+        <!-- <button class="button button-positive button-full" ng-click="btnOtherPhoto()" style="margin-top:0.5em !important;"><i class="ion-ios-camera-outline" style="font-size: 2.5em; line-height: 0;"></i> ถ่ายภาพอื่นๆ</button><br /><br /> -->
+
+        <div style="background-color: #387ef5; margin-top:0.5em; border-radius: 2em; color:#fff; position: relative; text-align: center;">
+            <i class="ion-ios-camera-outline" style="font-size: 3em; margin-top: -1em; color: #fff; text-align: center;"></i> ถ่ายภาพอื่นๆ
+            <input type="file" id="photo-oper-left" accept="image/*" style="display:block; width:100%; height:100%; opacity: 0; position: absolute; top: 0;" onchange="angular.element(this).scope().fileNameChanged(event, 'other')">
+        </div><br /><br />
 
 
 

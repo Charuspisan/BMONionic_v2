@@ -697,11 +697,19 @@ angular
       $scope.fileNameChanged = function(event, direction) {
         console.log(event);
         console.log(jobInfo.jobMeta);
-        $scope.Imgs4d.type=direction;
-        $scope.Imgs4d.meta=direction + "_" + jobInfo.jobMeta;
-        $scope.Imgs4d.imgName=direction + "_" + jobInfo.jobMeta + "@" + Date.now();
-        $scope.Imgs4d.jobRecId=jobInfo.jobId;
-        sharedProp.takePic_fn(event, upLoad4Dfn);  
+        if(direction=="other"){
+          $scope.ImgOther.type=direction;
+          $scope.ImgOther.meta=direction + "_" + jobInfo.jobMeta;
+          $scope.ImgOther.imgName=direction + "_" + jobInfo.jobMeta + "@" + Date.now();
+          $scope.ImgOther.jobRecId=jobInfo.jobId;
+          sharedProp.takePic_fn(event, uploadOtherFn);
+        }else{
+          $scope.Imgs4d.type=direction;
+          $scope.Imgs4d.meta=direction + "_" + jobInfo.jobMeta;
+          $scope.Imgs4d.imgName=direction + "_" + jobInfo.jobMeta + "@" + Date.now();
+          $scope.Imgs4d.jobRecId=jobInfo.jobId;
+          sharedProp.takePic_fn(event, upLoad4Dfn);            
+        }
       }
 
       function upLoad4Dfn(imgData, exif) {
@@ -714,6 +722,24 @@ angular
         sharedProp.btnUpload($scope.Imgs4d, img64data, exif);
 
       };
+
+      $scope.ImgOther = {
+        storage:"imgOther/",
+        dataTarget:"other",
+        imgName:"",
+        type:"",
+        jobRecId:"",
+        meta:"",
+        note:""
+      };
+
+      function uploadOtherFn (imgData, exif){
+        console.log($scope.ImgOther);
+        img64data = imgData.split(",")[1];
+        console.log(img64data);
+        console.log(exif);
+        sharedProp.btnUpload($scope.ImgOther, img64data, exif);
+      }
 
 
 
