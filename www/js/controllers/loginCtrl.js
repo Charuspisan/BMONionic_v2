@@ -12,6 +12,7 @@ angular
       sharedProp,
     ) {
       var auth = $firebaseAuth();
+ 
 
       var usersDB = new Firebase(
         sharedProp.dbUrl() + "/users/"
@@ -20,6 +21,10 @@ angular
       $scope.userEmail = "";
       $scope.userPass = "";
 
+      $scope.goNext = function (page) {
+        console.log("Going to : " + page);
+        $location.path(page);
+      };
 
       $scope.$on("$viewContentLoaded", function () {
         sharedProp.hideLoading();
@@ -39,10 +44,53 @@ angular
       }
 
 
+
+
+
+
+
+
+      var userEmail, userPass
+
+      $scope.signIn = function (user) {
+        $scope.firebaseUser = null;
+        $scope.error = null;
+        userEmail = $scope.userEmail;
+        userPass = $scope.userPass;
+        if (userPass == null) {
+          $scope.showAlert("กรุณาระบุรหัสผ่าน");
+        }
+        if (userEmail == null) {
+          $scope.showAlert("กรุณาระบุอีเมล์");
+        }
+
+        auth
+          .$signInWithEmailAndPassword(userEmail, userPass)
+          .then(function (user) {
+            sharedProp.showLoading();
+          })
+          .catch(function (error) {
+            $scope.error = error;
+            sharedProp.hideLoading();
+            //alert($scope.error);
+            console.log("signin error : ", error);
+            $scope.alertFactory(error);
+          });
+      };
+
+
+
+
+
+
+
+
+
       // Listening for auth state changes.
       // [START authstatelistener]
       firebase.auth().onAuthStateChanged(function (user) {
-        sharedProp.setPass($scope.userPass);
+
+        sharedProp.setPass(userPass);
 
         $("#userPass").val("");
 
@@ -52,10 +100,13 @@ angular
         // console.log("isLogin : " + isLogin);
 
         if (user != null) {
+
+          var uid = user.uid;
+          console.log("uid from loginCtrl : ",uid);
+          
           if (user.emailVerified) {
             usersDB.child(user.uid).once("value", function (snap) {
               var data = snap.val();
-
 
               if (data.role == "admin") {
                 $scope.$apply(function () {
@@ -155,32 +206,6 @@ angular
             $scope.showAlert("อีเมล์นี้ถูกใช้งานโดยอาสาสมัครคนอื่นแล้ว");
             break;
         }
-      };
-
-      $scope.signIn = function (user) {
-        $scope.firebaseUser = null;
-        $scope.error = null;
-        var userEmail = $scope.userEmail;
-        var userPass = $scope.userPass;
-        if (userPass == null) {
-          $scope.showAlert("กรุณาระบุรหัสผ่าน");
-        }
-        if (userEmail == null) {
-          $scope.showAlert("กรุณาระบุอีเมล์");
-        }
-
-        auth
-          .$signInWithEmailAndPassword(userEmail, userPass)
-          .then(function (user) {
-            sharedProp.showLoading();
-          })
-          .catch(function (error) {
-            $scope.error = error;
-            sharedProp.hideLoading();
-            //alert($scope.error);
-            console.log("signin error : ", error);
-            $scope.alertFactory(error);
-          });
       };
 
       $scope.signUpPopup = function () {

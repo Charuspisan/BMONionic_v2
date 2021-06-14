@@ -23,9 +23,11 @@ var config = {
   authDomain: authUrl,
   databaseURL: dbUrl,
   storageBucket: storageUrl,
-  messagingSenderId: "170191502662",
+  messagingSenderId: "1034734255535",
+  appId: "1:1034734255535:web:24b02a939a0298e9e5835a"
 };
 firebase.initializeApp(config);
+
 
 const refLocations = new Firebase(dbUrl + "/locations/");
 const refJobsID = new Firebase(dbUrl + "/jobsID/");

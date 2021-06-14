@@ -40,7 +40,7 @@
 
 
           <!--       One-man case or not identify -->
-                <ion-item ng-if="GetrefJobTool!='Water-level'"> 
+                <ion-item ng-if="GetrefJobTool!='Water-level'" ng-hide="key=='meta'||key=='img4d'||key=='operate_date'"> 
                     <button class="button button-small button-positive ion-chatbox-working button-left" ng-click="editNotePopup(key);"></button> 
                     {{key}} : <span>{{PinData}} cm</span>
 
@@ -49,7 +49,7 @@
                  </ion-item>
                 
            <!--       Water-level case  -->
-                <ion-item ng-if="GetrefJobTool=='Water-level'&&!$first">
+                <ion-item ng-if="GetrefJobTool=='Water-level'&&!$first" ng-hide="key=='meta'||key=='img4d'||key=='operate_date'">
                     <button class="button button-small button-positive ion-chatbox-working button-left" ng-click="editNotePopup(key);"></button>
                     {{key-2}} - {{key}} : <span style="text-align: right;display: inline-block;vertical-align: text-top;width: 50%;">ไม้นำ = {{PinData[0]}} cm<br />ไม้ตาม = {{PinData[1]}} cm</span>
                     <button class="button button-small button-positive button-right" ng-click="edit2MeterPopup(key);" style="vertical-align:middle;"><i class="icon ion-edit"></i></button>   

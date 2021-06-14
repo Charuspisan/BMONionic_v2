@@ -11,9 +11,6 @@ angular
       $location,
       $window
     ) {
-      
-      var loginStatus = sharedProp.getEmail();
-      console.log("user is : " + loginStatus);
 
       $scope.goNext = function (page) {
         console.log("Going to : " + page);
@@ -36,6 +33,18 @@ angular
         console.log("No Logedin");
         $scope.goNext("/login");
       }
+      firebase.auth().onAuthStateChanged(function (user) {
+        if (user) {
+          // User is signed in.
+          console.log("Logedin : ",user);
+          console.log("Logedin : ",user.email);
+          sharedProp.hideLoading();
+        } else {
+          // No user is signed in.
+          console.log("No Logedin");
+          $scope.goNext("/login");
+        }
+      });
 
       var imgData;
       var etcPhotoNote;
