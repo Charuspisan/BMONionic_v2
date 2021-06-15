@@ -30,25 +30,6 @@ angular
         sharedProp.hideLoading();
       });
 
-      var user = firebase.auth().currentUser;
-      
-      if (user) {
-        // User is signed in.
-        console.log("Logedin");
-        $scope.goNext("/managejobs");
-        sharedProp.hideLoading();
-      } else {
-        // No user is signed in.
-        console.log("No Logedin");
-        // $scope.goNext("/login");
-      }
-
-
-
-
-
-
-
 
       var userEmail, userPass
 
@@ -68,6 +49,7 @@ angular
           .$signInWithEmailAndPassword(userEmail, userPass)
           .then(function (user) {
             sharedProp.showLoading();
+            console.log("signInWithEmailAndPassword : ",user);
           })
           .catch(function (error) {
             $scope.error = error;

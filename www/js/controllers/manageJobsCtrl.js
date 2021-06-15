@@ -22,29 +22,29 @@ angular
         $location.path(page);
       };
 
-      var user = firebase.auth().currentUser;
+      var currentUser = firebase.auth().currentUser;
 
-      if (user) {
+      if (currentUser) {
         // User is signed in.
-        console.log("Logedin");
+        console.log("currentUser Logedin");
         sharedProp.hideLoading();
       } else {
         // No user is signed in.
         console.log("No Logedin");
         $scope.goNext("/login");
       }
-      firebase.auth().onAuthStateChanged(function (user) {
-        if (user) {
-          // User is signed in.
-          console.log("Logedin : ",user);
-          console.log("Logedin : ",user.email);
-          sharedProp.hideLoading();
-        } else {
-          // No user is signed in.
-          console.log("No Logedin");
-          $scope.goNext("/login");
-        }
-      });
+
+      // firebase.auth().onAuthStateChanged(function () {
+      //   if (currentUser) {
+      //     // User is signed in.
+      //     console.log("currentUser Logedin : ",currentUser);
+      //     sharedProp.hideLoading();
+      //   } else {
+      //     // No user is signed in.
+      //     console.log("No Logedin");
+      //     $scope.goNext("/login");
+      //   }
+      // });
 
       var imgData;
       var etcPhotoNote;
