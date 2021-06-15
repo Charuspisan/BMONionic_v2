@@ -637,8 +637,6 @@ angular
 
       $scope.setBG4d = function(){
 
-        console.log($scope.objRec.img4d.front);
-
         if($scope.objRec.img4d.front!=undefined){
           var refFrontimg = refStorage.child('img4d/' + $scope.objRec.img4d.front + ".jpg");
           refFrontimg.getDownloadURL().then(function (url) {
