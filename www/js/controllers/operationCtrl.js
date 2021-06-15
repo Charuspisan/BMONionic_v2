@@ -637,7 +637,9 @@ angular
 
       $scope.setBG4d = function(){
 
-        if($scope.objRec.img4d.front!="undefined"){
+        console.log($scope.objRec.img4d.front);
+
+        if($scope.objRec.img4d.front!=undefined){
           var refFrontimg = refStorage.child('img4d/' + $scope.objRec.img4d.front + ".jpg");
           refFrontimg.getDownloadURL().then(function (url) {
             console.log("url : "+url);
@@ -648,7 +650,7 @@ angular
           });
         }
 
-        if($scope.objRec.img4d.right!="undefined"){
+        if($scope.objRec.img4d.right!=undefined){
           var refRightimg = refStorage.child('img4d/' + $scope.objRec.img4d.right + ".jpg");
           refRightimg.getDownloadURL().then(function (url) {
             console.log("url : "+url);
@@ -659,7 +661,7 @@ angular
           });
         }
 
-        if($scope.objRec.img4d.back!="undefined"){
+        if($scope.objRec.img4d.back!=undefined){
           var refBackimg = refStorage.child('img4d/' + $scope.objRec.img4d.back + ".jpg");
           refBackimg.getDownloadURL().then(function (url) {
             console.log("url : "+url);
@@ -670,7 +672,7 @@ angular
           });
         }
 
-        if($scope.objRec.img4d.left!="undefined"){
+        if($scope.objRec.img4d.left!=undefined){
           var refLefttimg = refStorage.child('img4d/' + $scope.objRec.img4d.left + ".jpg");
           refLefttimg.getDownloadURL().then(function (url) {
             console.log("url : "+url);

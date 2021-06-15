@@ -214,7 +214,7 @@ angular
       }
 
       $scope.copyAll = (key)=>{
-        var refJobsIDSeleted = new Firebase(sharedProp.dbUrl() + "/jobsID/" + key);
+        var refJobsIDSeleted = firebase.database().ref("jobsID/" + key);
         var selectJob
         var urlsData
 
@@ -279,7 +279,7 @@ angular
             //var s=snapshot.val();
             snapshot.forEach(function (childSnapshot) {
               // key will be "ada" the first time and "alan" the second time
-              var key = childSnapshot.key();
+              var key = childSnapshot.key;
               // data will be the actual contents of the child
               var data = childSnapshot.val();
               console.log("jobIdKey : ", key);
@@ -531,7 +531,7 @@ angular
             area: area,
             status: "active",
           });
-          var newJobID = newJob.key();
+          var newJobID = newJob.key;
           console.log(newJobID);
           sharedProp.showLoading();
           $.when(
@@ -545,8 +545,8 @@ angular
                   tool: "Water-level",
                   locatRef: value.id,
                 });
-              var newRecID = newRec.key();
-              var time = Firebase.ServerValue.TIMESTAMP;
+              var newRecID = newRec.key;
+              var time = firebase.database.ServerValue.TIMESTAMP;
               var newSet = {};
               var graph = [];
               var note = [];

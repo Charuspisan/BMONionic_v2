@@ -29,11 +29,18 @@ var config = {
 firebase.initializeApp(config);
 
 
-const refLocations = new Firebase(dbUrl + "/locations/");
-const refJobsID = new Firebase(dbUrl + "/jobsID/");
-const refJobsRec = new Firebase(dbUrl + "/jobsRec/");
+// const refLocations = new Firebase(dbUrl + "/locations/");
+// const refJobsID = new Firebase(dbUrl + "/jobsID/");
+// const refJobsRec = new Firebase(dbUrl + "/jobsRec/");
+// const refStorage = firebase.storage().ref();
+// const imgDB = new Firebase(dbUrl + "/images/");
+// const imgEtc = "imgEtc/";
+
+const refLocations = firebase.database().ref("locations/");
+const refJobsID = firebase.database().ref("jobsID/");
+const refJobsRec = firebase.database().ref("jobsRec/");
 const refStorage = firebase.storage().ref();
-const imgDB = new Firebase(dbUrl + "/images/");
+const imgDB = firebase.database().ref("images/");
 const imgEtc = "imgEtc/";
 
 const env = "dev";

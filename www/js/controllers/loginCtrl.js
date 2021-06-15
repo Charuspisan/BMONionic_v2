@@ -14,9 +14,7 @@ angular
       var auth = $firebaseAuth();
  
 
-      var usersDB = new Firebase(
-        sharedProp.dbUrl() + "/users/"
-      );
+      var usersDB = firebase.database().ref("users/");
 
       $scope.userEmail = "";
       $scope.userPass = "";
