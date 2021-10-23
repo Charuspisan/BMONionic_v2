@@ -6,51 +6,12 @@ angular
     function (
       $scope,
       $ionicViewService,
-      $firebaseObject,
-      $firebaseArray,
       $ionicPopup,
+      $ionicModal,
       $timeout,
       $location,
-      $window,
       sharedProp,
-      $ionicLoading,
-      $ionicScrollDelegate
     ) {
-      var refLocations = new Firebase(sharedProp.dbUrl() + "/locations/");
-      var refJobsID = new Firebase(sharedProp.dbUrl() + "/jobsID/");
-      var refJobsRec = new Firebase(sharedProp.dbUrl() + "/jobsRec/");
-
-      console.log("refJobsID : " + refJobsID);
-      console.log("refJobsRec : " + refJobsRec);
-
-      // var jobInfo = sharedProp.getJobInfo();
-
-      // console.log("Pass value : ", sharedProp.getJobInfo());
-      // console.log("jobInfo.jobId : " + jobInfo.jobId);
-
-      $scope.showLoading = function () {
-        $ionicLoading
-          .show({
-            content: '<div class="ionic-logo"></div>',
-            animation: "fade-in",
-            showBackdrop: true,
-            maxWidth: 0,
-            showDelay: 0,
-            // duration: 3000
-          })
-          .then(function () {
-            console.log("The loading indicator is now displayed");
-          });
-      };
-
-      $scope.hideLoading = function () {
-        $ionicLoading.hide().then(function () {
-          console.log("The loading indicator is now hidden");
-        });
-      };
-      // $scope.$on('$viewContentLoaded', function(){
-      //   $scope.hideLoading();
-      // });
 
       $scope.goBack = function () {
         console.log("Going back");
@@ -61,37 +22,6 @@ angular
         console.log("Going to : " + page);
         $location.path(page);
       };
-
-      $scope.signOut = function () {
-        var confirmPopup = $ionicPopup.confirm({
-          title: "ออกจากระบบ",
-          template: "<center>คุณต้องการออกจากระบบหรือไม่</center>",
-          cancelText: "ยกเลิก",
-          okText: "ยืนยัน",
-        });
-        confirmPopup.then(function (res) {
-          if (res) {
-            if (firebase.auth().currentUser) {
-              firebase.auth().signOut();
-              console.log("Now loged out");
-              $location.path("/login");
-              $scope.userEmail = "";
-              $scope.userPass = "";
-            } else {
-              console.log("Not login login page");
-              // $location.path('/login');
-            }
-          } else {
-          }
-        });
-      };
-
-      //get value from Get Assign Jobs page to variable
-      //$scope.GetrefJobID = "-K_TaUNGfsnHpQdKs42B";
-
-      //////////this for testing only //////
-
- 
 
 
       var jobInfo = {};
@@ -105,74 +35,32 @@ angular
 
       console.log("jobInfo : ",jobInfo);
 
-      // refJobsID
-      // .orderByChild("status")
-      // .equalTo("active")
-      // .on("value", function (snapshot) {
-      //   $scope.objID = snapshot.val();
-      //   $scope.hideLoading();
-      //   console.log("$scope.objID : ",$scope.objID);
-      // });
+      sharedProp.setPinID(jobInfo.jobId);
 
       refJobsID.child(jobInfo.parentID).child(jobInfo.jobId).on("value", function (snapshot) {
         // console.log("value : ", value);
         $scope.objID = snapshot.val();
-        $scope.hideLoading();
+        sharedProp.hideLoading();
         console.log("$scope.objID : ", $scope.objID);
       }); 
 
       refJobsRec.child(jobInfo.jobId).on("value", function (snapshot) {
         // console.log("value : ", value);
         $scope.objRec = snapshot.val();
-        $scope.hideLoading();
+        sharedProp.hideLoading();
         console.log("$scope.objRec : ", $scope.objRec);
-      }); 
+      });
 
 
-      // $scope.GetrefJobID = "-MQV5s5F4ED9sI524QE2";
-      // $scope.GetrefJobPin = "B1";
-      // $scope.GetrefJobProv = "Songkhla";
-      // $scope.GetrefJobArea = "phagan";
-      // $scope.GetrefJobDate = "06/01/2017";
-      // $scope.GetrefJobTool = "Water-level";
-      // console.log("jobInfo.jobId : " + jobInfo.jobId);
-      // console.log("GetrefJobID : " + $scope.GetrefJobID);
-      // console.log("GetrefJobPin : " + $scope.GetrefJobPin);
-      // console.log("Tool : " + $scope.GetrefJobTool);
-      //////////////////////////////////////////////////
+      sharedProp.checkChrome();
+      sharedProp.getDeviceGPS();
 
-      
       $scope.GetrefJobParentID = jobInfo.parentID;
       $scope.GetrefJobID = jobInfo.jobId;
-      // $scope.GetrefJobPin = jobInfo.jobPin;
-      // $scope.GetrefJobProv = jobInfo.jobProv;
-      // $scope.GetrefJobArea = jobInfo.jobArea;
-      // $scope.GetrefJobDate = jobInfo.jobDate;
       $scope.GetrefJobTool = jobInfo.jobTool;
-      // $scope.GetrefJobLocate = jobInfo.jobLocate;
       $scope.GetrefJobMeta = jobInfo.jobMeta;
 
-      $scope.showLoading();
-
-      $scope.objRec;
-
-
-      refJobsRec.child(jobInfo.jobId).on("value", function (snapshot) {
-        // console.log("value : ", value);
-        $scope.objRec = snapshot.val();
-        $scope.hideLoading();
-      });        
-
-
-      
-      // refJobsRec.child("-MQV5s5F4ED9sI524QE2").on("value", function (snapshot) {
-      //   // console.log("value : ", value);
-      //   $scope.objRec = snapshot.val();
-      //   $scope.hideLoading();
-      //   console.log("$scope.objRec : ", $scope.objRec);
-      // });        
-
-
+      sharedProp.showLoading(); 
 
       //Start graph
       var dataArray = [];
@@ -715,6 +603,209 @@ angular
         });
       };
 
+
+
+      $ionicModal.fromTemplateUrl('takePhotosModal.html', {
+        scope: $scope,
+        animation: 'slide-in-up'
+      }).then(function(modal) {
+        $scope.modal = modal;
+      });
+      $scope.openModal = function() {
+        $scope.modal.show();
+      };
+      $scope.closeModal = function() {
+        $scope.modal.hide();
+      };
+      $scope.$on('modal.shown', function() {
+        $scope.setBG4d();
+      });
+      // Cleanup the modal when we're done with it!
+      $scope.$on('$destroy', function() {
+        $scope.modal.remove();
+      });
+      // Execute action on hide modal
+      $scope.$on('modal.hidden', function() {
+        // Execute action
+      });
+      // Execute action on remove modal
+      $scope.$on('modal.removed', function() {
+        // Execute action
+      });
       setupSlider();
-    }
+
+
+      $scope.setBG4d = function(){
+
+        if($scope.objRec.img4d.front!=undefined){
+          var refFrontimg = refStorage.child('img4d/' + $scope.objRec.img4d.front + ".jpg");
+          refFrontimg.getDownloadURL().then(function (url) {
+            console.log("url : "+url);
+            $("#front_4d_wrapper").css(
+              "background-image",
+              "url('" + url + "')"
+            );
+          });
+        }
+
+        if($scope.objRec.img4d.right!=undefined){
+          var refRightimg = refStorage.child('img4d/' + $scope.objRec.img4d.right + ".jpg");
+          refRightimg.getDownloadURL().then(function (url) {
+            console.log("url : "+url);
+            $("#right_4d_wrapper").css(
+              "background-image",
+              "url('" + url + "')"
+            );
+          });
+        }
+
+        if($scope.objRec.img4d.back!=undefined){
+          var refBackimg = refStorage.child('img4d/' + $scope.objRec.img4d.back + ".jpg");
+          refBackimg.getDownloadURL().then(function (url) {
+            console.log("url : "+url);
+            $("#back_4d_wrapper").css(
+              "background-image",
+              "url('" + url + "')"
+            );
+          });
+        }
+
+        if($scope.objRec.img4d.left!=undefined){
+          var refLefttimg = refStorage.child('img4d/' + $scope.objRec.img4d.left + ".jpg");
+          refLefttimg.getDownloadURL().then(function (url) {
+            console.log("url : "+url);
+            $("#left_4d_wrapper").css(
+              "background-image",
+              "url('" + url + "')"
+            );
+          });
+        }
+
+      }
+      
+
+      $scope.Imgs4d = {
+        storage:"img4d/",
+        dataTarget:"4d",
+        imgName:"",
+        type:"",
+        jobRecId:"",
+        meta:""
+      };
+
+
+      $scope.fileNameChanged = function(event, direction) {
+        console.log(event);
+        console.log(jobInfo.jobMeta);
+        if(direction=="other"){
+          $scope.ImgOther.type=direction;
+          $scope.ImgOther.meta=direction + "_" + jobInfo.jobMeta;
+          $scope.ImgOther.imgName=direction + "_" + jobInfo.jobMeta + "@" + Date.now();
+          $scope.ImgOther.jobRecId=jobInfo.jobId;
+          sharedProp.takePic_fn(event, $scope.editNotePopupOtherImg);
+        }else{
+          $scope.Imgs4d.type=direction;
+          $scope.Imgs4d.meta=direction + "_" + jobInfo.jobMeta;
+          $scope.Imgs4d.imgName=direction + "_" + jobInfo.jobMeta + "@" + Date.now();
+          $scope.Imgs4d.jobRecId=jobInfo.jobId;
+          sharedProp.takePic_fn(event, upLoad4Dfn);            
+        }
+      }
+
+      function upLoad4Dfn(imgData, exif) {
+
+        console.log($scope.Imgs4d);
+        img64data = imgData.split(",")[1];
+        console.log(img64data);
+        console.log(exif);
+
+        sharedProp.btnUpload($scope.Imgs4d, img64data, exif);
+
+      };
+
+      $scope.ImgOther = {
+        storage:"imgOther/",
+        dataTarget:"other",
+        imgName:"",
+        type:"",
+        jobRecId:"",
+        meta:"",
+        note:""
+      };
+
+      // function uploadOtherFn (imgData, exif){
+      //   console.log($scope.ImgOther);
+      //   img64data = imgData.split(",")[1];
+      //   console.log(img64data);
+      //   console.log(exif);
+      //   sharedProp.btnUpload($scope.ImgOther, img64data, exif);
+      // }
+
+
+      $scope.editNotePopupOtherImg = function (img64data, exif) {
+        //console.log("Key for edit Slope : "+refJobsRec);
+
+        console.log("exif from editNotePopupOtherImg : ",exif);
+
+        var myPopup = $ionicPopup.show({
+          templateUrl: "editNotePopupOtherImg.html",
+          title: "บันทึกช่วยจำ",
+          subTitle: "คำอธิบายสำหรับรูปถ่าย",
+          scope: $scope,
+          buttons: [
+            {
+              text: "ไม่บันทึกภาพ",
+              onTap: function (e) {
+                $('#take-picture').val('');
+              },
+            },
+            {
+              text: "<b>บันทึกภาพ</b>",
+              type: "button-positive",
+              onTap: function (e) {
+                otherPhotoNote = $scope.ImgOther.note;
+                if (
+                  otherPhotoNote == undefined ||
+                  otherPhotoNote == null ||
+                  otherPhotoNote == ""
+                ) {
+                  sharedProp.showAlert(
+                    "กรุณาใส่บันทึกช่วยจำทุกครั้ง"
+                  );
+                  event.preventDefault();
+                } else {
+                  // alert("ready for upload");
+                  // $scope.ImgOther.imgName = $scope.ImgOther.imgName + Date.now();
+                  console.log("$scope.ImgOther : ",$scope.ImgOther);
+                  sharedProp.btnUpload($scope.ImgOther, imgData, exif);
+                }
+              },
+            },
+          ],
+        });
+        myPopup.then(function () {});
+        imgData = img64data.split(",")[1];
+        setTimeout(()=>{
+          // preview image
+          $("#previewOtherImg").attr("src",img64data);
+          if($("#previewOtherImg").attr("src").length==0){
+            setInterval(()=>{
+              $("#previewOtherImg").attr("src",img64data);
+              console.log("waiting for preview Image");
+            },1000);
+          }
+        },1000)
+        $timeout(function () {
+          myPopup.close(); //close the popup after 3 seconds for some reason
+        }, 100000);
+      };
+
+
+
+
+
+
+
+
+  }
   );

@@ -2,11 +2,11 @@
 
 
   <ion-header-bar class="bar-positive">
-    <img src="images/icon-bar.png" class="icon-bar">
+    <img src="images/icon-bar.png" class="icon-bar" style="border-radius: 1em;">
     <h1 class="title">วัดและบันทึกค่า</h1>
-    <button id="logoutbt" ng-click="signOut()" class="button">
-      <i class="icon ion-close-round"></i>
-    </button>
+    <!-- <button id="logoutbt" ng-click="signOut()" class="button button-clear button-primary">
+      <ion-icon name="close-outline"></ion-icon>
+    </button> -->
   </ion-header-bar>
 
 
@@ -21,7 +21,7 @@
             <div id="container" style="width:100%; height:40vh; margin-top: 44px; padding-top:3em;"></div>
           </div>  
       
-      <ion-content scroll="true" style="top:49vh;" on-swipe-right="goBack()" on-swipe-left="goNext('/camera')">
+      <ion-content scroll="true" style="top:49vh;" on-swipe-right="goBack()">
 
 
               <div style="padding:1em;">
@@ -40,7 +40,7 @@
 
 
           <!--       One-man case or not identify -->
-                <ion-item ng-if="GetrefJobTool!='Water-level'"> 
+                <ion-item ng-if="GetrefJobTool!='Water-level'" ng-hide="key=='meta'||key=='img4d'||key=='operate_date'"> 
                     <button class="button button-small button-positive ion-chatbox-working button-left" ng-click="editNotePopup(key);"></button> 
                     {{key}} : <span>{{PinData}} cm</span>
 
@@ -49,21 +49,85 @@
                  </ion-item>
                 
            <!--       Water-level case  -->
-                <ion-item ng-if="GetrefJobTool=='Water-level'&&!$first">
+                <ion-item ng-if="GetrefJobTool=='Water-level'&&!$first" ng-hide="key=='meta'||key=='img4d'||key=='operate_date'">
                     <button class="button button-small button-positive ion-chatbox-working button-left" ng-click="editNotePopup(key);"></button>
                     {{key-2}} - {{key}} : <span style="text-align: right;display: inline-block;vertical-align: text-top;width: 50%;">ไม้นำ = {{PinData[0]}} cm<br />ไม้ตาม = {{PinData[1]}} cm</span>
                     <button class="button button-small button-positive button-right" ng-click="edit2MeterPopup(key);" style="vertical-align:middle;"><i class="icon ion-edit"></i></button>   
                  </ion-item>
 
               </ion-list>
+      </div>
 
- 
 
+
+
+      <div ng-click="modal.show()" style="background-color: #387ef5; color:#fff;position: fixed; bottom: 0.25em; left: calc(50% - 1.25em); font-size: 1.5em; padding: 0.5em; border-radius: 1.25em; opacity: 0.75;">
+        <ion-icon name="camera-outline"></ion-icon>
 
 
       </div>
 
+
+
 </ion-content>
+
+
+<script id="takePhotosModal.html" type="text/ng-template">
+  <ion-modal-view>
+    <ion-header-bar class="bar bar-positive">
+      <h1 class="title">ถ่ายรูป 4 ทิศ</h1>
+      <button class="button button-clear button-primary" ng-click="modal.hide()"><ion-icon name="close-outline"></ion-icon></button>
+    </ion-header-bar>
+    <ion-content class="padding" style="top:0;">
+
+
+
+      <div class="boxInSlide" id="4imgContainer" style="background-image: url(https://firebasestorage.googleapis.com/v0/b/bmon-v2.appspot.com/o/bmon-img%2Fbeach.png?alt=media&token=25285f3c-5da3-4928-a37f-450ca01cc0fc); background-size: cover; margin-top:2.5em !important; height: auto;">
+
+        <!-- <div id="show4imgs" style="width:100%; height:50vh; text-align:center; background-repeat: no-repeat; background-position: center; background-size: contain; background-color:#000;">
+        </div> -->
+        <!-- <div style="background-color: rgba(256,256,256,0.8);">
+            <i class="ion-camera" style="font-size: 3em; margin-top: -1em; display: block; color: #fff; text-align: center;"  ng-click="btnCamera()"></i>
+        </div> -->
+
+        <div style="text-align: center; padding: 0.25em;">
+
+          <div id="front_4d_wrapper" style="width:49%; height:28vw; margin:0 auto; background-image: url(https://firebasestorage.googleapis.com/v0/b/bmon-v2.appspot.com/o/bmon-img%2Fcamera_up.png?alt=media&token=ecca49e9-68f8-4f70-a7ec-e29741b62eb7); background-size: 100% 100%;">
+              <input type="file" id="photo-oper-front" accept="image/*" style="display:block; width:100%; height:100%; opacity: 0;" onchange="angular.element(this).scope().fileNameChanged(event, 'front')">
+          </div>
+
+          <div id="right_4d_wrapper" style="width:49%; height:28vw; margin-right:0; display: inline-block; background-image: url(https://firebasestorage.googleapis.com/v0/b/bmon-v2.appspot.com/o/bmon-img%2Fcamera_left.png?alt=media&token=a449d6ed-a6a2-436c-8980-e8c76132c453); background-size: 100% 100%;">
+              <input type="file" id="photo-oper-right" accept="image/*" style="display:block; width:100%; height:100%; opacity: 0;" onchange="angular.element(this).scope().fileNameChanged(event, 'right')">                  
+          </div>
+
+          <div id="back_4d_wrapper" style="width:49%; height:28vw; margin-left:0; display: inline-block; background-image: url(https://firebasestorage.googleapis.com/v0/b/bmon-v2.appspot.com/o/bmon-img%2Fcamera_right.png?alt=media&token=2a2a26f1-99ff-4019-9b58-41c2c11de1ea); background-size: 100% 100%;">                  
+            <input type="file" id="photo-oper-back" accept="image/*" style="display:block; width:100%; height:100%; opacity: 0;" onchange="angular.element(this).scope().fileNameChanged(event, 'back')">
+          </div>
+
+          <div id="left_4d_wrapper" style="width:49%; height:28vw; margin:0 auto; background-image: url(https://firebasestorage.googleapis.com/v0/b/bmon-v2.appspot.com/o/bmon-img%2Fcamera_down.png?alt=media&token=b1576e12-2661-46cd-a82c-3284fd5beae5); background-size: 100% 100%;">                  
+            <input type="file" id="photo-oper-left" accept="image/*" style="display:block; width:100%; height:100%; opacity: 0;" onchange="angular.element(this).scope().fileNameChanged(event, 'left')">
+          </div>
+
+        </div>
+      </div>
+
+        <!-- <button class="button button-positive button-full" ng-click="btnOtherPhoto()" style="margin-top:0.5em !important;"><i class="ion-ios-camera-outline" style="font-size: 2.5em; line-height: 0;"></i> ถ่ายภาพอื่นๆ</button><br /><br /> -->
+
+        <div style="background-color: #387ef5; margin-top:0.5em; border-radius: 2em; color:#fff; position: relative; text-align: center;">
+            <i class="ion-ios-camera-outline" style="font-size: 3em; margin-top: -1em; color: #fff; text-align: center;"></i> ถ่ายภาพอื่นๆ
+            <input type="file" id="photo-oper-left" accept="image/*" style="display:block; width:100%; height:100%; opacity: 0; position: absolute; top: 0;" onchange="angular.element(this).scope().fileNameChanged(event, 'other')">
+        </div><br /><br />
+
+
+        
+
+
+    </ion-content>
+  </ion-modal-view>
+</script>
+
+
+
 
 <script id="editSlopePopup.html" type="text/ng-template"><input ng-model="editSlopeData.slopeInTxt" type="number" placeholder="ค่าความลาดชัน"></script>
 <script id="editMeterPopup.html" type="text/ng-template"><input ng-model="editMeterData.meterInTxt" type="number" placeholder="ค่าที่วัดได้ (ซ.ม.)"></script>
@@ -78,7 +142,12 @@
         <option>Water-level</option>
       </select>
     </label>
-</script> 
+</script>
+
+<script id="editNotePopupOtherImg.html" type="text/ng-template">
+  <img id="previewOtherImg" style="width:100%;">
+  <textarea ng-model="ImgOther.note" rows="4" placeholder="บันทึกช่วยจำ" style="width:100%; padding:2%;"></textarea>
+</script>
 
 </ion-view>
  

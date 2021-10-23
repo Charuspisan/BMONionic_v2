@@ -4,13 +4,13 @@ input[type="text"]{margin-bottom: 3px;}
 .button {float:right;}
 </style>
 
-<ion-view ng-controller="manageLocationsCtrl">
+<ion-view ng-controller="locationsCtrl">
 
   <ion-header-bar class="bar-positive">
-    <img src="images/icon-bar.png" class="icon-bar">
+    <img src="images/icon-bar.png" class="icon-bar" style="border-radius: 1em;">
     <h1 class="title">จัดการพื้นที่สำรวจ</h1>
-    <button id="logoutbt" ng-click="signOut()" class="button">
-      <i class="icon ion-close-round"></i>
+    <button id="logoutbt" ng-click="signOut()" class="button button-clear button-primary">
+      <ion-icon name="close-outline"></ion-icon>
     </button>
   </ion-header-bar>  
 
@@ -21,7 +21,7 @@ input[type="text"]{margin-bottom: 3px;}
     <ion-item>
 
     <div style="padding: 0 0 1em 0.75em;">
-      <span style="font-size: 1.2em; color: deeppink;">{{ key }}</span>  
+      <span style="font-size: 1.2em; color: deeppink;">{{ key }}</span>
         <button class="button button-small button-positive button-right" ng-click="showEditProvPopup(key);" style="margin-right: 1.2em;    margin-top: -0.5em;">
           <i class="icon ion-edit"></i>
         </button>
@@ -32,6 +32,7 @@ input[type="text"]{margin-bottom: 3px;}
           <button class="button button-small button-positive button-right" ng-click="showEditAreaPopup(group[0].province, key);$event.stopPropagation();" style="margin: 0.75em 0;">
             <i class="icon ion-edit"></i>
           </button>
+
         <ion-item ng-repeat="item in group | orderBy:'pin'" class="item-accordion" ng-show="isGroupShown(group)||onEditGroup(key)" ng-click="$event.stopPropagation();">
 
         <div style="width:100%;">
@@ -70,8 +71,8 @@ input[type="text"]{margin-bottom: 3px;}
     </a> 
 
     <label class="custom-file-upload button">
-        <input type="file" id="take-picture" accept="image/*">
-        <ion-icon name="camera-outline"></ion-icon> <ion-icon name="chevron-forward-outline"></ion-icon> <ion-icon name="earth-outline"></ion-icon>
+      <input type="file" id="take-picture-on-locate" accept="image/*">
+      <ion-icon name="camera-outline"></ion-icon> <ion-icon name="chevron-forward-outline"></ion-icon> <ion-icon name="earth-outline"></ion-icon>
     </label>
 
     <a class="button" ng-click="showAddProvPopup()" style="z-index: 2;">
@@ -81,10 +82,12 @@ input[type="text"]{margin-bottom: 3px;}
   </div>
 </ion-footer-bar>
 
+<script id="editNotePopupEtcImg.html" type="text/ng-template">
+  <img id="previewImg" style="width:100%;">
+  <textarea ng-model="etcImgs.note" rows="4" placeholder="บันทึกช่วยจำ" style="width:100%; padding:2%;"></textarea>
+</script>
 
 <script id="AddProvPopup.html" type="text/ng-template">
-  
-
   <input ng-model="AddProvData.provInTxt" type="text" placeholder="เพิ่มจังหวัด" style="width:86%; display: inline-block;">
   <div data-tap-disabled="true" style="width:11%; display: inline-block;">
     <select style="width: 100%; padding: 0.25em;" ng-model="AddProvData.provInTxt" ng-change="filterArea();">
@@ -92,8 +95,6 @@ input[type="text"]{margin-bottom: 3px;}
       <option ng-repeat="prov in queryProv | orderBy">{{prov}}</option>
     </select>
   </div>
-
-
   <input ng-model="AddProvData.areaInTxt" type="text" placeholder="เพิ่มพื้นที่" style="width:86%; display: inline-block;">
   <div data-tap-disabled="true" style="width:11%; display: inline-block;">
     <select style="width: 100%; padding: 0.25em;" ng-model="AddProvData.areaInTxt">
@@ -101,19 +102,10 @@ input[type="text"]{margin-bottom: 3px;}
       <option ng-repeat="area in queryArea | orderBy">{{area}}</option>
     </select>
   </div>
-
-
   <input ng-model="AddProvData.pinInTxt" type="text" placeholder="เพิ่มจุดสำรวจ">
   <input ng-model="AddProvData.latInTxt" type="text" placeholder="เพิ่ม Latitude">
   <input ng-model="AddProvData.lngInTxt" type="text" placeholder="เพิ่ม Longtitude">
 </script>
-
-
-<!-- <script id="AddNewProvPopup.html" type="text/ng-template">
-  <input ng-model="AddNewProvData.provInTxt" type="text" placeholder="เพิ่มจังหวัดใหม่">
-</script> -->
-
-
 <script id="EditProvPopup.html" type="text/ng-template">
 	<input ng-model="EditProvData.provInTxt" type="text" placeholder="ชื่อจังหวัด">
 </script>

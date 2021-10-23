@@ -5,186 +5,72 @@ angular
     "manageJobsCtrl",
     function (
       $scope,
-      // $firebaseObject,
-      // $firebaseArray,
       $ionicPopup,
-      $ionicLoading,
       $timeout,
       sharedProp,
       $location,
-      $ionicViewService,
       $window
     ) {
-
-      $scope.hideLoading = function () {
-        $ionicLoading.hide().then(function () {
-          console.log("The loading indicator is now hidden");
-        });
-      };
-      
-      var loginStatus = sharedProp.getEmail();
-      console.log("user is : " + loginStatus);
 
       $scope.goNext = function (page) {
         console.log("Going to : " + page);
         $location.path(page);
       };
 
+      $scope.goBack = function (page) {
+        console.log("Going back");
+        $location.path(page);
+      };
 
-      var user = firebase.auth().currentUser;
+      var currentUser = firebase.auth().currentUser;
 
-      if (user) {
+      if (currentUser) {
         // User is signed in.
-        console.log("Logedin");
-        $scope.hideLoading();
+        console.log("currentUser Logedin");
+        sharedProp.hideLoading();
       } else {
         // No user is signed in.
         console.log("No Logedin");
         $scope.goNext("/login");
       }
 
+      // firebase.auth().onAuthStateChanged(function () {
+      //   if (currentUser) {
+      //     // User is signed in.
+      //     console.log("currentUser Logedin : ",currentUser);
+      //     sharedProp.hideLoading();
+      //   } else {
+      //     // No user is signed in.
+      //     console.log("No Logedin");
+      //     $scope.goNext("/login");
+      //   }
+      // });
 
-      var refLocations = new Firebase(
-        sharedProp.dbUrl() + "/locations/"
-      );
-      var refJobsID = new Firebase(
-        sharedProp.dbUrl() + "/jobsID/"
-      );
-      var refJobsRec = new Firebase(
-        sharedProp.dbUrl() + "/jobsRec/"
-      );
-      var refUsers = new Firebase(
-        sharedProp.dbUrl() + "/users/"
-      );
+      var imgData;
+      var etcPhotoNote;
 
-      // var objID = $firebaseObject(
-      //   refJobsID.orderByChild("status").equalTo("active")
-      // );
-      // var objLocate = $firebaseObject(refLocations);
-      // var objRec = $firebaseObject(refJobsRec);
-      // var objUsers = $firebaseObject(refUsers);
+      sharedProp.getDeviceGPS();
 
-      var refLocations = new Firebase(
-        sharedProp.dbUrl() + "/locations/"
-      );
+      var takePicture = $('#take-picture');
 
-
-
-
-
-
-
-
-
-      if (sharedProp.checkChrome() && window.location.protocol != "https:") {
-        console.log("not https may be have problem with chorme");
-        // $scope.showAlert(
-        //   "ท่านไม่ได้เปิดหน้าเพจด้วย https กรุณาคลิก <a target='_top' href=''>ลิงก์บน https</a>"
-        // );
-        navigator.geolocation.getCurrentPosition(getPosition, parseError);
-      } else {
-        navigator.geolocation.getCurrentPosition(getPosition, parseError);
+      if (takePicture) {
+        takePicture.change((event)=>{
+          sharedProp.takePic_fn(event, $scope.editNotePopupEtcImg);          
+        })
       }
 
-      function getPosition(position) {
-        var longitude = position.coords.longitude;
-        var latitude = position.coords.latitude;
-        console.log(latitude + " " + longitude);
-        latImg = latitude;
-        lngImg = longitude;
-        sharedProp.setJobLatLng(latImg, lngImg);
-      }
+      $scope.etcImgs = {
+        storage:"imgEtc/",
+        dataTarget:"etc",
+        imgName:"etc@",
+        type:"etc"
+      };
 
-      function parseError(error) {
-        var msg;
-        switch (error.code) {
-          case error.PERMISSION_DENIED:
-            msg = "User denied the request for geolocation.";
-            break;
-          case error.POSITION_UNAVAILABLE:
-            msg = "Location information is unavailable.";
-            break;
-          case error.TIMEOUT:
-            msg = "The request to get user location timed out.";
-            break;
-          case error.UNKNOWN_ERROR:
-            msg = "An unknown error occurred.";
-            break;
-        }
-        console.log(msg);
-      }
-
-
-      var takePicture = document.querySelector("#take-picture");
-
-      // if (takePicture && showPicture) {
-        if (takePicture) {
-        // Set events
-        takePicture.onchange = function (event) {
-          // Get a reference to the taken picture or chosen file
-          var files = event.target.files,
-            file;
-          console.log("files : ", files);
-          if (files && files.length > 0) {
-            file = files[0];
-            // console.log("file : ", file);
-            // var imgURL = window.URL.createObjectURL(file);
-            // console.log("imgURL : ", imgURL);
-            var reader = new FileReader();
-
-            reader.readAsArrayBuffer(file);
-            reader.onloadend = function () {
-              // var ImgBase64 = reader.result;
-              // console.log(ImgBase64);
-              // preview image after take photo
-              // showPicture.src = ImgBase64;
-
-              var exif = EXIF.readFromBinaryFile(reader.result);
-              console.log("exif : ",exif);
-
-              // read file again on Blob/Base64 mime type
-              var readerImg = new FileReader();
-              readerImg.readAsDataURL(file);
-              readerImg.onloadend = function () {
-                var ImgBase64 = readerImg.result;
-                console.log(ImgBase64);
-                // preview image after take photo
-                // showPicture.src = ImgBase64;
-                $scope.editNotePopupEtcImg(ImgBase64);
-              };
-
-              // if (showPicture.src) {
-              //   onSuccess(ImgBase64);
-              // }
-            };
-          }
-          function onSuccess(result) {
-            alert("onSuccess callback");
-    
-            // // alert("btnWhere : " + btnWhere);
-            // // convert JSON string to JSON Object
-            // var thisResult = JSON.parse(result);
-            // console.log("thisResult : " + thisResult);
-            // // convert json_metadata JSON string to JSON Object
-            // var metadata = JSON.parse(thisResult.json_metadata);
-            // upImgData = JSON.stringify(metadata);
-            // filePath = thisResult.filename;
-            // console.log("filePath : " + filePath);
-            // // Convert image
-            // getFileContentAsBase64(filePath, function (base64Image) {
-            //   //window.open(base64Image);
-            //   console.log("Convert to Base64 : " + base64Image);
-            //   // Then you'll be able to handle the myimage.png file as base64
-            //   imgData = base64Image.split(",")[1];
-            // });
-            // $scope.editNotePopup();
-          }
-        };
-      }
-
-      $scope.editNotePopupEtcImg = function (img64data) {
+      $scope.editNotePopupEtcImg = function (img64data, exif) {
         //console.log("Key for edit Slope : "+refJobsRec);
-        $scope.etcImgs = {};
+
+        console.log("exif from editNotePopupEtcImg : ",exif);
+
         var myPopup = $ionicPopup.show({
           templateUrl: "editNotePopupEtcImg.html",
           title: "บันทึกช่วยจำ",
@@ -193,7 +79,9 @@ angular
           buttons: [
             {
               text: "ไม่บันทึกภาพ",
-              onTap: function (e) {},
+              onTap: function (e) {
+                $('#take-picture').val('');
+              },
             },
             {
               text: "<b>บันทึกภาพ</b>",
@@ -206,19 +94,21 @@ angular
                   etcPhotoNote == null ||
                   etcPhotoNote == ""
                 ) {
-                  $scope.showAlert(
+                  sharedProp.showAlert(
                     "กรุณาใส่บันทึกช่วยจำทุกครั้ง"
                   );
                   event.preventDefault();
                 } else {
-                  alert("ready for upload");
-                  // $scope.btnUpload(imgData);
+                  // alert("ready for upload");
+                  $scope.etcImgs.imgName = $scope.etcImgs.imgName + Date.now();
+                  sharedProp.btnUpload($scope.etcImgs, imgData, exif);
                 }
               },
             },
           ],
         });
-        myPopup.then(function (img64data) {});
+        myPopup.then(function () {});
+        imgData = img64data.split(",")[1];
         setTimeout(()=>{
           // preview image
           $("#previewImg").attr("src",img64data);
@@ -233,60 +123,6 @@ angular
           myPopup.close(); //close the popup after 3 seconds for some reason
         }, 100000);
       };
-
-      $scope.showAlert = function (error) {
-        var alertPopup = $ionicPopup.alert({
-          title:
-            '<center><i class="icon ion-error ion-android-warning"></i></center>',
-          template: "<center>" + error + "</center>",
-          buttons: [
-            {
-              text: "รับทราบ",
-              type: "button-positive",
-            },
-          ],
-        });
-
-        alertPopup.then(function (res) {});
-      };
-
-      // $scope.showMessage = function (message) {
-      //   var alertPopup = $ionicPopup.alert({
-      //     title: "",
-      //     template: "<center>" + message + "</center>",
-      //     buttons: [
-      //       {
-      //         text: "รับทราบ",
-      //         type: "button-positive",
-      //       },
-      //     ],
-      //   });
-
-      //   alertPopup.then(function (res) {});
-      // };
-
-
-
-
-
-
-
-
-
-
-
-      // -
-      // -
-      // -
-      // -
-      // -
-      // -
-      // -
-
-
-
-
-
 
       refLocations.on("value", function (snapshot) {
         // console.log("value : ",value);
@@ -357,7 +193,7 @@ angular
         .on("value", function (snapshot) {
           $scope.jobListData = snapshot.val();
           //return $scope.jobListData
-          // console.log("$scope.jobListData : ",$scope.jobListData);
+          console.log("$scope.jobListData : ",$scope.jobListData);
         });
 
       $scope.shareRootURL = sharedProp.rootUrl();
@@ -367,7 +203,7 @@ angular
         var toolinput = $('#'+pin+'_'+date).val();
         var cb = document.getElementById('cb');
         cb.style.display='block';
-        var txt = txt.replace("tool=undefined", "tool="+toolinput);
+        var txt = txt.replace("tool=Water-level", "tool="+toolinput);
         cb.value = txt;
         cb.select();
         document.execCommand('copy');
@@ -377,47 +213,59 @@ angular
         );             
       }
 
+      $scope.copyAll = (key)=>{
+        var refJobsIDSeleted = firebase.database().ref("jobsID/" + key);
+        var selectJob
+        var urlsData
+
+        refJobsIDSeleted
+        .on("value", function (snapshot) {
+          selectJob = snapshot.val();
+        });
+        // console.log("selectJob : ",selectJob);
+        
+        for (const [keyPin, valPin] of Object.entries(selectJob)) {
+          // console.log("keyPin : ",keyPin);
+          // console.log("valPin : ",valPin);
+
+          var metaPin = selectJob.province+"_"+selectJob.area+"_"+selectJob.operate_date+"_"+valPin.pin;
+          // console.log("metaPin : "+metaPin);
+
+          urlEach = $scope.shareRootURL+"/#/operation?jodId="+key+"&pinId="+keyPin+"&tool="+valPin.tool+"&meta="+metaPin;
+          urlEach = urlEach.replace(/\s/g, '').trim();
+          // console.log("urlEach : "+urlEach);
+
+          if(!((keyPin == 'area') || (keyPin == 'operate_date') || (keyPin == 'province') || (keyPin == 'status'))){
+            if(urlsData==undefined){
+              urlsData = urlEach;
+              // console.log(urlsData);
+            }else{
+              urlsData = urlsData+"\r\n\r\n"+urlEach;
+            }            
+          }
+        }
+        // console.log("urlsData : "+urlsData);
+
+        var cb = document.getElementById('cb');
+        cb.style.display='block';
+        cb.value = urlsData;
+        cb.select();
+        document.execCommand('copy');
+        cb.style.display='none';     
+        navigator.clipboard.readText().then(clipText => 
+          console.log("clipText : "+clipText)   
+        );   
+
+      }
+
       $scope.openNewTab = (txt, pin, date)=>{
         var toolinput = $('#'+pin+'_'+date).val();
-        var txt = txt.replace("tool=undefined", "tool="+toolinput);
+        var txt = txt.replace("tool=Water-level", "tool="+toolinput);
         $window.open(txt, '_blank');
       };
 
-      // $scope.clearClipboard = ()=>{
-      //   // This should work but does not
-      //   //if (document.selection) document.selection.empty()
-      //   //else window.getSelection().removeAllRanges()
-      
-      //   // Create a dummy input to select
-      //   var tempElement = document.createElement("input");
-      //   tempElement.style.cssText = "width:0!important;padding:0!important;border:0!important;margin:0!important;outline:none!important;boxShadow:none!important;";
-      //   document.body.appendChild(tempElement);
-      //   tempElement.value = ' ' // Empty string won't work!
-      //   tempElement.select();
-      //   document.execCommand("copy");
-      //   document.body.removeChild(tempElement);
-      //   navigator.clipboard.readText().then(clipText => 
-      //     console.log("Clear clipText : "+clipText)   
-      //   );
-      // }
-      
-
-      $scope.goBack = function (page) {
-        console.log("Going back");
-        $location.path(page);
-      };
-
       $scope.signOut = function () {
-        if (firebase.auth().currentUser) {
-          firebase.auth().signOut();
-          console.log("Now loged out");
-          $location.path("/login");
-          $scope.userEmail = "";
-          $scope.userPass = "";
-        } else {
-          console.log("Not login login page");
-          $location.path("/login");
-        }
+        sharedProp.signOut();      
       };
 
       $scope.deleteJob = function (jobIdRef) {
@@ -431,7 +279,7 @@ angular
             //var s=snapshot.val();
             snapshot.forEach(function (childSnapshot) {
               // key will be "ada" the first time and "alan" the second time
-              var key = childSnapshot.key();
+              var key = childSnapshot.key;
               // data will be the actual contents of the child
               var data = childSnapshot.val();
               console.log("jobIdKey : ", key);
@@ -644,90 +492,100 @@ angular
                       );
                       e.preventDefault();
                     } else {
-                      $.each(data, function (key, value) {
-                        console.log("key  ", key, "value  ", value);
-                        if (
-                          value.province == selectedProv &&
-                          value.area == selectedArea
-                        ) {
-                          //var lacateID = key;
-                          matchID.push({ id: key, pin: value.pin });
-                          //console.log("Selected lacateID ",lacateID);
-                        } else {
-                          console.log("Not match");
-                        }
-                      });
-                    }
-                    console.log(matchID);
-                    if (matchID.length > 0) {
-                      console.log("Found Matching");
-                      var newJob = refJobsID.push({
-                        operate_date: selectedDate,
-                        province: selectedProv,
-                        area: selectedArea,
-                        status: "active",
-                      });
-                      var newJobID = newJob.key();
-                      console.log(newJobID);
-                      $.each(matchID, function (key, value) {
-                        //console.log(value.pin);
-                        var newRec = refJobsID
-                          .child(newJobID)
-                          .push({
-                            pin: value.pin,
-                            user: "",
-                            tool: "",
-                            locatRef: value.id,
-                          });
-                        var newRecID = newRec.key();
-                        var time = Firebase.ServerValue.TIMESTAMP;
-                        var newSet = {};
-                        var graph = [];
-                        var note = [];
-                        var diff = [];
-                        var metaJobRec =
-                          selectedProv + "_" + selectedArea + "_" + value.pin;
-                        for (i = 0; i < 300; i++) {
-                          newSet[i] = "";
-                          graph.push("");
-                          note.push("");
-                          diff.push(0);
-                        }
-                        // newSet.timeStamp=time;
-                        // console.log("timeStamp : ",time);
-                        newSet.slope = "";
-                        newSet.jobIdRef = newJobID;
-                        //var graphTxt = graph.toString();
-                        console.log("newSet : ", newSet);
-                        console.log("metaJobRec : " + metaJobRec);
-                        //console.log("graph : ",graph);
-                        //refJobsRec.child(newRecID).update({"timeStamp":time, "slope":"", "jobIdRef":newJobID});
-                        refJobsRec.child(newRecID).update(newSet);
-                        refJobsRec
-                          .child(newRecID)
-                          .update({ operate_date: selectedDate });
-                        refJobsRec.child(newRecID).update({ timeStamp: time });
-                        refJobsRec.child(newRecID).update({ graph: graph });
-                        refJobsRec.child(newRecID).update({ diff: diff });
-                        refJobsRec.child(newRecID).update({ note: note });
-                        refJobsRec.child(newRecID).update({ meta: metaJobRec });
-                      });
-                      //createRec(newJobID)
+                      $.when(
+                        $.each(data, function (key, value) {
+                          console.log("key  ", key, "value  ", value);
+                          if (
+                            value.province == selectedProv &&
+                            value.area == selectedArea
+                          ) {
+                            //var lacateID = key;
+                            matchID.push({ id: key, pin: value.pin });
+                            //console.log("Selected lacateID ",lacateID);
+                          } else {
+                            console.log("Not match");
+                          }
+                        })
+                      ).then(
+                        // console.log("Finished matching : ",matchID)
+                        loopRecPin(matchID,selectedDate,selectedProv,selectedArea)
+                      )
                     }
                   });
               },
             },
           ],
         });
-
-        // myPopup.then(function(res) {
-        //   console.log('Tapped!', res);
-        // });
-
         $timeout(function () {
           myPopup.close(); //close the popup after 3 seconds for some reason
         }, 100000);
       };
+
+      var distance2beach = 140;
+      var loopRecPin = (matchData,date,prov,area)=>{
+        if (matchData.length > 0) {
+          console.log("Found Matching");
+          var newJob = refJobsID.push({
+            operate_date: date,
+            province: prov,
+            area: area,
+            status: "active",
+          });
+          var newJobID = newJob.key;
+          console.log(newJobID);
+          sharedProp.showLoading();
+          $.when(
+            $.each(matchData, function (key, value) {
+              //console.log(value.pin);
+              var newRec = refJobsID
+                .child(newJobID)
+                .push({
+                  pin: value.pin,
+                  user: "",
+                  tool: "Water-level",
+                  locatRef: value.id,
+                });
+              var newRecID = newRec.key;
+              var time = firebase.database.ServerValue.TIMESTAMP;
+              var newSet = {};
+              var graph = [];
+              var note = [];
+              var diff = [];
+              var metaJobRec =
+              prov + "_" + area + "_" + value.pin;
+              for (i = 0; i < distance2beach; i++) {
+                newSet[i] = "";
+                graph.push("");
+                note.push("");
+                diff.push(0);
+              }
+                // newSet.timeStamp=time;
+                // console.log("timeStamp : ",time);
+                newSet.slope = "";
+                newSet.jobIdRef = newJobID;
+                //var graphTxt = graph.toString();
+                console.log("newSet : ", newSet);
+                console.log("metaJobRec : " + metaJobRec);
+                //console.log("graph : ",graph);
+                //refJobsRec.child(newRecID).update({"timeStamp":time, "slope":"", "jobIdRef":newJobID});
+                refJobsRec.child(newRecID).update(newSet);
+                refJobsRec
+                  .child(newRecID)
+                  .update({ operate_date: date });
+                refJobsRec.child(newRecID).update({ timeStamp: time });
+                refJobsRec.child(newRecID).update({ graph: graph });
+                refJobsRec.child(newRecID).update({ diff: diff });
+                refJobsRec.child(newRecID).update({ note: note });
+                refJobsRec.child(newRecID).update({ meta: metaJobRec });
+              })
+            ).then(
+              sharedProp.hideLoading()
+            )
+          }
+      }
+
+
+
 
       $scope.toggleGroup = function (key, group) {
         if ($scope.isGroupShown(group) || $scope.onEditGroup(key)) {

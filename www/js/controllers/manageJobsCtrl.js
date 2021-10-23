@@ -124,9 +124,17 @@ angular
         }, 100000);
       };
 
+      refJobsID
+      .orderByChild("status")
+      .equalTo("active")
+      .on("value", function (snapshot) {
+        $scope.jobListData = snapshot.val();
+        //return $scope.jobListData
+        console.log("$scope.jobListData : ",$scope.jobListData);
+      });
+
       refLocations.on("value", function (snapshot) {
         // console.log("value : ",value);
-        $scope.data = snapshot.val();
         var queryData = snapshot.val();
         var queryProv = [];
         var queryArea = [];
@@ -145,8 +153,11 @@ angular
 
         $scope.queryProv = queryProv;
         $scope.queryArea = queryArea;
+        // setTimeout(()=>{
+          $scope.data = snapshot.val();
+          console.log("$scope.data : ", $scope.data);          
+        // },1000);
 
-        console.log("$scope.data : ", $scope.data);
         console.log("$scope.queryProv : ", $scope.queryProv);
         console.log("$scope.queryArea : ", $scope.queryArea);
 
@@ -186,15 +197,6 @@ angular
 
       //Check login user by email and pass value to variable
       // $scope.assignedEmail = sharedProp.getEmail();
-
-      refJobsID
-        .orderByChild("status")
-        .equalTo("active")
-        .on("value", function (snapshot) {
-          $scope.jobListData = snapshot.val();
-          //return $scope.jobListData
-          console.log("$scope.jobListData : ",$scope.jobListData);
-        });
 
       $scope.shareRootURL = sharedProp.rootUrl();
 
@@ -521,7 +523,7 @@ angular
         }, 100000);
       };
 
-      var distance2beach = 140;
+      var distance2beach = 200;
       var loopRecPin = (matchData,date,prov,area)=>{
         if (matchData.length > 0) {
           console.log("Found Matching");
