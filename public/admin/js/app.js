@@ -54,19 +54,19 @@ angular.module('BMONadmin', ['ionic','ngCordova','firebase','angular.filter','72
       templateUrl:'partial/login.html'
     })
 
-    .state('operation', {
-      url:'/operation',
+    .state('adminOperation', {
+      url:'/adminOperation',
       cache: true,
-      templateUrl:'partial/operation.html'
-      ,
-      resolve: {
-        loadContacts:  function(locationDataCon) {
-          return locationDataCon.promiseToHaveData();
-        }  
-      },
-      controller: function ($scope, locationDataCon) {
-          $scope.data = locationDataCon.locationData;
-      }
+      templateUrl:'partial/admin-operation.html'
+      // ,
+      // resolve: {
+      //   loadContacts:  function(locationDataCon) {
+      //     return locationDataCon.promiseToHaveData();
+      //   }  
+      // },
+      // controller: function ($scope, locationDataCon) {
+      //     $scope.data = locationDataCon.locationData;
+      // }
     })
 
     .state('imgs4d', {

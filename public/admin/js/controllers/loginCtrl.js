@@ -5,8 +5,8 @@ angular.module('BMONadmin')
     var auth = $firebaseAuth();
 
     var usersDB = firebase.database().ref("users/");
-    var isLogin = sharedProp.getIsLoginPage();
-    console.log("isLogin : "+isLogin);
+    // var isLogin = sharedProp.getIsLoginPage();
+    // console.log("isLogin : "+isLogin);
 
     $scope.showLoading = function() {
       $ionicLoading.show({     
@@ -94,36 +94,36 @@ angular.module('BMONadmin')
    }
 
 
-    $scope.signIn = function(user) {
-      $scope.firebaseUser = null;
-      $scope.error = null;
-      var userEmail = $scope.userEmail;
-      var userPass = $scope.userPass;
-      // $scope.showLoading();
-      if(userPass==null){
-        $scope.showAlert("กรุณาระบุรหัสผ่าน");   
-      }
-      if(userEmail==null){
-        $scope.showAlert("กรุณาระบุอีเมล์");   
-      }
+   $scope.signIn = function (user) {
+    $scope.firebaseUser = null;
+    $scope.error = null;
+    userEmail = $scope.userEmail;
+    userPass = $scope.userPass;
+    if (userPass == null) {
+      $scope.showAlert("กรุณาระบุรหัสผ่าน");
+    }
+    if (userEmail == null) {
+      $scope.showAlert("กรุณาระบุอีเมล์");
+    }
 
-      auth.$signInWithEmailAndPassword(userEmail, userPass).then(function(user) {
-        $scope.showLoading();
-      }).catch(function(error) {
+    auth
+      .$signInWithEmailAndPassword(userEmail, userPass)
+      .then(function (user) {
+        // sharedProp.showLoading();
+        console.log("signInWithEmailAndPassword : ",user);
+      })
+      .catch(function (error) {
         $scope.error = error;
-        $scope.hideLoading();
+        // sharedProp.hideLoading();
         //alert($scope.error);
-        console.log("signin error : ",error)
+        console.log("signin error : ", error);
         $scope.alertFactory(error);
       });
-
-      // setTimeout(function(){
-      //     alert($scope.error);
-      //     $scope.hideLoading();
-      // },3000);
+  };
 
 
-    };
+
+
 
     $scope.signOut = function() {
       if (firebase.auth().currentUser) {
@@ -137,76 +137,6 @@ angular.module('BMONadmin')
         console.log("Not login login page");
         // $location.path('/login');
       }
-    };
-
-    $scope.signUpPopup = function() {
-      console.log("signUpPopup");
-      $scope.signUpData = {};
-      var myPopup = $ionicPopup.show({
-        templateUrl: 'signUpPopup.html',
-        title: 'สมัครสมาชิก',
-        subTitle: '',
-        scope: $scope,
-        buttons: [
-          { text: 'ยกเลิก' },
-          {
-            text: 'สมัคร',
-            type: 'button-positive',
-            onTap: function(e) {
-                    var rareEmail = $scope.signUpData.emailInTxt;
-                    var Email = rareEmail.toLowerCase();
-                    var Pass = $scope.signUpData.passInTxt;
-                    var Name = $scope.signUpData.nameInTxt;
-                    var Surname = $scope.signUpData.surnameInTxt;
-                    console.log("Email : "+Email);
-                    signUp(Email,Pass,Name,Surname);
-            }
-          }
-        ]
-      });
-      myPopup.then(function() {
-
-      });
-      $timeout(function() {
-        myPopup.close(); //close the popup after 3 seconds for some reason
-      }, 100000);     
-    } 
-
-    function signUp (Email,Pass,Name,Surname) {
-      $scope.firebaseUser = null;
-      $scope.error = null;
-
-      if(Email==null||Pass==null||Name==null||Surname==null){
-        $scope.showAlert("กรุณาใส่ข้อมูลให้ครบทุกช่อง");
-        // console.log(Email,Pass,Name,Surname)   
-      }else{
-        auth.$createUserWithEmailAndPassword(Email, Pass).then(function(user){
-          
-
-          firebase.auth().currentUser.sendEmailVerification();
-
-          $scope.showMessage("<center>กรุณายืนยันการสมัครจากลิงก์<br />ที่เราได้จัดส่งให้ทางอีเมล์ที่ใช้ในการสมัคร</center>");
-          // console.log("user.uid : "+user.uid);
-          //rec to db
-          usersDB.child(user.uid).set({
-            //username: name,
-            email:Email,
-            name:Name,
-            surname:Surname,
-            // password:userPass,
-            role:"user",
-            regisDate:Date.now(),
-            lastAccess:Date.now(),
-          });
-
-
-        }).catch(function(error) {
-          $scope.error = error;
-          console.log("signup error : ",error)
-          $scope.alertFactory(error);
-        });        
-      }
-
     };
 
     $scope.passResetPopup = function() {
@@ -254,14 +184,23 @@ angular.module('BMONadmin')
     firebase.auth().onAuthStateChanged(function(user) {
 
 
+      if (user) {
+        // User is signed in.
+        alert("logedin");
+      } else {
+        // No user is signed in.
+        alert("Not logedin");
+      }
+
+
         sharedProp.setPass($scope.userPass);
 
         $("#userPass").val("");
 
         $scope.firebaseUser = user;
 
-        var isLogin = sharedProp.getIsLoginPage();
-        console.log("isLogin : "+isLogin);
+        // var isLogin = sharedProp.getIsLoginPage();
+        // console.log("isLogin : "+isLogin);
 
         if(user!=null){
           if (user.emailVerified) {
@@ -269,12 +208,12 @@ angular.module('BMONadmin')
             usersDB.child(user.uid).once("value", function(snap){
               var data = snap.val();
 
-                if(data.role=="admin"&&isLogin!=false){ 
+                if(data.role=="admin"){ 
                   $scope.$apply(function(){
                     sharedProp.setEmail(user.email);
                     usersDB.child(user.uid).update({lastAccess:Date.now(),});
                     $scope.hideLoading();
-                    $location.path('/admin/#/operation');
+                    $location.path('/adminOperation');
                   });
                   console.log("admin");               
                 }else{

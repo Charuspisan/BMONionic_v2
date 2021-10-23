@@ -141,8 +141,7 @@ angular
       });
 
     $urlRouterProvider.otherwise("/login");
-    // $urlRouterProvider.otherwise("/operation");
-    // $urlRouterProvider.otherwise("/managejobs");
+
   })
 
   .factory("locationDataCon", function ($firebase, $q) {
