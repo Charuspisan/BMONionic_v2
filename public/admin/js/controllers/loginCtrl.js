@@ -4,7 +4,7 @@ angular.module('BMONadmin')
 
     var auth = $firebaseAuth();
 
-    var usersDB = new Firebase("https://bmon-41086.firebaseio.com/users/");
+    var usersDB = firebase.database().ref("users/");
     var isLogin = sharedProp.getIsLoginPage();
     console.log("isLogin : "+isLogin);
 
@@ -274,7 +274,7 @@ angular.module('BMONadmin')
                     sharedProp.setEmail(user.email);
                     usersDB.child(user.uid).update({lastAccess:Date.now(),});
                     $scope.hideLoading();
-                    $location.path('/operation');
+                    $location.path('/admin/#/operation');
                   });
                   console.log("admin");               
                 }else{

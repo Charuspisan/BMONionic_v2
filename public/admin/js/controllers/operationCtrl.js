@@ -3,9 +3,9 @@ angular.module('BMONadmin')
 .controller('operationCtrl', function($scope, $ionicViewService, $firebaseObject, $firebaseArray, $ionicPopup, $timeout, $location, $window, sharedProp, $ionicLoading, $ionicScrollDelegate) {
 
 
-  var refLocations = new Firebase("https://bmon-41086.firebaseio.com/locations/"); 
-  var refJobsID = new Firebase("https://bmon-41086.firebaseio.com/jobsID/");
-  var refJobsRec = new Firebase("https://bmon-41086.firebaseio.com/jobsRec/");
+  const refLocations = firebase.database().ref("locations/");
+  const refJobsID = firebase.database().ref("jobsID/");
+  const refJobsRec = firebase.database().ref("jobsRec/");
 
 
   //read data for create filter 
@@ -442,7 +442,7 @@ function genNote(date, id){
 
 
             }
-          },1000);  
+          },3000);  
 
 
       }

@@ -37,6 +37,17 @@ angular
 
       sharedProp.setPinID(jobInfo.jobId);
 
+      refJobsID.child(jobInfo.parentID).child("status").on("value", function (snapshot) {
+        // console.log("value : ", value);
+        let status = snapshot.val();
+        console.log("status",status);
+        if(status!="active"){
+          console.log("Redirect to Unavailable page");
+          sharedProp.hideLoading();
+          $scope.goNext("/unavailable");
+        }
+      }); 
+
       refJobsID.child(jobInfo.parentID).child(jobInfo.jobId).on("value", function (snapshot) {
         // console.log("value : ", value);
         $scope.objID = snapshot.val();

@@ -5,12 +5,18 @@
 // the 2nd parameter is an array of 'requires'
 
 // Initialize Firebase
+// Production
+const dbUrl = "https://bmon-41086.firebaseio.com";
+const storageUrl = "bmon-41086.appspot.com";
+const authUrl = "bmon-v2.firebaseapp.com";
 var config = {
   apiKey: "AIzaSyCx-rNzY3vIUrhSCP5WYirhiAss7sFqTuI",
-  authDomain: "bmon-41086.firebaseapp.com",
-  //databaseURL: "https://bmon-41086.firebaseio.com",
-  storageBucket: "bmon-41086.appspot.com",
-  messagingSenderId: "170191502662"
+  // authDomain: "bmon-41086.firebaseapp.com",
+  authDomain: authUrl,
+  databaseURL: dbUrl,
+  storageBucket: storageUrl,
+  messagingSenderId: "170191502662",
+  appId: "1:1034734255535:web:24b02a939a0298e9e5835a"
 };
 firebase.initializeApp(config);
 

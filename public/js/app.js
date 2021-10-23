@@ -106,9 +106,9 @@ angular
         url: "/getjobs",
         templateUrl: "partial/getjobs.html",
       })
-      .state("openform", {
-        url: "/openform",
-        templateUrl: "partial/openForm.html",
+      .state("unavailable", {
+        url: "/unavailable",
+        templateUrl: "partial/unavailable.html",
       })
       .state("operation", {
         cache: false,
