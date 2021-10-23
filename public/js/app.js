@@ -6,26 +6,33 @@
 
 // Initialize Firebase
 // Production
-// const dbUrl = "https://bmon-41086.firebaseio.com";
-// var config = {
-//   apiKey: "AIzaSyCx-rNzY3vIUrhSCP5WYirhiAss7sFqTuI",
-//   authDomain: "bmon-41086.firebaseapp.com",
-//   databaseURL: dbUrl,
-//   storageBucket: "bmon-41086.firebaseapp.com",
-//   messagingSenderId: "170191502662",
-// };
-// Dev config
-const dbUrl = "https://bmon-v2-default-rtdb.firebaseio.com";
-const storageUrl = "bmon-v2.appspot.com";
+const dbUrl = "https://bmon-41086.firebaseio.com";
+const storageUrl = "bmon-41086.appspot.com";
 const authUrl = "bmon-v2.firebaseapp.com";
 var config = {
-  apiKey: "AIzaSyBx5RiQzrpyeFN1HJ-hJDS2qWWmhvk-AZA",
+  apiKey: "AIzaSyCx-rNzY3vIUrhSCP5WYirhiAss7sFqTuI",
+  // authDomain: "bmon-41086.firebaseapp.com",
   authDomain: authUrl,
   databaseURL: dbUrl,
   storageBucket: storageUrl,
-  messagingSenderId: "1034734255535",
+  messagingSenderId: "170191502662",
   appId: "1:1034734255535:web:24b02a939a0298e9e5835a"
 };
+
+// Dev config
+// const dbUrl = "https://bmon-v2-default-rtdb.firebaseio.com";
+// const storageUrl = "bmon-v2.appspot.com";
+// const authUrl = "bmon-v2.firebaseapp.com";
+// var config = {
+//   apiKey: "AIzaSyBx5RiQzrpyeFN1HJ-hJDS2qWWmhvk-AZA",
+//   authDomain: authUrl,
+//   databaseURL: dbUrl,
+//   storageBucket: storageUrl,
+//   messagingSenderId: "1034734255535",
+//   appId: "1:1034734255535:web:24b02a939a0298e9e5835a"
+// };
+
+
 firebase.initializeApp(config);
 
 
@@ -491,8 +498,8 @@ angular
           setTimeout(function () {
             myService.hideLoading();
             myService.showMessage("บันทึกภาพแล้ว");
-            refBMONimg.getDownloadURL().then(function (url) {
 
+            refBMONimg.getDownloadURL().then(function (url) {
 
               if(type.type=="front"){
                 // console.log("update img4d on : "+currentPinID);
@@ -522,9 +529,8 @@ angular
                 );
               }
 
-
             });
-          }, 1000);
+          }, 3000);
         });
       }else if(type.dataTarget=="etc"){
         refBMONimg = refStorage.child(type.storage + imgName + ".jpg");
@@ -543,7 +549,7 @@ angular
           setTimeout(function () {
             myService.hideLoading();
             myService.showMessage("บันทึกภาพแล้ว");
-          }, 1000);
+          }, 2000);
         });
       }else if(type.dataTarget=="other"){
         refBMONimg = refStorage.child(type.storage + imgName + ".jpg");
@@ -564,7 +570,7 @@ angular
           setTimeout(function () {
             myService.hideLoading();
             myService.showMessage("บันทึกภาพแล้ว");
-          }, 1000);
+          }, 2000);
         });
       }
     };

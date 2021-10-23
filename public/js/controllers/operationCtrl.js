@@ -637,6 +637,10 @@ angular
 
       $scope.setBG4d = function(){
 
+        // if($scope.objRec.img4d==undefined){
+        //   alert();
+        // }
+
         if($scope.objRec.img4d.front!=undefined){
           var refFrontimg = refStorage.child('img4d/' + $scope.objRec.img4d.front + ".jpg");
           refFrontimg.getDownloadURL().then(function (url) {
