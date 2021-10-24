@@ -2,10 +2,9 @@ angular.module('BMONadmin')
 
 .controller('slopeCtrl', function($scope, $ionicViewService, $firebaseObject, $firebaseArray, $ionicPopup, $timeout, $location, $window, sharedProp, $ionicLoading, $ionicScrollDelegate) {
 
-
-  var refLocations = new Firebase("https://bmon-41086.firebaseio.com/locations/"); 
-  var refJobsID = new Firebase("https://bmon-41086.firebaseio.com/jobsID/");
-  var refJobsRec = new Firebase("https://bmon-41086.firebaseio.com/jobsRec/");
+  var refLocations = firebase.database().ref("locations/");
+  var refJobsID = firebase.database().ref("jobsID/");
+  var refJobsRec = firebase.database().ref("jobsRec/");
 
 
   //read data for create filter 
@@ -35,7 +34,7 @@ angular.module('BMONadmin')
         $scope.queryProv = queryProv;
         $scope.queryArea = queryArea;
         $scope.Areas = areas;
-        $scope.$apply();
+        // $scope.$apply();
 
         console.log("$scope.data : ",$scope.data);
         console.log("$scope.queryProv : ",$scope.queryProv);

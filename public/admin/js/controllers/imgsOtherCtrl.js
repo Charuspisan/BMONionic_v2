@@ -3,10 +3,10 @@ angular.module('BMONadmin')
 .controller('imgsOtherCtrl', function($scope, $ionicViewService, $firebaseObject, $firebaseArray, $ionicPopup, $timeout, $location, $window, sharedProp, $ionicLoading, $ionicScrollDelegate) {
 
 
-  var refLocations = new Firebase("https://bmon-41086.firebaseio.com/locations/"); 
-  var refJobsID = new Firebase("https://bmon-41086.firebaseio.com/jobsID/");
-  var refJobsRec = new Firebase("https://bmon-41086.firebaseio.com/jobsRec/");
-  var refImages = new Firebase("https://bmon-41086.firebaseio.com/images/");
+  var refLocations = firebase.database().ref("locations/");
+  var refJobsID = firebase.database().ref("jobsID/");
+  var refJobsRec = firebase.database().ref("jobsRec/");
+  var refImages = firebase.database().ref("images/");
   var refStorage = firebase.storage().ref();
 
   $scope.showLoading = function() {
